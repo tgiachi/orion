@@ -9,4 +9,6 @@ public class OrionServerConfig
     public JwtAuthConfig JwtAuth { get; set; } = new();
 
     public IrcServerConfig Irc { get; set; } = new();
+
+    public NetworkConfig Network { get; set; } = new();
 }
