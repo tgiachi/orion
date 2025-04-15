@@ -1,14 +1,14 @@
 namespace Orion.Core.Server.Interfaces.Services.Base;
 
 /// <summary>
-/// Defines a contract for services that can be loaded, started, and stopped within the HyperCube framework.
+/// Defines a contract for services that can be loaded, started, and stopped within the Orion framework.
 /// </summary>
 /// <remarks>
 /// Services implementing this interface can be managed by the HyperCube service container.
 /// The framework will call StartAsync when the application starts and StopAsync when the application
 /// is shutting down, allowing for proper initialization and cleanup of resources.
 ///
-/// This interface is similar to IHostedService in ASP.NET Core but is specific to the HyperCube
+/// This interface is similar to IHostedService in ASP.NET Core but is specific to the Orion
 /// framework and may be used in different contexts, including non-ASP.NET applications.
 ///
 /// Implementers should ensure that:
