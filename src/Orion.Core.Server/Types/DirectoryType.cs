@@ -1,4 +1,4 @@
-namespace AbyssIrc.Server.Core.Types;
+namespace Orion.Core.Server.Types;
 
 public enum DirectoryType
 {
