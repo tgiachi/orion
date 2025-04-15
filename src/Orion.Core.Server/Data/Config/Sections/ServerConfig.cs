@@ -3,7 +3,7 @@ namespace Orion.Core.Server.Data.Config.Sections;
 public class ServerConfig
 {
     public string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", string.Empty);
-    
+
     public string Host { get; set; } = "irc.orion.io";
 
     public string Network { get; set; } = "OrionNet";

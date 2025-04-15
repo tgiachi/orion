@@ -4,6 +4,8 @@ namespace Orion.Core.Server.Data.Config;
 
 public class OrionServerConfig
 {
+    public string PidFile { get; set; } = "orion_server.pid";
+
     public WebHttpConfig WebHttp { get; set; } = new();
 
     public JwtAuthConfig JwtAuth { get; set; } = new();
