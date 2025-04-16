@@ -53,6 +53,8 @@ public class OrionHostedService : IHostedService
 
         await _hyperPostmanService.PublishAsync(new ServerStartedEvent(), cancellationToken);
         await _hyperPostmanService.PublishAsync(new ServerReadyEvent(), cancellationToken);
+
+        _logger.LogInformation("Server started and ready");
     }
 
     public async Task StopAsync(CancellationToken cancellationToken)
