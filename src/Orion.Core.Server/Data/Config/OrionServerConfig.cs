@@ -8,8 +8,6 @@ public class OrionServerConfig
 
     public WebHttpConfig WebHttp { get; set; } = new();
 
-    public JwtAuthConfig JwtAuth { get; set; } = new();
-
     public ServerConfig Irc { get; set; } = new();
 
     public NetworkConfig Network { get; set; } = new();
