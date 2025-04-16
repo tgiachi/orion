@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <Version>0.1.0</Version>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
         <PublishAot>true</PublishAot>
@@ -17,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Orion.Core.Server.Web\Orion.Core.Server.Web.csproj" />
       <ProjectReference Include="..\Orion.Core.Server\Orion.Core.Server.csproj" />
       <ProjectReference Include="..\Orion.Core\Orion.Core.csproj" />
       <ProjectReference Include="..\Orion.Network.Core\Orion.Network.Core.csproj" />
