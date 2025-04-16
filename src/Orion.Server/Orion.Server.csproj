@@ -20,6 +20,7 @@
         <ProjectReference Include="..\Orion.Core.Server.Web\Orion.Core.Server.Web.csproj"/>
         <ProjectReference Include="..\Orion.Core.Server\Orion.Core.Server.csproj"/>
         <ProjectReference Include="..\Orion.Core\Orion.Core.csproj"/>
+        <ProjectReference Include="..\Orion.Irc.Core\Orion.Irc.Core.csproj" />
         <ProjectReference Include="..\Orion.Network.Core\Orion.Network.Core.csproj"/>
         <ProjectReference Include="..\Orion.Network.Tcp\Orion.Network.Tcp.csproj"/>
     </ItemGroup>
