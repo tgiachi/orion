@@ -1,4 +1,11 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Orion.Core.Extensions;
+using Orion.Core.Server.Data.Config;
+using Orion.Core.Server.Data.Config.Sections;
+using Orion.Core.Server.Data.Options;
+using Orion.Core.Server.Extensions;
+using Serilog;
 
 namespace Orion.Server;
 
@@ -8,38 +15,40 @@ public class Program
     {
         var builder = WebApplication.CreateSlimBuilder(args);
 
-        builder.Services.ConfigureHttpJsonOptions(
-            options => { options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default); }
+
+        var appContext = builder.Services.InitApplication<OrionServerOptions, OrionServerConfig>("Orion");
+
+        builder.WebHost.ConfigureKestrel(
+            k =>
+            {
+                if (appContext.ServerConfig.WebHttp.IsEnabled)
+                {
+                    k.Listen(
+                        appContext.ServerConfig.WebHttp.ListenAddress.ToIpAddress(),
+                        appContext.ServerConfig.WebHttp.ListenPort,
+                        options => { options.Protocols = HttpProtocols.Http1; }
+                    );
+                }
+                else
+                {
+                    k.ListenLocalhost(
+                        new WebHttpConfig().ListenPort,
+                        options => { options.Protocols = HttpProtocols.Http1; }
+                    );
+                }
+
+                Environment.SetEnvironmentVariable("ORION_HTTP_PORT", appContext.ServerConfig.WebHttp.ListenPort.ToString());
+            }
         );
+
+
+        Log.Logger = appContext.LoggerConfiguration.CreateLogger();
+
+        builder.Logging.ClearProviders().AddSerilog();
 
         var app = builder.Build();
 
-        var sampleTodos = new Todo[]
-        {
-            new(1, "Walk the dog"),
-            new(2, "Do the dishes", DateOnly.FromDateTime(DateTime.Now)),
-            new(3, "Do the laundry", DateOnly.FromDateTime(DateTime.Now.AddDays(1))),
-            new(4, "Clean the bathroom"),
-            new(5, "Clean the car", DateOnly.FromDateTime(DateTime.Now.AddDays(2)))
-        };
-
-        var todosApi = app.MapGroup("/todos");
-        todosApi.MapGet("/", () => sampleTodos);
-        todosApi.MapGet(
-            "/{id}",
-            (int id) =>
-                sampleTodos.FirstOrDefault(a => a.Id == id) is { } todo
-                    ? Results.Ok(todo)
-                    : Results.NotFound()
-        );
 
         app.Run();
     }
-}
-
-public record Todo(int Id, string? Title, DateOnly? DueBy = null, bool IsComplete = false);
-
-[JsonSerializable(typeof(Todo[]))]
-internal partial class AppJsonSerializerContext : JsonSerializerContext
-{
 }

@@ -23,13 +23,8 @@ public static class ConfigLoaderExtension
 
         var config = LoadConfig(new TConfig(), configFilePath);
 
-        File.WriteAllText(configFilePath, config.ToString());
 
-        foreach (var (_, section) in config.Sections)
-        {
-            serviceCollection.AddSingleton(section);
-        }
-
+        SaveConfig(config, configFilePath);
 
         return config;
     }
@@ -37,11 +32,6 @@ public static class ConfigLoaderExtension
 
     private static void SaveConfig<TConfig>(this TConfig config, string configFilePath) where TConfig : IOrionServerConfig
     {
-        foreach (var (name, section) in config.Sections)
-        {
-            section.BeforeSave();
-        }
-
         var configContent = config.ToYaml();
         File.WriteAllText(configFilePath, configContent);
     }
@@ -51,10 +41,6 @@ public static class ConfigLoaderExtension
         var configContent = File.ReadAllText(configFilePath);
         var cfg = configContent.FromYaml<TConfig>();
 
-        foreach (var (name, section) in cfg.Sections)
-        {
-            section.Load();
-        }
 
         return cfg;
     }

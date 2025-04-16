@@ -7,6 +7,7 @@
         <InvariantGlobalization>true</InvariantGlobalization>
         <PublishAot>true</PublishAot>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,6 +20,19 @@
       <ProjectReference Include="..\Orion.Core.Server\Orion.Core.Server.csproj" />
       <ProjectReference Include="..\Orion.Core\Orion.Core.csproj" />
       <ProjectReference Include="..\Orion.Network.Core\Orion.Network.Core.csproj" />
+      <ProjectReference Include="..\Orion.Network.Tcp\Orion.Network.Tcp.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Properties\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Properties\launchSettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.1" />
     </ItemGroup>
 
 </Project>
