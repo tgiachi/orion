@@ -11,6 +11,7 @@ public class NonSecureTcpServer : TcpServer, INetworkTransport
     public event INetworkTransport.ClientDisconnectedHandler? ClientDisconnected;
     public event INetworkTransport.MessageReceivedHandler? MessageReceived;
 
+
     public string Id { get; }
     public string Name { get; }
     public string IpAddress { get; }
@@ -82,7 +83,7 @@ public class NonSecureTcpServer : TcpServer, INetworkTransport
 
     protected override void OnDisconnected(TcpSession session)
     {
-        ClientDisconnected?.Invoke(Id, session.Id.ToString(), session.Socket.RemoteEndPoint.ToString());
+        ClientDisconnected?.Invoke(Id, session.Id.ToString(), string.Empty);
         base.OnDisconnected(session);
     }
 

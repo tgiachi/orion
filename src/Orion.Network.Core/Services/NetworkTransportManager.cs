@@ -28,6 +28,10 @@ public class NetworkTransportManager : INetworkTransportManager
 
     private readonly IDisposable _metricsSubscription;
 
+    public event INetworkTransport.ClientConnectedHandler? ClientConnected;
+
+    public event INetworkTransport.ClientDisconnectedHandler? ClientDisconnected;
+
     public List<NetworkTransportData> Transports { get; } = new();
 
     public IObservable<NetworkMetricData> NetworkMetrics => _networkMetricsSubject;
@@ -116,10 +120,19 @@ public class NetworkTransportManager : INetworkTransportManager
     {
         foreach (var transport in Transports)
         {
-            _logger.LogDebug("Starting transport {TransportName}", transport.Name);
-
-
+            _logger.LogDebug(
+                "Starting transport {TransportName}:{Port} - {Id}",
+                transport.Name,
+                transport.Port,
+                transport.Id
+            );
             await transport.Transport.StartAsync();
+            _logger.LogDebug(
+                "Started transport {TransportName}:{Port} - {Id}",
+                transport.Name,
+                transport.Port,
+                transport.Id
+            );
         }
     }
 
@@ -155,6 +168,8 @@ public class NetworkTransportManager : INetworkTransportManager
         );
         _sessionsTransports.TryRemove(sessionId, out _);
         _sessionsMetrics.TryRemove(sessionId, out _);
+
+        ClientDisconnected?.Invoke(transportId, sessionId, endpoint);
     }
 
     private void TransportOnClientConnected(string transportId, string sessionId, string endpoint)
@@ -167,6 +182,8 @@ public class NetworkTransportManager : INetworkTransportManager
         );
         _sessionsTransports.TryAdd(sessionId, transportId);
         _sessionsMetrics.TryAdd(sessionId, new NetworkMetricData());
+
+        ClientConnected?.Invoke(transportId, sessionId, endpoint);
     }
 
     public async Task StopAsync(CancellationToken cancellationToken = default)

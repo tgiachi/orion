@@ -19,7 +19,8 @@ public class NetworkConfig : BaseConfigSection
                 Host = "0.0.0.0",
                 Ports = "6660-6669,6670",
                 NetworkType = ServerNetworkType.Clients,
-                Secure = false
+                Secure = false,
+                UseWebSocket = false
             }
         );
     }

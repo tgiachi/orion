@@ -10,6 +10,16 @@ namespace Orion.Network.Core.Interfaces.Services;
 public interface INetworkTransportManager : IDisposable
 {
     /// <summary>
+    ///  Notifies when a client connects to the network
+    /// </summary>
+    event INetworkTransport.ClientConnectedHandler ClientConnected;
+
+    /// <summary>
+    ///    Notifies when a client disconnects from the network
+    /// </summary>
+    event INetworkTransport.ClientDisconnectedHandler ClientDisconnected;
+
+    /// <summary>
     /// Gets the collection of registered network transports
     /// </summary>
     List<NetworkTransportData> Transports { get; }
