@@ -7,6 +7,7 @@ using Orion.Core.Server.Data.Options;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Web.Extensions;
 using Orion.Network.Core.Modules.Container;
+using Orion.Server.Hosted;
 using Orion.Server.Modules.Container;
 using Orion.Server.Routes;
 using Scalar.AspNetCore;
@@ -42,6 +43,11 @@ public class Program
             .AddModule<NetworkTransportModule>();
 
 
+        builder.Services.AddModule<DefaultScriptsModule>();
+
+
+        builder.Services.AddHostedService<OrionHostedService>();
+
         var app = builder.Build();
 
 
@@ -63,7 +69,6 @@ public class Program
         apiRoute.MapStatus();
 
         app.MapOpenApi(_openApiPath);
-
 
         app.Run();
     }

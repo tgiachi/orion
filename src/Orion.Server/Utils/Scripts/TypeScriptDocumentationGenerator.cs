@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 using Orion.Core.Extensions;
@@ -138,7 +139,7 @@ public static class TypeScriptDocumentationGenerator
     }
 
 
-    private static string ConvertToTypeScriptType(Type type)
+    private static string ConvertToTypeScriptType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type type)
     {
         if (type == typeof(void))
         {

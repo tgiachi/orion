@@ -17,7 +17,7 @@ public class ScriptEngineService : IScriptEngineService, ILetterListener<ServerR
 {
     private readonly ILogger _logger;
 
-    private readonly List<string> _initScripts = ["bootstrap.js", "index.js", "abyssirc.js"];
+    private readonly List<string> _initScripts = ["bootstrap.js", "index.js", "orion.js"];
 
     private readonly DirectoriesConfig _directoriesConfig;
     private readonly Engine _jsEngine;
@@ -154,6 +154,10 @@ public class ScriptEngineService : IScriptEngineService, ILetterListener<ServerR
         {
             _logger.LogInformation("Executing onStarted");
             callback(null);
+        }
+        else
+        {
+            _logger.LogInformation("function onStarted not found");
         }
     }
 }

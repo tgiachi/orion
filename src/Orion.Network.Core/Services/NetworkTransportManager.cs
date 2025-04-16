@@ -200,7 +200,6 @@ public class NetworkTransportManager : INetworkTransportManager
     public void Dispose()
     {
         _cancellationTokenSource.Dispose();
-        _outputTask.Dispose();
         _metricsSubscription.Dispose();
         GC.SuppressFinalize(this);
     }

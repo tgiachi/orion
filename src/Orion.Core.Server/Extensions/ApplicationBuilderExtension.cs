@@ -20,7 +20,7 @@ public static class ApplicationBuilderExtension
     public static AppContextData<TOptions, TConfig> InitApplication<TOptions, TConfig>(
         this IServiceCollection serviceCollection, string appName
     )
-        where TOptions : IOrionServerCmdOptions where TConfig : IOrionServerConfig, new()
+        where TOptions : IOrionServerCmdOptions where TConfig : class, IOrionServerConfig, new()
     {
         var env = Environment.GetEnvironmentVariable(appName.ToSnakeCaseUpper() + "_ENVIRONMENT");
         var appContextData = new AppContextData<TOptions, TConfig>()
@@ -61,12 +61,21 @@ public static class ApplicationBuilderExtension
 
         var directoriesConfig = new DirectoriesConfig(parsedOptions.Value.RootDirectory);
 
+        serviceCollection.AddSingleton(directoriesConfig);
+
         appContextData.ServerConfig =
             directoriesConfig.LoadConfig<TConfig>(serviceCollection, parsedOptions.Value.ConfigFile);
+
+        serviceCollection.AddSingleton<TConfig>(appContextData.ServerConfig);
 
         appContextData.DirectoriesConfig = directoriesConfig;
 
         appContextData.ServerOptions = parsedOptions.Value;
+
+        if (Environment.GetEnvironmentVariable(appName.ToSnakeCaseUpper() + "_DEBUG") != null)
+        {
+            appContextData.ServerOptions.IsDebug = true;
+        }
 
 
         appContextData.LoggerConfiguration = new LoggerConfiguration()
