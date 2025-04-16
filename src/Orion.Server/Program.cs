@@ -6,6 +6,8 @@ using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Options;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Web.Extensions;
+using Orion.Network.Core.Modules.Container;
+using Orion.Server.Modules.Container;
 using Orion.Server.Routes;
 using Scalar.AspNetCore;
 using Serilog;
@@ -34,6 +36,10 @@ public class Program
         builder.Logging.ClearProviders().AddSerilog();
 
         appContext.ServerOptions.ShowHeader(typeof(Program).Assembly);
+
+        builder.Services
+            .AddModule<DefaultServicesModule>()
+            .AddModule<NetworkTransportModule>();
 
 
         var app = builder.Build();
