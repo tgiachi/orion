@@ -1,17 +1,22 @@
 using System.Buffers;
 using System.Collections.Concurrent;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Channels;
 using Microsoft.Extensions.Logging;
 using Orion.Network.Core.Data;
 using Orion.Network.Core.Interfaces.Services;
 using Orion.Network.Core.Interfaces.Transports;
+using Orion.Network.Core.Parsers;
 
 namespace Orion.Network.Core.Services;
 
 public class NetworkTransportManager : INetworkTransportManager
 {
     private readonly ILogger _logger;
+
+    private readonly Subject<NetworkMetricData> _networkMetricsSubject = new();
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
@@ -21,7 +26,12 @@ public class NetworkTransportManager : INetworkTransportManager
 
     private readonly ConcurrentDictionary<string, NetworkMetricData> _sessionsMetrics = new();
 
+    private readonly IDisposable _metricsSubscription;
+
     public List<INetworkTransport> Transports { get; } = new();
+
+
+    public IObservable<NetworkMetricData> NetworkMetrics => _networkMetricsSubject;
 
     public Channel<NetworkMessageData> IncomingMessages { get; }
 
@@ -35,6 +45,21 @@ public class NetworkTransportManager : INetworkTransportManager
         OutgoingMessages = Channel.CreateUnbounded<NetworkMessageData>();
 
         _outputTask = Task.Run(OutputTaskAction);
+
+        _metricsSubscription = Observable.Interval(TimeSpan.FromSeconds(60)).Subscribe(_ => EmitMetrics());
+    }
+
+    private void EmitMetrics()
+    {
+        if (!_sessionsMetrics.IsEmpty)
+        {
+            foreach (var (sessionId, metrics) in _sessionsMetrics)
+            {
+                _logger.LogDebug("Session {SessionId} metrics: {Metrics}", sessionId, metrics);
+
+                _networkMetricsSubject.OnNext(metrics);
+            }
+        }
     }
 
     private async Task OutputTaskAction()
@@ -94,10 +119,30 @@ public class NetworkTransportManager : INetworkTransportManager
         {
             _logger.LogDebug("Starting transport {TransportName}", transport.Name);
 
-            transport.ClientConnected += TransportOnClientConnected;
-            transport.ClientDisconnected += TransportOnClientDisconnected;
 
             await transport.StartAsync();
+        }
+    }
+
+    private void TransportOnMessageReceived(string transportName, string sessionId, ReadOnlyMemory<byte> data)
+    {
+        var messages = NewLineMessageParser.FastParseMessages(data);
+
+        foreach (var message in messages)
+        {
+            _logger.LogTrace(
+                "{TransportName} - SessionId: {Session} IpClient {Endpoint} received message: {Message}",
+                sessionId,
+                transportName,
+                sessionId,
+                message
+            );
+
+            _sessionsMetrics[sessionId].AddBytesIn(data.Length);
+            _sessionsMetrics[sessionId].AddPacketsIn();
+
+            var messageData = new NetworkMessageData(sessionId, message);
+            IncomingMessages.Writer.TryWrite(messageData);
         }
     }
 
@@ -146,6 +191,10 @@ public class NetworkTransportManager : INetworkTransportManager
             throw new InvalidOperationException($"Transport with name {transport.Name} already exists.");
         }
 
+        transport.ClientConnected += TransportOnClientConnected;
+        transport.ClientDisconnected += TransportOnClientDisconnected;
+        transport.MessageReceived += TransportOnMessageReceived;
+
         Transports.Add(transport);
     }
 
@@ -153,6 +202,7 @@ public class NetworkTransportManager : INetworkTransportManager
     {
         _cancellationTokenSource.Dispose();
         _outputTask.Dispose();
+        _metricsSubscription.Dispose();
         GC.SuppressFinalize(this);
     }
 }

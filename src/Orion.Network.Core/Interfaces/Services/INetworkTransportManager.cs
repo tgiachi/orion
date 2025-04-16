@@ -15,6 +15,11 @@ public interface INetworkTransportManager : IDisposable
     List<INetworkTransport> Transports { get; }
 
     /// <summary>
+    ///  Gets the observable for network metrics
+    /// </summary>
+    IObservable<NetworkMetricData> NetworkMetrics { get; }
+
+    /// <summary>
     /// Gets the channel for incoming network messages
     /// </summary>
     Channel<NetworkMessageData> IncomingMessages { get; }

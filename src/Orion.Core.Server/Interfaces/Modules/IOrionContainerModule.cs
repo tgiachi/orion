@@ -8,5 +8,5 @@ public interface IOrionContainerModule
     ///     Register the services in the container.
     /// </summary>
     /// <param name="container">The container to register the services in.</param>
-    IServiceCollection RegisterServices(IServiceCollection serviceCollection);
+    IServiceCollection RegisterServices(IServiceCollection services);
 }

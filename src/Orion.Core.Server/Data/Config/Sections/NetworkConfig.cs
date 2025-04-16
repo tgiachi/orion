@@ -1,5 +1,5 @@
 using Orion.Core.Server.Types;
-using Orion.Network.Core.Types;
+using Orion.Core.Types;
 
 namespace Orion.Core.Server.Data.Config.Sections;
 
