@@ -28,8 +28,7 @@ public class NetworkTransportManager : INetworkTransportManager
 
     private readonly IDisposable _metricsSubscription;
 
-    public List<INetworkTransport> Transports { get; } = new();
-
+    public List<NetworkTransportData> Transports { get; } = new();
 
     public IObservable<NetworkMetricData> NetworkMetrics => _networkMetricsSubject;
 
@@ -70,15 +69,15 @@ public class NetworkTransportManager : INetworkTransportManager
             {
                 try
                 {
-                    var sessionTransport = _sessionsTransports.GetValueOrDefault(message.SessionId);
+                    var sessionTransportId = _sessionsTransports.GetValueOrDefault(message.SessionId);
 
-                    if (sessionTransport == null)
+                    if (sessionTransportId == null)
                     {
                         _logger.LogWarning("Session transport not found for session {sessionId}", message.SessionId);
                         continue;
                     }
 
-                    var transport = Transports.FirstOrDefault(t => t.Name == sessionTransport);
+                    var transport = Transports.FirstOrDefault(t => t.Id == sessionTransportId);
 
                     var byteArray = ArrayPool<byte>.Shared.Rent(message.Message.Length);
                     var bytes = Encoding.UTF8.GetBytes(message.Message, byteArray);
@@ -86,12 +85,12 @@ public class NetworkTransportManager : INetworkTransportManager
                     _sessionsMetrics[message.SessionId].AddBytesOut(bytes);
                     _sessionsMetrics[message.SessionId].AddPacketsOut();
 
-                    await transport.SendAsync(message.SessionId, byteArray);
+                    await transport.Transport.SendAsync(message.SessionId, byteArray);
 
                     _logger.LogTrace(
                         "Sent message to session {SessionId} on transport {TransportName}: {Message}",
                         message.SessionId,
-                        sessionTransport,
+                        sessionTransportId,
                         message.Message
                     );
                 }
@@ -120,11 +119,11 @@ public class NetworkTransportManager : INetworkTransportManager
             _logger.LogDebug("Starting transport {TransportName}", transport.Name);
 
 
-            await transport.StartAsync();
+            await transport.Transport.StartAsync();
         }
     }
 
-    private void TransportOnMessageReceived(string transportName, string sessionId, ReadOnlyMemory<byte> data)
+    private void TransportOnMessageReceived(string transportId, string sessionId, ReadOnlyMemory<byte> data)
     {
         var messages = NewLineMessageParser.FastParseMessages(data);
 
@@ -133,7 +132,7 @@ public class NetworkTransportManager : INetworkTransportManager
             _logger.LogTrace(
                 "{TransportName} - SessionId: {Session} IpClient {Endpoint} received message: {Message}",
                 sessionId,
-                transportName,
+                transportId,
                 sessionId,
                 message
             );
@@ -146,27 +145,27 @@ public class NetworkTransportManager : INetworkTransportManager
         }
     }
 
-    private void TransportOnClientDisconnected(string transportName, string sessionId, string endpoint)
+    private void TransportOnClientDisconnected(string transportId, string sessionId, string endpoint)
     {
         _logger.LogDebug(
             "{TransportName} - SessionId: {Session} IpClient {Endpoint} disconnected",
             sessionId,
-            transportName,
+            transportId,
             endpoint
         );
         _sessionsTransports.TryRemove(sessionId, out _);
         _sessionsMetrics.TryRemove(sessionId, out _);
     }
 
-    private void TransportOnClientConnected(string transportName, string sessionId, string endpoint)
+    private void TransportOnClientConnected(string transportId, string sessionId, string endpoint)
     {
         _logger.LogDebug(
             "{TransportName} - SessionId: {Session} IpClient {Endpoint} connected",
             sessionId,
-            transportName,
+            transportId,
             endpoint
         );
-        _sessionsTransports.TryAdd(sessionId, transportName);
+        _sessionsTransports.TryAdd(sessionId, transportId);
         _sessionsMetrics.TryAdd(sessionId, new NetworkMetricData());
     }
 
@@ -175,7 +174,7 @@ public class NetworkTransportManager : INetworkTransportManager
         foreach (var transport in Transports)
         {
             _logger.LogDebug("Starting transport {TransportName}", transport.Name);
-            await transport.StopAsync();
+            await transport.Transport.StopAsync();
         }
     }
 
@@ -186,7 +185,7 @@ public class NetworkTransportManager : INetworkTransportManager
 
     public void AddTransport(INetworkTransport transport)
     {
-        if (Transports.Any(t => t.Name == transport.Name))
+        if (Transports.Any(t => t.Name == transport.Name && t.Port == transport.Port))
         {
             throw new InvalidOperationException($"Transport with name {transport.Name} already exists.");
         }
@@ -195,7 +194,7 @@ public class NetworkTransportManager : INetworkTransportManager
         transport.ClientDisconnected += TransportOnClientDisconnected;
         transport.MessageReceived += TransportOnMessageReceived;
 
-        Transports.Add(transport);
+        Transports.Add(new NetworkTransportData(transport));
     }
 
     public void Dispose()

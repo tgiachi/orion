@@ -12,7 +12,7 @@ public interface INetworkTransportManager : IDisposable
     /// <summary>
     /// Gets the collection of registered network transports
     /// </summary>
-    List<INetworkTransport> Transports { get; }
+    List<NetworkTransportData> Transports { get; }
 
     /// <summary>
     ///  Gets the observable for network metrics

@@ -5,28 +5,28 @@ public interface INetworkTransport
     /// <summary>
     /// Delegate for handling client connection events
     /// </summary>
-    /// <param name="transportName">The name of transport</param>
+    /// <param name="transportId">The Id of transport</param>
     /// <param name="sessionId">The unique identifier for the client session</param>
     /// <param name="endpoint">The network endpoint of the connected client</param>
-    public delegate void ClientConnectedHandler(string transportName, string sessionId, string endpoint);
+    public delegate void ClientConnectedHandler(string transportId, string sessionId, string endpoint);
 
     /// <summary>
     /// Delegate for handling client disconnection events
     /// </summary>
-    /// <param name="transportName">The name of transport</param>
+    /// <param name="transportId">The Id of transport</param>
     /// <param name="sessionId">The unique identifier for the client session</param>
     /// <param name="endpoint">The network endpoint of the disconnected lient</param>
-    public delegate void ClientDisconnectedHandler(string transportName, string sessionId, string endpoint);
+    public delegate void ClientDisconnectedHandler(string transportId, string sessionId, string endpoint);
 
     /// <summary>
     /// Delegate for handling received message events
     /// </summary>
-    /// <param name="transportName">The name of transport</param>
+    /// <param name="transportId">The id of transport</param>
     /// <param name="sessionId">The unique identifier for the client session</param>
     /// <param name="data">The raw message data received from the client</param>
     /// <param name="cancellationToken">A token to cancel the operation</param>
     public delegate void MessageReceivedHandler(
-        string transportName, string sessionId, ReadOnlyMemory<byte> data
+        string transportId, string sessionId, ReadOnlyMemory<byte> data
     );
 
     /// <summary>
@@ -44,10 +44,26 @@ public interface INetworkTransport
     /// </summary>
     event MessageReceivedHandler MessageReceived;
 
+
+    /// <summary>
+    ///  The transport unique identifier.
+    /// </summary>
+    string Id { get; }
+
     /// <summary>
     ///   The transport name.
     /// </summary>
     string Name { get; }
+
+    /// <summary>
+    ///  The transport port
+    /// </summary>
+    int Port { get; }
+
+    /// <summary>
+    ///  The transport IP address
+    /// </summary>
+    string IpAddress { get; }
 
     /// <summary>
     ///     Starts the transport.

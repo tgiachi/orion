@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Core.Server", "src\Or
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Core", "src\Orion.Core\Orion.Core.csproj", "{AE8CACF0-332A-4799-9F96-97A78AFD498F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Network.Tcp", "src\Orion.Network.Tcp\Orion.Network.Tcp.csproj", "{723C8918-93DB-4FFD-BF39-388D71086FB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,18 @@ Global
 		{AE8CACF0-332A-4799-9F96-97A78AFD498F}.Release|x64.Build.0 = Release|Any CPU
 		{AE8CACF0-332A-4799-9F96-97A78AFD498F}.Release|x86.ActiveCfg = Release|Any CPU
 		{AE8CACF0-332A-4799-9F96-97A78AFD498F}.Release|x86.Build.0 = Release|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Debug|x64.Build.0 = Debug|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Debug|x86.Build.0 = Debug|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Release|x64.ActiveCfg = Release|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Release|x64.Build.0 = Release|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Release|x86.ActiveCfg = Release|Any CPU
+		{723C8918-93DB-4FFD-BF39-388D71086FB6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
