@@ -64,7 +64,7 @@ public class Program
         );
 
 
-        var apiRoute = app.MapGroup("/v1/api");
+        var apiRoute = app.MapGroup("/api/v1");
 
         apiRoute.MapStatus();
 
