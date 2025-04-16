@@ -8,7 +8,7 @@ namespace Orion.Core.Server.Extensions;
 
 public static class ConfigLoaderExtension
 {
-    public static TConfig GetConfig<TConfig>(
+    public static TConfig LoadConfig<TConfig>(
         this DirectoriesConfig directoriesConfig, IServiceCollection serviceCollection, string configFileName = "orion.yml"
     ) where TConfig : IOrionServerConfig, new()
     {
