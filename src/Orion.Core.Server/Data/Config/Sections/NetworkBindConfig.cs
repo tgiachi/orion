@@ -10,5 +10,5 @@ public class NetworkBindConfig
 
     public string Ports { get; set; } = "6660-6669,6697";
 
-    public bool UseSSL { get; set; } = false;
+    public bool Secure { get; set; } = false;
 }

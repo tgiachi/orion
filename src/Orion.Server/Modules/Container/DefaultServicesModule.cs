@@ -24,6 +24,7 @@ public class DefaultServicesModule : IOrionContainerModule
             .AddService<ISchedulerSystemService, SchedulerSystemService>()
             .AddService<IEventDispatcherService, EventDispatcherService>()
             .AddService<IScriptEngineService, ScriptEngineService>()
+            .AddService<INetworkService, NetworkService>()
             .AddService<IProcessQueueService, ProcessQueueService>();
 
     }

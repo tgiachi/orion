@@ -17,9 +17,9 @@ public class NetworkConfig : BaseConfigSection
             new NetworkBindConfig()
             {
                 Host = "0.0.0.0",
-                Ports = "6660-6661",
+                Ports = "6660-6669,6670",
                 NetworkType = ServerNetworkType.Clients,
-                UseSSL = false
+                Secure = false
             }
         );
     }
