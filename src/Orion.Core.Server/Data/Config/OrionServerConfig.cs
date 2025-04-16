@@ -11,4 +11,5 @@ public class OrionServerConfig : IOrionServerConfig
     public NetworkConfig Network { get; set; } = new();
     public OperConfig Oper { get; set; } = new();
     public ProcessConfig Process { get; set; } = new();
+
 }

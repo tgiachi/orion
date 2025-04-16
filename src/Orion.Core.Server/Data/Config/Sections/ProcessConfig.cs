@@ -6,4 +6,6 @@ public class ProcessConfig : BaseConfigSection
 {
     public string PidFile { get; set; } = "orion_server.pid";
 
+    public ProcessQueueConfig ProcessQueue { get; set; } = new();
+
 }
