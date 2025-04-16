@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Network.Tcp", "src\Or
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Core.Server.Web", "src\Orion.Core.Server.Web\Orion.Core.Server.Web.csproj", "{75432F8C-65F4-4BDD-8E9B-03B40697E8F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Irc.Core", "src\Orion.Irc.Core\Orion.Irc.Core.csproj", "{87511157-57EF-48F0-90DA-394D8C736583}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,18 @@ Global
 		{75432F8C-65F4-4BDD-8E9B-03B40697E8F6}.Release|x64.Build.0 = Release|Any CPU
 		{75432F8C-65F4-4BDD-8E9B-03B40697E8F6}.Release|x86.ActiveCfg = Release|Any CPU
 		{75432F8C-65F4-4BDD-8E9B-03B40697E8F6}.Release|x86.Build.0 = Release|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Debug|x64.Build.0 = Debug|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Debug|x86.Build.0 = Debug|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Release|x64.ActiveCfg = Release|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Release|x64.Build.0 = Release|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Release|x86.ActiveCfg = Release|Any CPU
+		{87511157-57EF-48F0-90DA-394D8C736583}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
