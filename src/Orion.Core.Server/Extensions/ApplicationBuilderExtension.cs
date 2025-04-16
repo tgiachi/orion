@@ -1,3 +1,4 @@
+using System.Reflection;
 using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using Orion.Core.Extensions;
@@ -7,6 +8,7 @@ using Orion.Core.Server.Interfaces.Config;
 using Orion.Core.Server.Interfaces.Options;
 using Orion.Core.Server.Types;
 using Orion.Core.Types;
+using Orion.Core.Utils;
 using Serilog;
 using Serilog.Formatting.Json;
 
@@ -84,5 +86,19 @@ public static class ApplicationBuilderExtension
 
 
         return appContextData;
+    }
+
+    public static void ShowHeader<TOption>(this TOption options, Assembly assembly, string headerFile = "Assets.header.txt")
+        where TOption : IOrionServerCmdOptions
+    {
+        if (options.ShowHeader)
+        {
+            var header = ResourceUtils.ReadEmbeddedResource(headerFile, assembly);
+
+            foreach (var line in header.Split(Environment.NewLine))
+            {
+                Console.WriteLine(line);
+            }
+        }
     }
 }

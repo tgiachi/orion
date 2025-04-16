@@ -8,9 +8,9 @@ public class OperEntryConfig
 
     public string VHost { get; set; } = "opers.orion.io";
 
-    public string PasswordHash { get; set; } = HashUtils.CreatePassword("password");
+    public string PasswordHash { get; set; } = "hash://" + HashUtils.CreatePassword("password");
 
     public string NickName { get; set; } = "Oper";
-
+    
 
 }
