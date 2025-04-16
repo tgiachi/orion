@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using NetCoreServer;
+using Orion.Core.Types;
 using Orion.Network.Core.Interfaces.Transports;
 using Orion.Network.Tcp.Sessions;
 
@@ -16,14 +17,16 @@ public class SecureTcpServer : SslServer, INetworkTransport
     public string Id { get; }
     public string Name { get; }
 
+    public ServerNetworkType ServerNetworkType { get; }
     public string IpAddress { get; }
 
-    public SecureTcpServer(SslContext context, IPAddress address, int port) : base(context, address, port)
+    public SecureTcpServer(ServerNetworkType serverNetworkType,SslContext context, IPAddress address, int port) : base(context, address, port)
     {
         Id = Guid.NewGuid().ToString();
         Name = "SecureTcpServer";
         IpAddress = address.ToString();
 
+        ServerNetworkType = serverNetworkType;
         OptionNoDelay = true;
         OptionReceiveBufferSize = 8192;
         OptionSendBufferSize = 8192;

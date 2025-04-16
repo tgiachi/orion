@@ -1,3 +1,4 @@
+using Orion.Core.Types;
 using Orion.Network.Core.Interfaces.Transports;
 
 namespace Orion.Network.Core.Data;
@@ -14,6 +15,9 @@ public class NetworkTransportData
 
     public INetworkTransport Transport { get; set; }
 
+
+    public ServerNetworkType ServerNetworkType { get; set; }
+
     public NetworkTransportData(INetworkTransport transport)
     {
         Id = transport.Id;
@@ -21,5 +25,6 @@ public class NetworkTransportData
         IpAddress = transport.IpAddress;
         Port = transport.Port;
         Transport = transport;
+        ServerNetworkType = transport.ServerNetworkType;
     }
 }

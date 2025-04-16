@@ -1,5 +1,6 @@
 using System.Net;
 using NetCoreServer;
+using Orion.Core.Types;
 using Orion.Network.Core.Interfaces.Transports;
 using Orion.Network.Tcp.Sessions;
 
@@ -14,13 +15,15 @@ public class NonSecureTcpServer : TcpServer, INetworkTransport
 
     public string Id { get; }
     public string Name { get; }
+    public ServerNetworkType ServerNetworkType { get; }
     public string IpAddress { get; }
 
-    public NonSecureTcpServer(IPAddress address, int port) : base(address, port)
+    public NonSecureTcpServer(ServerNetworkType serverNetworkType, IPAddress address, int port) : base(address, port)
     {
         Id = Guid.NewGuid().ToString();
         Name = "NonSecureTcpServer";
         IpAddress = address.ToString();
+        ServerNetworkType = serverNetworkType;
 
         OptionNoDelay = true;
         OptionReceiveBufferSize = 8192;

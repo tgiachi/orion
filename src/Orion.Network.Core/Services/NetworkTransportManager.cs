@@ -5,9 +5,7 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Channels;
 using Microsoft.Extensions.Logging;
-using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Network.Core.Data;
-using Orion.Network.Core.Interfaces.Listeners;
 using Orion.Network.Core.Interfaces.Services;
 using Orion.Network.Core.Interfaces.Transports;
 using Orion.Network.Core.Parsers;
@@ -156,7 +154,8 @@ public class NetworkTransportManager : INetworkTransportManager
             _sessionsMetrics[sessionId].AddBytesIn(data.Length);
             _sessionsMetrics[sessionId].AddPacketsIn();
 
-            var messageData = new NetworkMessageData(sessionId, message);
+            var transport = Transports.FirstOrDefault(t => t.Id == transportId);
+            var messageData = new NetworkMessageData(sessionId, message, transport.ServerNetworkType);
             IncomingMessages.Writer.TryWrite(messageData);
         }
     }

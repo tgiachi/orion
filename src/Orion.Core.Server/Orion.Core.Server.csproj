@@ -18,6 +18,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Orion.Core\Orion.Core.csproj" />
+      <ProjectReference Include="..\Orion.Irc.Core\Orion.Irc.Core.csproj" />
+      <ProjectReference Include="..\Orion.Network.Core\Orion.Network.Core.csproj" />
     </ItemGroup>
 
 </Project>

@@ -4,6 +4,8 @@ using HyperCube.Postman.Services;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Interfaces.Modules;
 using Orion.Core.Server.Interfaces.Services;
+using Orion.Irc.Core.Interfaces.Parser;
+using Orion.Irc.Core.Services;
 using Orion.Server.Services;
 
 namespace Orion.Server.Modules.Container;
@@ -16,6 +18,10 @@ public class DefaultServicesModule : IOrionContainerModule
         {
             MaxConcurrentTasks = 4
         });
+
+        services
+            .AddService<IIrcCommandService, IrcCommandService>()
+            .AddService<IIrcCommandParser, IrcCommandParser>();
 
         return services
             .AddService<IHyperPostmanService, HyperPostmanService>()

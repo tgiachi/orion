@@ -6,7 +6,6 @@ using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Options;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Web.Extensions;
-using Orion.Network.Core.Modules.Container;
 using Orion.Server.Hosted;
 using Orion.Server.Modules.Container;
 using Orion.Server.Routes;

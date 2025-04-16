@@ -9,10 +9,11 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
+      <PackageReference Include="System.Reactive" Version="6.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Orion.Core.Server\Orion.Core.Server.csproj" />
+
       <ProjectReference Include="..\Orion.Core\Orion.Core.csproj" />
       <ProjectReference Include="..\Orion.Irc.Core\Orion.Irc.Core.csproj" />
     </ItemGroup>

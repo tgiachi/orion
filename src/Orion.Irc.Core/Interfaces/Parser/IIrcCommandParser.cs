@@ -4,11 +4,10 @@ namespace Orion.Irc.Core.Interfaces.Parser;
 
 public interface IIrcCommandParser
 {
-    Task<List<IIrcCommand>> ParseAsync(string message);
+    Task<IIrcCommand> ParseAsync(string message);
 
     Task<string> SerializeAsync(IIrcCommand command);
 
-    void RegisterCommand(IIrcCommand command);
+    void RegisterCommand<TCommand>() where TCommand : IIrcCommand, new();
 
-    List<string> SanitizeMessage(string rawMessage);
 }

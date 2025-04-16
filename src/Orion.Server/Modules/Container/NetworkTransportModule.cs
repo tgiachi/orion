@@ -1,10 +1,9 @@
-using Microsoft.Extensions.DependencyInjection;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Interfaces.Modules;
 using Orion.Network.Core.Interfaces.Services;
 using Orion.Network.Core.Services;
 
-namespace Orion.Network.Core.Modules.Container;
+namespace Orion.Server.Modules.Container;
 
 public class NetworkTransportModule : IOrionContainerModule
 {

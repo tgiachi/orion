@@ -107,7 +107,7 @@ public class NetworkService : INetworkService, ILetterListener<ServerReadyEvent>
 
     private void AddNonSecureTcpServer(int port, string ipAddress, ServerNetworkType networkType)
     {
-        var server = new NonSecureTcpServer(ipAddress.ToIpAddress(), port);
+        var server = new NonSecureTcpServer(networkType, ipAddress.ToIpAddress(), port);
 
         _logger.LogInformation("Starting server on (non-SSL) TCP {IpAddress}:{Port}", ipAddress, port);
         _networkTransportManager.AddTransport(server);
@@ -120,7 +120,7 @@ public class NetworkService : INetworkService, ILetterListener<ServerReadyEvent>
             throw new InvalidOperationException("SSL context is not initialized");
         }
 
-        var server = new SecureTcpServer(_sslContext, ipAddress.ToIpAddress(), port);
+        var server = new SecureTcpServer(networkType, _sslContext, ipAddress.ToIpAddress(), port);
         _logger.LogInformation("Starting server on (SSL) TCP {IpAddress}:{Port}", ipAddress, port);
         _networkTransportManager.AddTransport(server);
     }
