@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Sockets;
 using NetCoreServer;
 using Orion.Network.Core.Interfaces.Transports;
 using Orion.Network.Tcp.Sessions;
@@ -22,6 +23,10 @@ public class SecureTcpServer : SslServer, INetworkTransport
         Id = Guid.NewGuid().ToString();
         Name = "SecureTcpServer";
         IpAddress = address.ToString();
+
+        OptionNoDelay = true;
+        OptionReceiveBufferSize = 8192;
+        OptionSendBufferSize = 8192;
     }
 
     protected override SslSession CreateSession()
@@ -83,7 +88,7 @@ public class SecureTcpServer : SslServer, INetworkTransport
         base.OnDisconnected(session);
     }
 
-    public void OnMessageReceived(NonSecureTcpSession session, byte[] message)
+    public void OnMessageReceived(SecureTcpSession session, byte[] message)
     {
         MessageReceived?.Invoke(Id, session.Id.ToString(), message);
     }

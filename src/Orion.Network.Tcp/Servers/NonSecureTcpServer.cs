@@ -20,6 +20,10 @@ public class NonSecureTcpServer : TcpServer, INetworkTransport
         Id = Guid.NewGuid().ToString();
         Name = "NonSecureTcpServer";
         IpAddress = address.ToString();
+
+        OptionNoDelay = true;
+        OptionReceiveBufferSize = 8192;
+        OptionSendBufferSize = 8192;
     }
 
 

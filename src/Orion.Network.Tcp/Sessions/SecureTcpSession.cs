@@ -10,4 +10,12 @@ public class SecureTcpSession : SslSession
     {
         _server = server;
     }
+
+    protected override void OnReceived(byte[] buffer, long offset, long size)
+    {
+        _server.OnMessageReceived(this, buffer);
+
+        base.OnReceived(buffer, offset, size);
+    }
+
 }
