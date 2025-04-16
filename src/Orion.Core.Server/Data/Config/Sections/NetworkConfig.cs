@@ -1,9 +1,10 @@
+using Orion.Core.Server.Data.Config.Base;
 using Orion.Core.Server.Types;
 using Orion.Core.Types;
 
 namespace Orion.Core.Server.Data.Config.Sections;
 
-public class NetworkConfig
+public class NetworkConfig : BaseConfigSection
 {
     public SSLConfig SSL { get; set; } = new();
 

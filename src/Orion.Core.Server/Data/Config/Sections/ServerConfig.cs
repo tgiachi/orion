@@ -1,6 +1,8 @@
+using Orion.Core.Server.Data.Config.Base;
+
 namespace Orion.Core.Server.Data.Config.Sections;
 
-public class ServerConfig
+public class ServerConfig : BaseConfigSection
 {
     public string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", string.Empty);
 
