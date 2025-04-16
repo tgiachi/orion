@@ -5,7 +5,9 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Channels;
 using Microsoft.Extensions.Logging;
+using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Network.Core.Data;
+using Orion.Network.Core.Interfaces.Listeners;
 using Orion.Network.Core.Interfaces.Services;
 using Orion.Network.Core.Interfaces.Transports;
 using Orion.Network.Core.Parsers;
@@ -19,6 +21,7 @@ public class NetworkTransportManager : INetworkTransportManager
     private readonly Subject<NetworkMetricData> _networkMetricsSubject = new();
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
+
 
     private readonly Task _outputTask;
 
