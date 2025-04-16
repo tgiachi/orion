@@ -7,7 +7,6 @@ public struct NetworkMessageData(string sessionId, string message, ServerNetwork
     public string SessionId { get; set; } = sessionId;
 
     public string Message { get; set; } = message;
-
-
-    public ServerNetworkType ServerNetworkType { get; set; }
+    
+    public ServerNetworkType ServerNetworkType { get; set; } = serverNetworkType;
 }
