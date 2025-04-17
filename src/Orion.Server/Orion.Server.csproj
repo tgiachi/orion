@@ -3,16 +3,42 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <Version>0.1.1</Version>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
-        <PublishAot>true</PublishAot>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Orion.Core.Server.Web\Orion.Core.Server.Web.csproj" />
+        <ProjectReference Include="..\Orion.Core.Server\Orion.Core.Server.csproj" />
+        <ProjectReference Include="..\Orion.Core\Orion.Core.csproj" />
+        <ProjectReference Include="..\Orion.Irc.Core\Orion.Irc.Core.csproj" />
+        <ProjectReference Include="..\Orion.Network.Core\Orion.Network.Core.csproj" />
+        <ProjectReference Include="..\Orion.Network.Tcp\Orion.Network.Tcp.csproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="Jint" Version="4.2.2" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+        
+        <PackageReference Include="Scalar.AspNetCore" Version="2.1.16" />
+        <PackageReference Include="Scriban" Version="6.2.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.1" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <None Remove="Assets\header.txt" />
+      <EmbeddedResource Include="Assets\header.txt" />
     </ItemGroup>
 
 </Project>

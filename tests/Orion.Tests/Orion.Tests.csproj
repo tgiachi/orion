@@ -26,4 +26,8 @@
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Orion.Network.Core\Orion.Network.Core.csproj" />
+  </ItemGroup>
+
 </Project>

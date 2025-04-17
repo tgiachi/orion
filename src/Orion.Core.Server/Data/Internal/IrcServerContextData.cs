@@ -1,0 +1,10 @@
+namespace Orion.Core.Server.Data.Internal;
+
+public class IrcServerContextData
+{
+    /// <summary>
+    ///  The name of the server.
+    ///  Example: irc.example.com
+    /// </summary>
+    public string ServerName { get; set; }
+}
