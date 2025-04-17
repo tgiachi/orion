@@ -3,7 +3,7 @@ using Orion.Core.Server.Interfaces.Services.Base;
 using Orion.Core.Types;
 using Orion.Irc.Core.Interfaces.Commands;
 
-namespace Orion.Core.Server.Interfaces.Services;
+namespace Orion.Core.Server.Interfaces.Services.Irc;
 
 public interface IIrcCommandService : IOrionService
 {

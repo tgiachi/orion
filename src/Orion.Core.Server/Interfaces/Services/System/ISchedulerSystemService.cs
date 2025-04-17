@@ -1,4 +1,4 @@
-namespace Orion.Core.Server.Interfaces.Services;
+namespace Orion.Core.Server.Interfaces.Services.System;
 
 public interface ISchedulerSystemService : IDisposable
 {

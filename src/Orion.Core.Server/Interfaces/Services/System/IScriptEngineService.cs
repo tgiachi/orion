@@ -1,6 +1,6 @@
 using Orion.Core.Server.Interfaces.Services.Base;
 
-namespace Orion.Core.Server.Interfaces.Services;
+namespace Orion.Core.Server.Interfaces.Services.System;
 
 public interface IScriptEngineService : IOrionStartService
 {

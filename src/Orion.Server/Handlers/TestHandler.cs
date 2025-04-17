@@ -1,5 +1,6 @@
 using Orion.Core.Server.Interfaces.Listeners;
 using Orion.Core.Server.Interfaces.Services;
+using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Core.Types;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Replies;

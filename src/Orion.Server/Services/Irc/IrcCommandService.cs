@@ -1,6 +1,7 @@
 using Orion.Core.Observable;
 using Orion.Core.Server.Interfaces.Listeners;
 using Orion.Core.Server.Interfaces.Services;
+using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Core.Types;
 using Orion.Irc.Core.Data.Internal;
 using Orion.Irc.Core.Interfaces.Commands;
