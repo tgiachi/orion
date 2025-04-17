@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.1.0</Version>
+        <Version>0.1.1</Version>
         <Authors>tgiachi</Authors>
         <Company>tgiachi</Company>
         <Description>TCP implementation for Orion IRC Server networking</Description>
@@ -23,18 +23,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Orion.Core\Orion.Core.csproj"/>
-        <ProjectReference Include="..\Orion.Network.Core\Orion.Network.Core.csproj"/>
+        <ProjectReference Include="..\Orion.Core\Orion.Core.csproj" />
+        <ProjectReference Include="..\Orion.Network.Core\Orion.Network.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="NetCoreServer" Version="8.0.7"/>
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+        <PackageReference Include="NetCoreServer" Version="8.0.7" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\..\assets\orion_nuget_logo.png" Pack="true" PackagePath="\"/>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\..\assets\orion_nuget_logo.png" Pack="true" PackagePath="\" />
+        <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
