@@ -1,32 +1,28 @@
+using Orion.Core.Server.Handlers.Base;
 using Orion.Core.Server.Interfaces.Listeners;
-using Orion.Core.Server.Interfaces.Services;
 using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Core.Types;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Replies;
 using Orion.Irc.Core.Interfaces.Commands;
-using Orion.Server.Services;
+
 
 namespace Orion.Server.Handlers;
 
-public class TestHandler : IIrcCommandListener
+public class TestHandler : BaseIrcCommandListener, IIrcCommandListener<UserCommand>
 {
-    private readonly IIrcCommandService _ircCommandService;
-
-    private readonly ILogger _logger;
-
-    public TestHandler(IIrcCommandService ircCommandService, ILogger<TestHandler> logger)
+    public TestHandler(ILogger<BaseIrcCommandListener> logger, IIrcCommandService ircCommandService) : base(
+        logger,
+        ircCommandService
+    )
     {
-        _ircCommandService = ircCommandService;
-        _logger = logger;
-
-        _ircCommandService.AddListener<NickCommand>(this, ServerNetworkType.Clients);
+        RegisterHandler<UserCommand>(this, ServerNetworkType.Clients);
     }
 
-
-    public async Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, IIrcCommand command)
+    public async Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, UserCommand command)
     {
-        _logger.LogInformation("Received Command: {Command}", command);
-        await _ircCommandService.SendCommandAsync(sessionId, RplAdminMe.Create("irc.test", "test", "test"));
+        Logger.LogInformation("Received Command: {Command}", command);
+
+        await SendCommandAsync(sessionId, RplAdminMe.Create("irc.test", "test", "test"));
     }
 }

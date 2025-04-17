@@ -13,7 +13,8 @@ public interface IIrcCommandListener
     Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, IIrcCommand command);
 }
 
-public interface IIrcCommandListener<in TCommand>
+public interface IIrcCommandListener<in TCommand> : IIrcCommandListener
+    where TCommand : IIrcCommand
 {
     /// <summary>
     ///   Called when a command is received.

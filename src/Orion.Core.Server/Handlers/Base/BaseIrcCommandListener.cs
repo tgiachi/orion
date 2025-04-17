@@ -6,23 +6,27 @@ using Orion.Irc.Core.Interfaces.Commands;
 
 namespace Orion.Core.Server.Handlers.Base;
 
-public class BaseIrcCommandListener : IIrcCommandListener
+public abstract class BaseIrcCommandListener : IIrcCommandListener
 {
-    private readonly ILogger _logger;
+    protected ILogger Logger { get; }
 
     private readonly IIrcCommandService _ircCommandService;
 
 
     // Dictionary that maps command types and network types to their handlers
-    private readonly Dictionary<(Type CommandType, ServerNetworkType NetworkType), Func<string, ServerNetworkType, IIrcCommand, Task>> _handlers = new();
+    private readonly
+        Dictionary<(Type CommandType, ServerNetworkType NetworkType), Func<string, ServerNetworkType, IIrcCommand, Task>>
+        _handlers = new();
 
-    public BaseIrcCommandListener(ILogger<BaseIrcCommandListener> logger, IIrcCommandService ircCommandService)
+    protected BaseIrcCommandListener(ILogger<BaseIrcCommandListener> logger, IIrcCommandService ircCommandService)
     {
-        _logger = logger;
+        Logger = logger;
         _ircCommandService = ircCommandService;
     }
 
-    protected void RegisterHandler<TCommand>(Func<string, ServerNetworkType, TCommand, Task> handler, ServerNetworkType serverNetworkType)
+    protected void RegisterHandler<TCommand>(
+        Func<string, ServerNetworkType, TCommand, Task> handler, ServerNetworkType serverNetworkType
+    )
         where TCommand : IIrcCommand, new()
     {
         // Register a handler for a specific command type and network type
@@ -36,8 +40,15 @@ public class BaseIrcCommandListener : IIrcCommandListener
             return Task.CompletedTask;
         };
 
-        var cmd = new TCommand();
         _ircCommandService.AddListener<TCommand>(this, serverNetworkType);
+    }
+
+    protected void RegisterHandler<TCommand>(
+        IIrcCommandListener<TCommand> listener, ServerNetworkType serverNetworkType
+    )
+        where TCommand : IIrcCommand, new()
+    {
+        RegisterHandler<TCommand>(listener.OnCommandReceivedAsync, serverNetworkType);
     }
 
     public virtual Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, IIrcCommand command)
@@ -51,8 +62,16 @@ public class BaseIrcCommandListener : IIrcCommandListener
             return handler(sessionId, serverNetworkType, command);
         }
 
-        _logger.LogWarning("No handler registered for command type {CommandType} on network type {NetworkType}",
-            commandType.Name, serverNetworkType);
+        Logger.LogWarning(
+            "No handler registered for command type {CommandType} on network type {NetworkType}",
+            commandType.Name,
+            serverNetworkType
+        );
         return Task.CompletedTask;
+    }
+
+    protected Task SendCommandAsync<TCommand>(string sessionId, TCommand command) where TCommand : IIrcCommand
+    {
+        return _ircCommandService.SendCommandAsync<TCommand>(sessionId, command);
     }
 }
