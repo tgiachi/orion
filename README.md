@@ -6,7 +6,7 @@
 
 > IRC is not dead, long live IRC!
 
-![Orion Logo](assets/orion_logo.png)])_
+![Orion Logo](assets/orion_logo.png)
 > Orion (Orione in italiano) is my cat and this project is dedicated to him.
 
 
