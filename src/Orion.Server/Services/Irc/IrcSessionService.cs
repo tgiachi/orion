@@ -65,4 +65,19 @@ public class IrcSessionService : IIrcSessionService
 
         _hyperPostmanService.PublishAsync(new SessionConnectedEvent(sessionId, endpoint, transport.ServerNetworkType));
     }
+
+    public IrcUserSession GetSession(string sessionId, bool throwIfNotFound = true)
+    {
+        if (_sessions.TryGetValue(sessionId, out var session))
+        {
+            return session;
+        }
+
+        if (throwIfNotFound)
+        {
+            throw new KeyNotFoundException($"Session '{sessionId}' not found");
+        }
+
+        return null;
+    }
 }

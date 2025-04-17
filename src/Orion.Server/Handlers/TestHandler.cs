@@ -1,3 +1,5 @@
+using HyperCube.Postman.Interfaces.Services;
+using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Handlers.Base;
 using Orion.Core.Server.Interfaces.Listeners;
 using Orion.Core.Server.Interfaces.Services.Irc;
@@ -9,20 +11,28 @@ using Orion.Irc.Core.Interfaces.Commands;
 
 namespace Orion.Server.Handlers;
 
-public class TestHandler : BaseIrcCommandListener, IIrcCommandListener<UserCommand>
+public class TestHandler : BaseIrcCommandListener, IIrcCommandHandler<UserCommand>
 {
-    public TestHandler(ILogger<BaseIrcCommandListener> logger, IIrcCommandService ircCommandService) : base(
+    public TestHandler(
+        ILogger<BaseIrcCommandListener> logger, IIrcCommandService ircCommandService, IHyperPostmanService postmanService,
+        IIrcSessionService sessionService
+    ) : base(
         logger,
-        ircCommandService
+        ircCommandService,
+        postmanService,
+        sessionService
     )
     {
-        RegisterHandler<UserCommand>(this, ServerNetworkType.Clients);
+        RegisterCommandHandler<UserCommand>(this, ServerNetworkType.Clients);
     }
 
-    public async Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, UserCommand command)
+
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, UserCommand command
+    )
     {
         Logger.LogInformation("Received Command: {Command}", command);
 
-        await SendCommandAsync(sessionId, RplAdminMe.Create("irc.test", "test", "test"));
+        await session.SendCommandAsync(RplAdminMe.Create("irc.test", "test", "test"));
     }
 }

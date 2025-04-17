@@ -25,3 +25,5 @@ public interface IIrcCommandListener<in TCommand> : IIrcCommandListener
     /// <returns></returns>
     Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, TCommand command);
 }
+
+

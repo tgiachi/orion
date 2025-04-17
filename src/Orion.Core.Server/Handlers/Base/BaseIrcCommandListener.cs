@@ -1,8 +1,12 @@
+using HyperCube.Postman.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Interfaces.Listeners;
 using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Core.Types;
 using Orion.Irc.Core.Interfaces.Commands;
+using Orion.Network.Core.Extensions;
+using Serilog;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Orion.Core.Server.Handlers.Base;
 
@@ -12,16 +16,25 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
 
     private readonly IIrcCommandService _ircCommandService;
 
+    private readonly IHyperPostmanService _postmanService;
+
+    private readonly IIrcSessionService _sessionService;
+
 
     // Dictionary that maps command types and network types to their handlers
     private readonly
         Dictionary<(Type CommandType, ServerNetworkType NetworkType), Func<string, ServerNetworkType, IIrcCommand, Task>>
         _handlers = new();
 
-    protected BaseIrcCommandListener(ILogger<BaseIrcCommandListener> logger, IIrcCommandService ircCommandService)
+    protected BaseIrcCommandListener(
+        ILogger<BaseIrcCommandListener> logger, IIrcCommandService ircCommandService, IHyperPostmanService postmanService,
+        IIrcSessionService sessionService
+    )
     {
         Logger = logger;
         _ircCommandService = ircCommandService;
+        _postmanService = postmanService;
+        _sessionService = sessionService;
     }
 
     protected void RegisterHandler<TCommand>(
@@ -49,6 +62,37 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
         where TCommand : IIrcCommand, new()
     {
         RegisterHandler<TCommand>(listener.OnCommandReceivedAsync, serverNetworkType);
+    }
+
+    protected void RegisterCommandHandler<TCommand>(
+        IIrcCommandHandler<TCommand> handler, ServerNetworkType serverNetworkType
+    )
+        where TCommand : IIrcCommand, new()
+    {
+        // Register a handler for a specific command type and network type
+        _handlers[(typeof(TCommand), serverNetworkType)] = async (sessionId, networkType, command) =>
+        {
+            if (command is TCommand typedCommand)
+            {
+
+                var session = _sessionService.GetSession(sessionId, false);
+                if (session != null)
+                {
+                    await handler.OnCommandReceivedAsync(session, networkType, typedCommand);
+                }
+                else
+                {
+                    Logger.LogWarning(
+                        "Session {SessionId} not found for command {CommandType}",
+                        sessionId.ToShortSessionId(),
+                        typeof(TCommand).Name
+                    );
+                }
+            }
+        };
+
+        var cmd = new TCommand();
+        _ircCommandService.AddListener<TCommand>(this, serverNetworkType);
     }
 
     public virtual Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, IIrcCommand command)
