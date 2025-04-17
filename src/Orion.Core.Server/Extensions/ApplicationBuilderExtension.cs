@@ -1,18 +1,16 @@
 using System.Reflection;
 using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
-using Orion.Core.Extensions;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Internal;
-using Orion.Core.Server.Interfaces.Config;
 using Orion.Core.Server.Interfaces.Options;
 using Orion.Core.Server.Types;
-using Orion.Core.Types;
-using Orion.Core.Utils;
+using Orion.Foundations.Extensions;
+using Orion.Foundations.Types;
+using Orion.Foundations.Utils;
 using Serilog;
 using Serilog.Formatting.Json;
-
 
 namespace Orion.Core.Server.Extensions;
 
@@ -24,7 +22,7 @@ public static class ApplicationBuilderExtension
         where TOptions : IOrionServerCmdOptions where TConfig : OrionServerConfig, new()
     {
         var env = Environment.GetEnvironmentVariable(appName.ToSnakeCaseUpper() + "_ENVIRONMENT");
-        var appContextData = new AppContextData<TOptions, TConfig>()
+        var appContextData = new AppContextData<TOptions, TConfig>
         {
             AppName = appName,
             Environment = env ?? "Production"
@@ -83,7 +81,7 @@ public static class ApplicationBuilderExtension
             .MinimumLevel.Is(parsedOptions.Value.LogLevel.ToSerilogLogLevel())
             .WriteTo.Console()
             .WriteTo.File(
-                formatter: new JsonFormatter(),
+                new JsonFormatter(),
                 rollingInterval: RollingInterval.Day,
                 path: Path.Combine(directoriesConfig[DirectoryType.Logs], $"{appName}_.log")
             );

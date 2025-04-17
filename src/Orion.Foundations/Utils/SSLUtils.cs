@@ -1,6 +1,6 @@
 using System.Security.Cryptography.X509Certificates;
 
-namespace Orion.Core.Utils;
+namespace Orion.Foundations.Utils;
 
 public static class SSLUtils
 {

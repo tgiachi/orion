@@ -1,4 +1,3 @@
-using Orion.Core.Extensions;
 using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Interfaces.Config;
 

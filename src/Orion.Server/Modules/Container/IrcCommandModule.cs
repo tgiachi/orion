@@ -1,5 +1,6 @@
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Interfaces.Modules;
+
 using Orion.Irc.Core.Commands;
 
 namespace Orion.Server.Modules.Container;

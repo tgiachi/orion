@@ -1,9 +1,10 @@
 using System.Collections.Concurrent;
 using HyperCube.Postman.Interfaces.Services;
-using Orion.Core.Pool;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
 using Orion.Core.Server.Interfaces.Services.Irc;
+using Orion.Foundations.Pool;
+
 using Orion.Network.Core.Interfaces.Services;
 
 namespace Orion.Server.Services.Irc;

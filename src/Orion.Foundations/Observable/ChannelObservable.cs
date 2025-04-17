@@ -1,6 +1,6 @@
 using System.Threading.Channels;
 
-namespace Orion.Core.Observable;
+namespace Orion.Foundations.Observable;
 
 public class ChannelObservable<T> : IObservable<T>
 {

@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace Orion.Core.Extensions;
+namespace Orion.Foundations.Extensions;
 
 /// <summary>
 /// Provides extension methods for IP address operations.

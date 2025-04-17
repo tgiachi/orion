@@ -1,4 +1,4 @@
-namespace Orion.Core.Types;
+namespace Orion.Foundations.Types;
 
 /// <summary>
 ///  Enumeration representing the different service lifetimes.

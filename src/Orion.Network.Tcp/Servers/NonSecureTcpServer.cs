@@ -1,6 +1,6 @@
 using System.Net;
 using NetCoreServer;
-using Orion.Core.Types;
+using Orion.Foundations.Types;
 using Orion.Network.Core.Interfaces.Transports;
 using Orion.Network.Core.Types;
 using Orion.Network.Tcp.Sessions;

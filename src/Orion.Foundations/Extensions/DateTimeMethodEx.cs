@@ -1,4 +1,4 @@
-namespace Orion.Core.Extensions;
+namespace Orion.Foundations.Extensions;
 
 public static class DateTimeMethodEx
 {

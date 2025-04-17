@@ -1,5 +1,5 @@
 using System.Security.Cryptography;
-using Orion.Core.Extensions;
+using Orion.Foundations.Extensions;
 
 namespace Orion.Core.Server.Data.Config.Sections;
 

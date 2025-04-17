@@ -1,4 +1,4 @@
-namespace Orion.Core.Types;
+namespace Orion.Foundations.Types;
 
 /// <summary>
 /// Defines the standard log levels used throughout the HyperCube framework.

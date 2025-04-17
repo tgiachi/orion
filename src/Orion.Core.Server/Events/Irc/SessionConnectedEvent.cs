@@ -1,5 +1,5 @@
 using HyperCube.Postman.Base.Events;
-using Orion.Core.Types;
+using Orion.Foundations.Types;
 
 namespace Orion.Core.Server.Events.Irc;
 

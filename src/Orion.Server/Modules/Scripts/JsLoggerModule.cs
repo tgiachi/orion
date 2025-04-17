@@ -1,5 +1,6 @@
 using Orion.Core.Server.Attributes.Scripts;
 
+
 namespace Orion.Server.Modules.Scripts;
 
 [ScriptModule("logger")]

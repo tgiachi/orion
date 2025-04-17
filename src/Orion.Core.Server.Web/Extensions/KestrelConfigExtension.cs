@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Orion.Core.Extensions;
 using Orion.Core.Server.Data.Config.Sections;
+using Orion.Foundations.Extensions;
+
 
 namespace Orion.Core.Server.Web.Extensions;
 

@@ -1,6 +1,7 @@
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Interfaces.Config;
 using Orion.Core.Server.Interfaces.Options;
+
 using Serilog;
 
 namespace Orion.Core.Server.Data.Internal;

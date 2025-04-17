@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
-using Orion.Core.Utils;
+using Orion.Foundations.Utils;
 
-namespace Orion.Core.Extensions;
+namespace Orion.Foundations.Extensions;
 
 /// <summary>
 /// Provides extension methods for JSON serialization and deserialization operations.

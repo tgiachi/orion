@@ -1,4 +1,4 @@
-using Orion.Core.Types;
+using Orion.Foundations.Types;
 using Serilog.Events;
 
 namespace Orion.Core.Server.Extensions;

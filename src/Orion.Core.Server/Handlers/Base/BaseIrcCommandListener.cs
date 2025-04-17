@@ -2,7 +2,8 @@ using HyperCube.Postman.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Interfaces.Listeners;
 using Orion.Core.Server.Interfaces.Services.Irc;
-using Orion.Core.Types;
+
+using Orion.Foundations.Types;
 using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Network.Core.Extensions;
 using Serilog;

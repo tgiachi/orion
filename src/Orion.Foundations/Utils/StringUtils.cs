@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Orion.Core.Utils;
+namespace Orion.Foundations.Utils;
 
 /// <summary>
 /// Provides utility methods for string operations, including various case conversion methods.

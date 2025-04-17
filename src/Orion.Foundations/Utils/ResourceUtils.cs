@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Orion.Core.Utils;
+namespace Orion.Foundations.Utils;
 
 /// <summary>
 /// Provides utilities for working with embedded resources.

@@ -1,4 +1,4 @@
-using Orion.Core.Utils;
+using Orion.Foundations.Utils;
 
 namespace Orion.Core.Server.Data.Config.Sections;
 

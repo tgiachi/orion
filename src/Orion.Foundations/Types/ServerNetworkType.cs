@@ -1,4 +1,4 @@
-namespace Orion.Core.Types;
+namespace Orion.Foundations.Types;
 
 public enum ServerNetworkType
 {

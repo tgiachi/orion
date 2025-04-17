@@ -6,20 +6,18 @@ namespace Orion.Core.Server.Extensions;
 
 public static class CreateIrcServerContextExtension
 {
-
-    public static IServiceCollection CreateIrcServerAppContext(this IServiceCollection services, OrionServerConfig serverConfig)
+    public static IServiceCollection CreateIrcServerAppContext(
+        this IServiceCollection services, OrionServerConfig serverConfig
+    )
     {
-
         services.AddSingleton(
-            new IrcServerContextData()
+            new IrcServerContextData
             {
                 ServerName = serverConfig.Server.Host
-
             }
         );
 
 
         return services;
     }
-
 }

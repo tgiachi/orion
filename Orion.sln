@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Server", "src\Orion.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Core.Server", "src\Orion.Core.Server\Orion.Core.Server.csproj", "{087BD608-86E9-4DD5-BF05-3D88C708CF20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Core", "src\Orion.Core\Orion.Core.csproj", "{AE8CACF0-332A-4799-9F96-97A78AFD498F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Foundations", "src\Orion.Foundations\Orion.Foundations.csproj", "{AE8CACF0-332A-4799-9F96-97A78AFD498F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Network.Tcp", "src\Orion.Network.Tcp\Orion.Network.Tcp.csproj", "{723C8918-93DB-4FFD-BF39-388D71086FB6}"
 EndProject

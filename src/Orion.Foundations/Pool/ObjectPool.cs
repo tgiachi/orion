@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace Orion.Core.Pool;
+namespace Orion.Foundations.Pool;
 
 public class ObjectPool<T> where T : IDisposable, new()
 {

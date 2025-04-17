@@ -1,6 +1,7 @@
 using CommandLine;
 using Orion.Core.Server.Interfaces.Options;
-using Orion.Core.Types;
+
+using Orion.Foundations.Types;
 
 namespace Orion.Core.Server.Data.Options;
 

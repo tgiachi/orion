@@ -1,12 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Orion.Core.Server.Interfaces.Services.Base;
 using Orion.Core.Server.Internal;
-using Orion.Core.Types;
+using Orion.Foundations.Types;
 
 namespace Orion.Core.Server.Extensions;
 
 /// <summary>
-///  Extension methods for adding Orion services.
+///     Extension methods for adding Orion services.
 /// </summary>
 public static class AddOrionServiceExtension
 {
@@ -23,7 +23,7 @@ public static class AddOrionServiceExtension
             _                             => throw new ArgumentOutOfRangeException(nameof(lifetimeType), lifetimeType, null)
         };
 
-        bool isAutoStart = typeof(IOrionStartService).IsAssignableFrom(implementationType);
+        var isAutoStart = typeof(IOrionStartService).IsAssignableFrom(implementationType);
 
         services.Add(new ServiceDescriptor(serviceType, implementationType, lifetime));
 
