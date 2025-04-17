@@ -21,8 +21,6 @@ public class NetworkTransportManager : INetworkTransportManager
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
-    private readonly Task _outputTask;
-
     private readonly ConcurrentDictionary<string, string> _sessionsTransports = new();
 
     private readonly ConcurrentDictionary<string, NetworkMetricData> _sessionsMetrics = new();
@@ -48,7 +46,7 @@ public class NetworkTransportManager : INetworkTransportManager
         IncomingMessages = Channel.CreateUnbounded<NetworkMessageData>();
         OutgoingMessages = Channel.CreateUnbounded<NetworkMessageData>();
 
-        _outputTask = Task.Run(OutputTaskAction);
+        _ = Task.Run(OutputTaskAction);
 
         _metricsSubscription = Observable.Interval(TimeSpan.FromSeconds(60)).Subscribe(_ => EmitMetrics());
     }
@@ -97,7 +95,7 @@ public class NetworkTransportManager : INetworkTransportManager
                     _logger.LogDebug(
                         "-> {IpEndpoint}- {SessionId} - {Type} - {Message}",
                         _sessionsMetrics[message.SessionId].Endpoint,
-                        GetShortSessionId(message.SessionId),
+                        message.SessionId.ToShortSessionId(),
                         message.ServerNetworkType,
                         sanitizedMessage
                     );
@@ -115,27 +113,25 @@ public class NetworkTransportManager : INetworkTransportManager
         }
     }
 
-    private string GetShortSessionId(string sessionId)
-    {
-        return sessionId.Length > 8 ? sessionId[..8] : sessionId;
-    }
 
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
         foreach (var transport in Transports)
         {
             _logger.LogDebug(
-                "Starting transport {TransportName}:{Port} - {Id}",
-                transport.Name,
+                "Starting transport {TransportName}({Security}):{Port} - {Id}",
+                transport.Transport.Protocol,
+                transport.Transport.Security,
                 transport.Port,
-                transport.Id
+                transport.Id.ToShortSessionId()
             );
             await transport.Transport.StartAsync();
             _logger.LogDebug(
-                "Started transport {TransportName}:{Port} - {Id}",
-                transport.Name,
+                "Started transport {TransportName}({Security}):{Port} - {Id}",
+                transport.Transport.Protocol,
+                transport.Transport.Security,
                 transport.Port,
-                transport.Id
+                transport.Id.ToShortSessionId()
             );
         }
     }
@@ -155,7 +151,7 @@ public class NetworkTransportManager : INetworkTransportManager
             _logger.LogDebug(
                 "<- {Endpoint} - {SessionId} - {Type} - {Message}",
                 _sessionsMetrics[sessionId].Endpoint,
-                GetShortSessionId(sessionId),
+                sessionId.ToShortSessionId(),
                 transport.ServerNetworkType,
                 message
             );
