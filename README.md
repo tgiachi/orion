@@ -99,8 +99,8 @@ web_http:
 You can run Orion using Docker:
 
 ```bash
-docker pull tgiachi/orionircserver
-docker run -p 6667:6667 -p 23021:23021 tgiachi/orionircserver
+docker pull tgiachi/orionirc-server
+docker run -p 6667:6667 -p 23021:23021 tgiachi/orionirc-server
 ```
 
 2. Build the solution:

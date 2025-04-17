@@ -5,6 +5,21 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Version>0.1.0</Version>
+        <Authors>tgiachi</Authors>
+        <Company>tgiachi</Company>
+        <Description>TCP implementation for Orion IRC Server networking</Description>
+        <PackageProjectUrl>https://github.com/tgiachi/orion</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/tgiachi/orion</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>irc;server;orion;network;tcp</PackageTags>
+        <PackageIcon>orion_nuget_logo.png</PackageIcon>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,6 +29,12 @@
 
     <ItemGroup>
         <PackageReference Include="NetCoreServer" Version="8.0.7"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\assets\orion_nuget_logo.png" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>
