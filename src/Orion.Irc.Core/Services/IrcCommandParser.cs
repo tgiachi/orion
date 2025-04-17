@@ -79,8 +79,19 @@ public class IrcCommandParser : IIrcCommandParser
     public void RegisterCommand<TCommand>() where TCommand : IIrcCommand, new()
     {
         var command = new TCommand();
+
+        RegisterCommand(command);
+    }
+
+    public void RegisterCommand(IIrcCommand command)
+    {
+        if (command == null)
+        {
+            throw new ArgumentNullException(nameof(command));
+        }
+
         _commands[command.Code] = command;
 
-        _logger.LogDebug("Registered command {CommandName}", command.Code);
+        _logger.LogDebug("Registered IRC command {CommandName}", command.Code);
     }
 }

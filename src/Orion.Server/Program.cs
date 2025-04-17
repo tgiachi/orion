@@ -43,7 +43,11 @@ public class Program
 
 
         builder.Services.AddModule<DefaultScriptsModule>();
-        builder.Services.AddModule<DefaultIrcListenerModule>();
+
+
+        builder.Services
+            .AddModule<IrcCommandModule>()
+            .AddModule<DefaultIrcListenerModule>();
 
         builder.Services.AddHostedService<OrionHostedService>();
 

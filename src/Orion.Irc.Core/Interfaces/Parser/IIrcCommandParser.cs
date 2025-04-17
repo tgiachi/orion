@@ -10,4 +10,6 @@ public interface IIrcCommandParser
 
     void RegisterCommand<TCommand>() where TCommand : IIrcCommand, new();
 
+    void RegisterCommand(IIrcCommand command);
+
 }

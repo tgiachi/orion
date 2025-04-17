@@ -2,6 +2,7 @@ using Orion.Core.Observable;
 using Orion.Core.Server.Interfaces.Listeners;
 using Orion.Core.Server.Interfaces.Services;
 using Orion.Core.Types;
+using Orion.Irc.Core.Data.Internal;
 using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Irc.Core.Interfaces.Parser;
 using Orion.Network.Core.Data;
@@ -24,14 +25,19 @@ public class IrcCommandService : IIrcCommandService, IDisposable
 
     private readonly IDisposable _channelListenerDisposable;
 
+    private readonly List<IrcCommandDefinitionData> _commands = new();
+
     public IrcCommandService(
         ILogger<IrcCommandService> logger, IIrcCommandParser ircCommandParser,
-        INetworkTransportManager networkTransportManager
+        INetworkTransportManager networkTransportManager, List<IrcCommandDefinitionData> commands = null
     )
     {
+        _commands = commands ?? new List<IrcCommandDefinitionData>();
         _logger = logger;
         _ircCommandParser = ircCommandParser;
         _networkTransportManager = networkTransportManager;
+
+        RegisterIrcCommands();
 
 
         _channelListener =
@@ -40,6 +46,14 @@ public class IrcCommandService : IIrcCommandService, IDisposable
         _channelListenerDisposable = _channelListener.Subscribe(async data =>
             await HandleIncomingMessageAsync(data.SessionId, data.Message, data.ServerNetworkType)
         );
+    }
+
+    private void RegisterIrcCommands()
+    {
+        foreach (var command in _commands)
+        {
+            _ircCommandParser.RegisterCommand(command.Command);
+        }
     }
 
 
