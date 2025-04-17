@@ -70,7 +70,7 @@ public class NetworkTransportManager : INetworkTransportManager
     {
         while (_cancellationTokenSource.IsCancellationRequested == false)
         {
-            await foreach (var message in OutgoingMessages.Reader.ReadAllAsync(_cancellationTokenSource.Token))
+            await foreach (var message in OutgoingMessages.Reader.ReadAllAsync())
             {
                 try
                 {
@@ -92,7 +92,7 @@ public class NetworkTransportManager : INetworkTransportManager
 
                     await transport.Transport.SendAsync(message.SessionId, byteArray);
 
-                    _logger.LogTrace(
+                    _logger.LogDebug(
                         "Sent message to session {SessionId} on transport {TransportName}: {Message}",
                         message.SessionId,
                         sessionTransportId,
@@ -107,10 +107,6 @@ public class NetworkTransportManager : INetworkTransportManager
                         message.SessionId,
                         message.Message
                     );
-                }
-                finally
-                {
-                    OutgoingMessages.Writer.TryComplete();
                 }
             }
         }
@@ -197,9 +193,9 @@ public class NetworkTransportManager : INetworkTransportManager
         }
     }
 
-    public async Task EnqueueMessageAsync(NetworkMessageData messageData, CancellationToken cancellationToken = default)
+    public async Task EnqueueMessageAsync(NetworkMessageData messageData)
     {
-        await OutgoingMessages.Writer.WriteAsync(messageData, cancellationToken);
+        await OutgoingMessages.Writer.WriteAsync(messageData);
     }
 
     public void AddTransport(INetworkTransport transport)

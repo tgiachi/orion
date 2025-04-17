@@ -57,9 +57,8 @@ public interface INetworkTransportManager : IDisposable
     /// Enqueues a message to be sent over the network
     /// </summary>
     /// <param name="messageData">The message data to enqueue</param>
-    /// <param name="cancellationToken">A token to cancel the operation</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    Task EnqueueMessageAsync(NetworkMessageData messageData, CancellationToken cancellationToken = default);
+    Task EnqueueMessageAsync(NetworkMessageData messageData);
 
 
     /// <summary>
