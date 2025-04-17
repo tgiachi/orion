@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.1.4"></a>
+## [0.1.4](https://www.github.com/tgiachi/Orion/releases/tag/v0.1.4) (2025-04-17)
+
+### Bug Fixes
+
+* **README.md:** update Docker image link to point to the correct repository name 'orionirc-server' for consistency and accuracy ([c1e84d0](https://www.github.com/tgiachi/Orion/commit/c1e84d0320538198e9f043198d1331beb6537855))
+
 <a name="0.1.3"></a>
 ## [0.1.3](https://www.github.com/tgiachi/Orion/releases/tag/v0.1.3) (2025-04-17)
 
