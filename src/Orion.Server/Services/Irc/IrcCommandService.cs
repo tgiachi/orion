@@ -71,7 +71,7 @@ public class IrcCommandService : IIrcCommandService, IDisposable
         {
             try
             {
-                await listener.OnCommandReceivedAsync(sessionId, command);
+                await listener.OnCommandReceivedAsync(sessionId, serverNetworkType, command);
             }
             catch (Exception ex)
             {

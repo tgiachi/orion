@@ -27,7 +27,7 @@ public class Program
 
         var appContext = builder.Services.InitApplication<OrionServerOptions, OrionServerConfig>("Orion");
 
-        builder.WebHost.ConfigureKestrelFromConfig(appContext.ServerConfig.WebHttp);
+        builder.WebHost.ConfigureKestrelFromConfig(appContext.Config.WebHttp);
         builder.Services.ConfigureHttpJsonOptions(WebJsonExtension.ConfigureWebJson());
 
 
@@ -35,7 +35,7 @@ public class Program
 
         builder.Logging.ClearProviders().AddSerilog();
 
-        appContext.ServerOptions.ShowHeader(typeof(Program).Assembly);
+        appContext.Options.ShowHeader(typeof(Program).Assembly);
 
         builder.Services
             .AddModule<DefaultServicesModule>()
@@ -44,6 +44,8 @@ public class Program
 
         builder.Services.AddModule<DefaultScriptsModule>();
 
+
+        builder.Services.CreateIrcServerAppContext(appContext.Config);
 
         builder.Services
             .AddModule<IrcCommandModule>()

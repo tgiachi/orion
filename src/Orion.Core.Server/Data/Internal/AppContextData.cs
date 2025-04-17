@@ -13,11 +13,11 @@ public class AppContextData<TOptions, TConfig>
 
     public string Environment { get; set; }
 
-    public DirectoriesConfig DirectoriesConfig { get; set; }
+    public DirectoriesConfig Directories { get; set; }
 
-    public TOptions ServerOptions { get; set; }
+    public TOptions Options { get; set; }
 
-    public TConfig ServerConfig { get; set; }
+    public TConfig Config { get; set; }
 
     public LoggerConfiguration LoggerConfiguration { get; set; }
 }

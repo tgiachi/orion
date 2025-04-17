@@ -1,3 +1,5 @@
+using Orion.Network.Core.Extensions;
+
 namespace Orion.Network.Core.Data;
 
 public class NetworkMetricData
@@ -44,6 +46,6 @@ public class NetworkMetricData
     public override string ToString()
     {
         return
-            $"SessionId: {SessionId}, BytesIn: {BytesIn}, BytesOut: {BytesOut}, PacketsIn: {PacketsIn}, PacketsOut: {PacketsOut}";
+            $"SessionId: {SessionId.ToShortSessionId()}, BytesIn: {BytesIn}, BytesOut: {BytesOut}, PacketsIn: {PacketsIn}, PacketsOut: {PacketsOut}";
     }
 }

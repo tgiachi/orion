@@ -1,3 +1,4 @@
+using Orion.Core.Types;
 using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Network.Core.Interfaces.Services;
 
@@ -9,6 +10,17 @@ public interface IIrcCommandListener
     ///     Called when a command is received.
     /// </summary>
     /// <param name="command">The command.</param>
-    Task OnCommandReceivedAsync(string sessionId, IIrcCommand command);
+    Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, IIrcCommand command);
 }
 
+public interface IIrcCommandListener<in TCommand>
+{
+    /// <summary>
+    ///   Called when a command is received.
+    /// </summary>
+    /// <param name="sessionId"></param>
+    /// <param name="serverNetworkType"></param>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, TCommand command);
+}

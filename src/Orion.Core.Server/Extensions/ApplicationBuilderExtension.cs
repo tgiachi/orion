@@ -64,18 +64,18 @@ public static class ApplicationBuilderExtension
 
         serviceCollection.AddSingleton(directoriesConfig);
 
-        appContextData.ServerConfig =
+        appContextData.Config =
             directoriesConfig.LoadConfig<TConfig>(serviceCollection, parsedOptions.Value.ConfigFile);
 
-        serviceCollection.AddSingleton<TConfig>(appContextData.ServerConfig);
+        serviceCollection.AddSingleton<TConfig>(appContextData.Config);
 
-        appContextData.DirectoriesConfig = directoriesConfig;
+        appContextData.Directories = directoriesConfig;
 
-        appContextData.ServerOptions = parsedOptions.Value;
+        appContextData.Options = parsedOptions.Value;
 
         if (Environment.GetEnvironmentVariable(appName.ToSnakeCaseUpper() + "_DEBUG") != null)
         {
-            appContextData.ServerOptions.IsDebug = true;
+            appContextData.Options.IsDebug = true;
         }
 
 
@@ -95,7 +95,7 @@ public static class ApplicationBuilderExtension
         }
 
 
-        if (appContextData.ServerConfig.Debug.SaveRawPackets)
+        if (appContextData.Config.Debug.SaveRawPackets)
         {
             appContextData.LoggerConfiguration.WriteTo.Logger(lc => lc
                 .Filter.ByIncludingOnly(e => e.Properties.ContainsKey("SourceContext") &&

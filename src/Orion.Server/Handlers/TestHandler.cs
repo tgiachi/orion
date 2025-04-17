@@ -23,9 +23,9 @@ public class TestHandler : IIrcCommandListener
         _ircCommandService.AddListener<NickCommand>(this, ServerNetworkType.Clients);
     }
 
-    public async Task OnCommandReceivedAsync(string sessionId, IIrcCommand command)
-    {
 
+    public async Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, IIrcCommand command)
+    {
         _logger.LogInformation("Received Command: {Command}", command);
         await _ircCommandService.SendCommandAsync(sessionId, RplAdminMe.Create("irc.test", "test", "test"));
     }
