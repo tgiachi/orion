@@ -8,7 +8,7 @@ using Orion.Core.Server.Data.Metrics.Diagnostic;
 using Orion.Core.Server.Events.Diagnostic;
 using Orion.Core.Server.Interfaces.Services;
 
-namespace Orion.Server.Services;
+namespace Orion.Server.Services.System;
 
 public class DiagnosticService : IDiagnosticService
 {

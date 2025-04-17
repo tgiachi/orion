@@ -8,7 +8,7 @@ using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Metrics.ProcessQueue;
 using Orion.Core.Server.Interfaces.Services;
 
-namespace Orion.Server.Services;
+namespace Orion.Server.Services.System;
 
 public class ProcessQueueService : IProcessQueueService
 {

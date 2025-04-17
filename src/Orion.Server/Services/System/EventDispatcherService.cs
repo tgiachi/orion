@@ -2,7 +2,7 @@ using HyperCube.Postman.Interfaces.Services;
 using Orion.Core.Extensions;
 using Orion.Core.Server.Interfaces.Services;
 
-namespace Orion.Server.Services;
+namespace Orion.Server.Services.System;
 
 public class EventDispatcherService : IEventDispatcherService
 {

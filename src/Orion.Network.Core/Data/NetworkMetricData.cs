@@ -31,4 +31,10 @@ public class NetworkMetricData
     {
         PacketsOut += packets;
     }
+
+    public override string ToString()
+    {
+        return
+            $"SessionId: {SessionId}, BytesIn: {BytesIn}, BytesOut: {BytesOut}, PacketsIn: {PacketsIn}, PacketsOut: {PacketsOut}";
+    }
 }

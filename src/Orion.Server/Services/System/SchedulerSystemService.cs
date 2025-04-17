@@ -6,7 +6,7 @@ using Orion.Core.Server.Events.Scheduler;
 using Orion.Core.Server.Interfaces.Services;
 using Orion.Core.Server.Internal.Scheduler;
 
-namespace Orion.Server.Services;
+namespace Orion.Server.Services.System;
 
 public class SchedulerSystemService : ISchedulerSystemService, ILetterListener<AddSchedulerJobEvent>
 {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Channels;
 using Microsoft.Extensions.Logging;
 using Orion.Network.Core.Data;
+using Orion.Network.Core.Extensions;
 using Orion.Network.Core.Interfaces.Services;
 using Orion.Network.Core.Interfaces.Transports;
 using Orion.Network.Core.Parsers;
@@ -93,9 +94,9 @@ public class NetworkTransportManager : INetworkTransportManager
                     await transport.Transport.SendAsync(message.SessionId, byteArray);
 
                     _logger.LogDebug(
-                        "Sent message to session {SessionId} on transport {TransportName}: {Message}",
-                        message.SessionId,
-                        sessionTransportId,
+                        "-> {SessionId} - {Type} - {Message}",
+                        GetShortSessionId(message.SessionId),
+                        message.ServerNetworkType,
                         message.Message
                     );
                 }
@@ -112,6 +113,10 @@ public class NetworkTransportManager : INetworkTransportManager
         }
     }
 
+    private string GetShortSessionId(string sessionId)
+    {
+        return sessionId.Length > 8 ? sessionId[..8] : sessionId;
+    }
 
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
@@ -139,18 +144,18 @@ public class NetworkTransportManager : INetworkTransportManager
 
         foreach (var message in messages)
         {
-            _logger.LogTrace(
-                "{TransportName} - SessionId: {Session} IpClient {Endpoint} received message: {Message}",
-                sessionId,
-                transportId,
-                sessionId,
-                message
-            );
-
             _sessionsMetrics[sessionId].AddBytesIn(data.Length);
             _sessionsMetrics[sessionId].AddPacketsIn();
 
             var transport = Transports.FirstOrDefault(t => t.Id == transportId);
+
+            _logger.LogDebug(
+                "<- {SessionId} - {Type} - {Message}",
+                GetShortSessionId(sessionId),
+                transport.ServerNetworkType,
+                message
+            );
+
             var messageData = new NetworkMessageData(sessionId, message, transport.ServerNetworkType);
             IncomingMessages.Writer.TryWrite(messageData);
         }
@@ -160,8 +165,8 @@ public class NetworkTransportManager : INetworkTransportManager
     {
         _logger.LogDebug(
             "{TransportName} - SessionId: {Session} IpClient {Endpoint} disconnected",
-            sessionId,
-            transportId,
+            sessionId.ToShortSessionId(),
+            transportId.ToShortSessionId(),
             endpoint
         );
         _sessionsTransports.TryRemove(sessionId, out _);

@@ -7,7 +7,7 @@ using Scriban;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
-namespace Orion.Server.Services;
+namespace Orion.Server.Services.System;
 
 public class TextTemplateService
     : ITextTemplateService, ILetterListener<AddVariableEvent>, ILetterListener<AddVariableBuilderEvent>

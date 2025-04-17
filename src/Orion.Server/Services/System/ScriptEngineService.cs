@@ -11,7 +11,7 @@ using Orion.Core.Server.Interfaces.Services;
 using Orion.Core.Server.Types;
 using Orion.Server.Utils.Scripts;
 
-namespace Orion.Server.Services;
+namespace Orion.Server.Services.System;
 
 public class ScriptEngineService : IScriptEngineService, ILetterListener<ServerReadyEvent>
 {

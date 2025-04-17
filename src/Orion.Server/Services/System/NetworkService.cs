@@ -10,7 +10,7 @@ using Orion.Core.Types;
 using Orion.Network.Core.Interfaces.Services;
 using Orion.Network.Tcp.Servers;
 
-namespace Orion.Server.Services;
+namespace Orion.Server.Services.System;
 
 public class NetworkService : INetworkService, ILetterListener<ServerReadyEvent>
 {

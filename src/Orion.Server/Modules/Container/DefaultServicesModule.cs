@@ -7,6 +7,8 @@ using Orion.Core.Server.Interfaces.Services;
 using Orion.Irc.Core.Interfaces.Parser;
 using Orion.Irc.Core.Services;
 using Orion.Server.Services;
+using Orion.Server.Services.Irc;
+using Orion.Server.Services.System;
 
 namespace Orion.Server.Modules.Container;
 

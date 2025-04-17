@@ -9,7 +9,7 @@ using Orion.Network.Core.Data;
 using Orion.Network.Core.Interfaces.Services;
 using Orion.Server.CommandListener;
 
-namespace Orion.Server.Services;
+namespace Orion.Server.Services.Irc;
 
 public class IrcCommandService : IIrcCommandService, IDisposable
 {
