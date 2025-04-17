@@ -3,12 +3,12 @@ using Orion.Network.Core.Interfaces.Services;
 
 namespace Orion.Core.Server.Interfaces.Listeners;
 
-public interface IIrcCommandListener<in TCommand>
-    where TCommand : IIrcCommand
+public interface IIrcCommandListener
 {
     /// <summary>
     ///     Called when a command is received.
     /// </summary>
     /// <param name="command">The command.</param>
-    Task OnCommandReceivedAsync(string sessionId, TCommand command);
+    Task OnCommandReceivedAsync(string sessionId, IIrcCommand command);
 }
+

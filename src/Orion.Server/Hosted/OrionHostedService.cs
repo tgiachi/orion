@@ -1,7 +1,9 @@
 using HyperCube.Postman.Interfaces.Services;
+using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Events.Server;
 using Orion.Core.Server.Interfaces.Services.Base;
 using Orion.Core.Server.Internal;
+using Orion.Irc.Core.Data.Internal;
 
 namespace Orion.Server.Hosted;
 
@@ -12,15 +14,19 @@ public class OrionHostedService : IHostedService
     private readonly IHyperPostmanService _hyperPostmanService;
     private readonly ILogger _logger;
 
+    private readonly List<IrcListenerDefinition> _ircCommandListeners;
+
 
     public OrionHostedService(
         ILogger<OrionHostedService> logger, List<ServiceDefinitionObject> serviceDefinitions,
-        IHyperPostmanService hyperPostmanService, IServiceProvider serviceProvider
+        IHyperPostmanService hyperPostmanService, IServiceProvider serviceProvider,
+        List<IrcListenerDefinition> ircCommandListeners
     )
     {
         _serviceDefinitions = serviceDefinitions;
         _hyperPostmanService = hyperPostmanService;
         _serviceProvider = serviceProvider;
+        _ircCommandListeners = ircCommandListeners;
         _logger = logger;
     }
 
@@ -55,6 +61,11 @@ public class OrionHostedService : IHostedService
         await _hyperPostmanService.PublishAsync(new ServerReadyEvent(), cancellationToken);
 
         _logger.LogInformation("Server started and ready");
+
+        foreach (var listenerType in _ircCommandListeners)
+        {
+            _serviceProvider.GetRequiredService(listenerType.Type);
+        }
     }
 
     public async Task StopAsync(CancellationToken cancellationToken)

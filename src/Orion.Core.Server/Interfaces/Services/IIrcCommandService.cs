@@ -7,7 +7,7 @@ namespace Orion.Core.Server.Interfaces.Services;
 
 public interface IIrcCommandService : IOrionService
 {
-    void AddListener<TCommand>(IIrcCommandListener<TCommand> command, ServerNetworkType serverNetworkType)
+    void AddListener<TCommand>(IIrcCommandListener command, ServerNetworkType serverNetworkType)
         where TCommand : IIrcCommand, new();
 
     Task SendCommandAsync<TCommand>(string sessionId, TCommand command) where TCommand : IIrcCommand;
