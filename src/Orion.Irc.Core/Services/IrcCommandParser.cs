@@ -20,7 +20,7 @@ public class IrcCommandParser : IIrcCommandParser
 
     public async Task<IIrcCommand> ParseAsync(string message)
     {
-        var sw = Stopwatch.StartNew();
+        var sw = Stopwatch.GetTimestamp();
 
         try
         {
@@ -46,8 +46,8 @@ public class IrcCommandParser : IIrcCommandParser
                     ircCommand.Parse(message);
                     _logger.LogDebug("Parsed command: {CommandType}", ircCommand.GetType().Name);
 
-                    sw.Stop();
-                    _logger.LogDebug("Parsed command in {Elapsed}ms", sw.ElapsedMilliseconds);
+
+                    _logger.LogDebug("Parsed command in {Elapsed}ms", Stopwatch.GetElapsedTime(sw));
                     return ircCommand;
                 }
                 catch (Exception ex)
