@@ -3,6 +3,8 @@ name: Publish NuGet Packages
 on:
   push:
     branches: [ main ]
+  repository_dispatch:
+    types: [version-updated]
 
 jobs:
   build-and-publish:

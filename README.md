@@ -11,7 +11,7 @@
 
 
 
-[![Docker Image](https://img.shields.io/docker/v/tgiachi/orionircserver?label=docker&sort=date)](https://hub.docker.com/r/tgiachi/orionircserver)
+[![Docker Image](https://img.shields.io/docker/v/tgiachi/orionircserver?label=docker&sort=date)](https://hub.docker.com/r/tgiachi/orionirc-server)
 
 Orion is a modern, scalable IRC server built with .NET 9.0, designed to provide robust functionality while maintaining performance and flexibility.
 
