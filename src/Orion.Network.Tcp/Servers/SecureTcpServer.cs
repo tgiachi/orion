@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using NetCoreServer;
 using Orion.Core.Types;
 using Orion.Network.Core.Interfaces.Transports;
+using Orion.Network.Core.Types;
 using Orion.Network.Tcp.Sessions;
 
 namespace Orion.Network.Tcp.Servers;
@@ -13,6 +14,8 @@ public class SecureTcpServer : SslServer, INetworkTransport
     public event INetworkTransport.ClientDisconnectedHandler? ClientDisconnected;
     public event INetworkTransport.MessageReceivedHandler? MessageReceived;
 
+    public NetworkProtocolType Protocol => NetworkProtocolType.Tcp;
+    public NetworkSecurityType Security => NetworkSecurityType.Ssl;
 
     public string Id { get; }
     public string Name { get; }
@@ -20,7 +23,11 @@ public class SecureTcpServer : SslServer, INetworkTransport
     public ServerNetworkType ServerNetworkType { get; }
     public string IpAddress { get; }
 
-    public SecureTcpServer(ServerNetworkType serverNetworkType,SslContext context, IPAddress address, int port) : base(context, address, port)
+    public SecureTcpServer(ServerNetworkType serverNetworkType, SslContext context, IPAddress address, int port) : base(
+        context,
+        address,
+        port
+    )
     {
         Id = Guid.NewGuid().ToString();
         Name = "SecureTcpServer";

@@ -2,6 +2,7 @@ using System.Net;
 using NetCoreServer;
 using Orion.Core.Types;
 using Orion.Network.Core.Interfaces.Transports;
+using Orion.Network.Core.Types;
 using Orion.Network.Tcp.Sessions;
 
 namespace Orion.Network.Tcp.Servers;
@@ -15,6 +16,9 @@ public class NonSecureTcpServer : TcpServer, INetworkTransport
 
     public string Id { get; }
     public string Name { get; }
+    public NetworkProtocolType Protocol => NetworkProtocolType.Tcp;
+    public NetworkSecurityType Security => NetworkSecurityType.None;
+
     public ServerNetworkType ServerNetworkType { get; }
     public string IpAddress { get; }
 

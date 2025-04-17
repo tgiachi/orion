@@ -179,8 +179,8 @@ public class NetworkTransportManager : INetworkTransportManager
     {
         _logger.LogDebug(
             "{TransportName} - SessionId: {Session} IpClient {Endpoint} connected",
-            sessionId,
-            transportId,
+            sessionId.ToShortSessionId(),
+            transportId.ToShortSessionId(),
             endpoint
         );
         _sessionsTransports.TryAdd(sessionId, transportId);
@@ -215,6 +215,18 @@ public class NetworkTransportManager : INetworkTransportManager
         transport.MessageReceived += TransportOnMessageReceived;
 
         Transports.Add(new NetworkTransportData(transport));
+    }
+
+    public NetworkTransportData GetTransport(string Id)
+    {
+        var transport = Transports.FirstOrDefault(t => t.Id == Id);
+
+        if (transport == null)
+        {
+            throw new InvalidOperationException($"Transport with id {Id} not found.");
+        }
+
+        return transport;
     }
 
     public void Dispose()

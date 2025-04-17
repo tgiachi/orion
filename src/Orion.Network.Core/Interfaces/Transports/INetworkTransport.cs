@@ -1,4 +1,5 @@
 using Orion.Core.Types;
+using Orion.Network.Core.Types;
 
 namespace Orion.Network.Core.Interfaces.Transports;
 
@@ -61,6 +62,16 @@ public interface INetworkTransport
     ///  The transport port
     /// </summary>
     int Port { get; }
+
+    /// <summary>
+    ///  The transport protocol type
+    /// </summary>
+    NetworkProtocolType Protocol { get; }
+
+    /// <summary>
+    ///  The transport security type
+    /// </summary>
+    NetworkSecurityType Security { get; }
 
     /// <summary>
     ///  The transport type

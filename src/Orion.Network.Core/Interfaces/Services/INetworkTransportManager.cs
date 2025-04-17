@@ -66,4 +66,12 @@ public interface INetworkTransportManager : IDisposable
     /// </summary>
     /// <param name="transport">The transport implementation to add</param>
     void AddTransport(INetworkTransport transport);
+
+
+    /// <summary>
+    ///  Gets a network transport by its ID
+    /// </summary>
+    /// <param name="Id"></param>
+    /// <returns></returns>
+    NetworkTransportData GetTransport(string Id);
 }
