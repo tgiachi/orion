@@ -4,6 +4,8 @@ public class NetworkMetricData
 {
     public string SessionId { get; set; }
 
+    public string Endpoint { get; set; }
+
     public long BytesIn { get; set; }
 
     public long BytesOut { get; set; }
@@ -11,6 +13,13 @@ public class NetworkMetricData
     public long PacketsIn { get; set; }
 
     public long PacketsOut { get; set; }
+
+
+    public NetworkMetricData(string sessionId, string endpoint)
+    {
+        SessionId = sessionId;
+        Endpoint = endpoint;
+    }
 
     public void AddBytesIn(long bytes)
     {

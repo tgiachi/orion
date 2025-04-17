@@ -2,6 +2,7 @@ using System.Reflection;
 using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using Orion.Core.Extensions;
+using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Interfaces.Config;
@@ -20,7 +21,7 @@ public static class ApplicationBuilderExtension
     public static AppContextData<TOptions, TConfig> InitApplication<TOptions, TConfig>(
         this IServiceCollection serviceCollection, string appName
     )
-        where TOptions : IOrionServerCmdOptions where TConfig : class, IOrionServerConfig, new()
+        where TOptions : IOrionServerCmdOptions where TConfig : OrionServerConfig, new()
     {
         var env = Environment.GetEnvironmentVariable(appName.ToSnakeCaseUpper() + "_ENVIRONMENT");
         var appContextData = new AppContextData<TOptions, TConfig>()
@@ -91,6 +92,21 @@ public static class ApplicationBuilderExtension
         {
             appContextData.LoggerConfiguration
                 .MinimumLevel.Is(LogLevelType.Debug.ToSerilogLogLevel());
+        }
+
+
+        if (appContextData.ServerConfig.Debug.SaveRawPackets)
+        {
+            appContextData.LoggerConfiguration.WriteTo.Logger(lc => lc
+                .Filter.ByIncludingOnly(e => e.Properties.ContainsKey("SourceContext") &&
+                                             e.Properties["SourceContext"].ToString().Contains("NetworkTransportManager")
+                )
+                .MinimumLevel.Debug()
+                .WriteTo.File(
+                    Path.Combine(directoriesConfig[DirectoryType.Logs], "packets", "raw_.log"),
+                    rollingInterval: RollingInterval.Day
+                )
+            );
         }
 
 

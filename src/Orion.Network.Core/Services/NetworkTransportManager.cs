@@ -21,7 +21,6 @@ public class NetworkTransportManager : INetworkTransportManager
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();
 
-
     private readonly Task _outputTask;
 
     private readonly ConcurrentDictionary<string, string> _sessionsTransports = new();
@@ -93,11 +92,14 @@ public class NetworkTransportManager : INetworkTransportManager
 
                     await transport.Transport.SendAsync(message.SessionId, byteArray);
 
+                    var sanitizedMessage = message.Message.Replace(Environment.NewLine, " ");
+
                     _logger.LogDebug(
-                        "-> {SessionId} - {Type} - {Message}",
+                        "-> {IpEndpoint}- {SessionId} - {Type} - {Message}",
+                        _sessionsMetrics[message.SessionId].Endpoint,
                         GetShortSessionId(message.SessionId),
                         message.ServerNetworkType,
-                        message.Message
+                        sanitizedMessage
                     );
                 }
                 catch (Exception ex)
@@ -149,8 +151,10 @@ public class NetworkTransportManager : INetworkTransportManager
 
             var transport = Transports.FirstOrDefault(t => t.Id == transportId);
 
+
             _logger.LogDebug(
-                "<- {SessionId} - {Type} - {Message}",
+                "<- {Endpoint} - {SessionId} - {Type} - {Message}",
+                _sessionsMetrics[sessionId].Endpoint,
                 GetShortSessionId(sessionId),
                 transport.ServerNetworkType,
                 message
@@ -184,7 +188,8 @@ public class NetworkTransportManager : INetworkTransportManager
             endpoint
         );
         _sessionsTransports.TryAdd(sessionId, transportId);
-        _sessionsMetrics.TryAdd(sessionId, new NetworkMetricData());
+        _sessionsMetrics.TryAdd(sessionId, new NetworkMetricData(sessionId, endpoint));
+
 
         ClientConnected?.Invoke(transportId, sessionId, endpoint);
     }

@@ -12,4 +12,6 @@ public class OrionServerConfig : IOrionServerConfig
     public OperConfig Oper { get; set; } = new();
     public ProcessConfig Process { get; set; } = new();
 
+    public DebugConfig Debug { get; set; } = new();
+
 }
