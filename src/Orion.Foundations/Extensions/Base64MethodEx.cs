@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Orion.Core.Extensions;
+namespace Orion.Foundations.Extensions;
 
 public static class Base64MethodEx
 {

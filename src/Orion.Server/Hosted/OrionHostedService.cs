@@ -3,6 +3,7 @@ using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Events.Server;
 using Orion.Core.Server.Interfaces.Services.Base;
 using Orion.Core.Server.Internal;
+
 using Orion.Irc.Core.Data.Internal;
 
 namespace Orion.Server.Hosted;

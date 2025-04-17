@@ -3,9 +3,9 @@ using HyperCube.Postman.Interfaces.Services;
 using HyperCube.Postman.Services;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Interfaces.Modules;
-using Orion.Core.Server.Interfaces.Services;
 using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Core.Server.Interfaces.Services.System;
+
 using Orion.Irc.Core.Interfaces.Parser;
 using Orion.Irc.Core.Services;
 using Orion.Server.Services;

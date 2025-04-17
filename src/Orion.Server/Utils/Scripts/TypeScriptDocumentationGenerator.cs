@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
-using Orion.Core.Extensions;
 using Orion.Core.Server.Attributes.Scripts;
 using Orion.Core.Server.Data.Internal;
+using Orion.Foundations.Extensions;
 
 namespace Orion.Server.Utils.Scripts;
 

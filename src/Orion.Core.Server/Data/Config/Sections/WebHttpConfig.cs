@@ -1,5 +1,5 @@
 using Orion.Core.Server.Data.Config.Base;
-using Orion.Core.Server.Interfaces.Config;
+
 
 namespace Orion.Core.Server.Data.Config.Sections;
 

@@ -1,8 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
-using Orion.Core.Extensions;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Interfaces.Config;
-
+using Orion.Foundations.Extensions;
 
 namespace Orion.Core.Server.Extensions;
 

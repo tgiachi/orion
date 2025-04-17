@@ -1,6 +1,6 @@
-using Orion.Core.Utils;
+using Orion.Foundations.Utils;
 
-namespace Orion.Core.Extensions;
+namespace Orion.Foundations.Extensions;
 
 public static class StringToPortsExtension
 {

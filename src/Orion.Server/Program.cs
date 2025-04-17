@@ -1,8 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Orion.Core.Extensions;
 using Orion.Core.Server.Data.Config;
-using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Options;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Web.Extensions;

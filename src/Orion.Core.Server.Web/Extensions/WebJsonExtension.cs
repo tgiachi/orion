@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Http.Json;
-using Orion.Core.Utils;
+using Orion.Foundations.Utils;
 
 namespace Orion.Core.Server.Web.Extensions;
 

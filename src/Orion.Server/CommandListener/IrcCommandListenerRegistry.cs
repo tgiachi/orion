@@ -1,5 +1,6 @@
 using Orion.Core.Server.Interfaces.Listeners;
-using Orion.Core.Types;
+
+using Orion.Foundations.Types;
 using Orion.Irc.Core.Interfaces.Commands;
 
 namespace Orion.Server.CommandListener;

@@ -1,4 +1,4 @@
-using Orion.Core.Types;
+using Orion.Foundations.Types;
 using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Network.Core.Interfaces.Services;
 

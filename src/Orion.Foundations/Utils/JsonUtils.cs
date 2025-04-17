@@ -2,7 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
-namespace Orion.Core.Utils;
+namespace Orion.Foundations.Utils;
 
 /// <summary>
 /// Provides utility methods for JSON serialization and deserialization with AOT (Ahead-of-Time) compilation support.

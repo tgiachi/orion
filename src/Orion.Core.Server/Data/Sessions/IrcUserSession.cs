@@ -1,4 +1,5 @@
 using Orion.Core.Server.Interfaces.Services.Irc;
+
 using Orion.Irc.Core.Interfaces.Commands;
 
 namespace Orion.Core.Server.Data.Sessions;

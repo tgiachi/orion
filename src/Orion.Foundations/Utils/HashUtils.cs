@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Orion.Core.Utils;
+namespace Orion.Foundations.Utils;
 
 /// <summary>
 /// Provides utility methods for cryptographic operations including hashing, password management, and encryption.

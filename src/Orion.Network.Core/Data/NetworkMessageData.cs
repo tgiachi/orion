@@ -1,4 +1,4 @@
-using Orion.Core.Types;
+using Orion.Foundations.Types;
 
 namespace Orion.Network.Core.Data;
 

@@ -1,6 +1,6 @@
+
 using Orion.Core.Server.Data.Config.Base;
-using Orion.Core.Server.Types;
-using Orion.Core.Types;
+using Orion.Foundations.Types;
 
 namespace Orion.Core.Server.Data.Config.Sections;
 

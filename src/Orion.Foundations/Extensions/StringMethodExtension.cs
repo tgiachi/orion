@@ -1,6 +1,6 @@
-using Orion.Core.Utils;
+using Orion.Foundations.Utils;
 
-namespace Orion.Core.Extensions;
+namespace Orion.Foundations.Extensions;
 
 /// <summary>
 /// Provides extension methods for string operations, particularly for case conversions.

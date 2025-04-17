@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Orion.Core.Extensions;
+namespace Orion.Foundations.Extensions;
 
 /// <summary>
 /// Provides extension methods for replacing environment variables in strings.

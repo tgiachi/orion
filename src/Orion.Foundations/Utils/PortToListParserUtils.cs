@@ -1,4 +1,4 @@
-namespace Orion.Core.Utils;
+namespace Orion.Foundations.Utils;
 
 public class PortToListParserUtils
 {

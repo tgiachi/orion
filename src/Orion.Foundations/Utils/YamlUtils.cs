@@ -1,7 +1,7 @@
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Orion.Core.Utils;
+namespace Orion.Foundations.Utils;
 
 public static class YamlUtils
 {

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Orion.Core.Server.Data.Internal;
-using Orion.Core.Server.Interfaces.Listeners;
+
 using Orion.Irc.Core.Interfaces.Commands;
 
 namespace Orion.Core.Server.Extensions;

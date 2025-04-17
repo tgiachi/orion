@@ -1,4 +1,4 @@
-namespace Orion.Core.Observable;
+namespace Orion.Foundations.Observable;
 
 public class CancellationDisposable : IDisposable
 {
