@@ -2,9 +2,10 @@ name: Release Build
 
 on:
   push:
-    branches: [ main ]
+    tags:
+      - 'v*'
   repository_dispatch:
-    types: [version-updated]
+    types: [ version-updated ]
 
 permissions:
   contents: write
@@ -42,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [win-x64, linux-x64, osx-x64, osx-arm64, linux-arm64]
+        os: [ win-x64, linux-x64, osx-x64, osx-arm64, linux-arm64 ]
         include:
           - os: win-x64
             output_name: win-x64
