@@ -230,6 +230,18 @@ public class NetworkTransportManager : INetworkTransportManager
         return transport;
     }
 
+    public Task DisconnectAsync(string sessionId)
+    {
+        if (_sessionsTransports.TryGetValue(sessionId, out var transportId))
+        {
+            var transport = Transports.FirstOrDefault(t => t.Id == transportId);
+
+            return transport.Transport.DisconnectAsync(sessionId);
+        }
+
+        throw new InvalidOperationException($"Session {sessionId} not found.");
+    }
+
     public void Dispose()
     {
         _cancellationTokenSource.Dispose();

@@ -74,4 +74,11 @@ public interface INetworkTransportManager : IDisposable
     /// <param name="Id"></param>
     /// <returns></returns>
     NetworkTransportData GetTransport(string Id);
+
+    /// <summary>
+    ///  Disconnects a client from the network
+    /// </summary>
+    /// <param name="sessionId"></param>
+    /// <returns></returns>
+    Task DisconnectAsync(string sessionId);
 }

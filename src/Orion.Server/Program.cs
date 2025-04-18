@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Orion.Core.Server.Data.Config;
+using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Options;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Web.Extensions;
@@ -25,6 +26,8 @@ public class Program
 
         var appContext = builder.Services.InitApplication<OrionServerOptions, OrionServerConfig>("Orion");
 
+        builder.Services.AddSingleton(appContext);
+
         builder.WebHost.ConfigureKestrelFromConfig(appContext.Config.WebHttp);
         builder.Services.ConfigureHttpJsonOptions(WebJsonExtension.ConfigureWebJson());
 
@@ -43,6 +46,8 @@ public class Program
         builder.Services.AddModule<DefaultScriptsModule>();
 
 
+        builder.Services.AddSingleton<IrcCommandListenerContext>();
+
         builder.Services.CreateIrcServerAppContext(appContext.Config);
 
         builder.Services
@@ -58,8 +63,7 @@ public class Program
 
         app.MapOpenApi();
 
-        app.MapScalarApiReference(
-            o =>
+        app.MapScalarApiReference(o =>
             {
                 o.Title = "Orion Server";
                 o.Theme = ScalarTheme.Kepler;

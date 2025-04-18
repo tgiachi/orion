@@ -85,6 +85,20 @@ public class SecureTcpServer : SslServer, INetworkTransport
         return session.Value != null;
     }
 
+    public Task DisconnectAsync(string sessionId)
+    {
+        if (!HaveSession(sessionId))
+        {
+            throw new InvalidOperationException($"Session {sessionId} not found.");
+        }
+
+        var session = Sessions.FirstOrDefault(s => s.Key == Guid.Parse(sessionId));
+
+        session.Value?.Disconnect();
+
+        return Task.CompletedTask;
+    }
+
 
     protected override void OnConnecting(SslSession session)
     {

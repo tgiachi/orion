@@ -59,7 +59,7 @@ public class PongCommand : BaseIrcCommand
     {
         if (!string.IsNullOrEmpty(Source))
         {
-            return $":{Source} PONG :{Token}";
+            return $"{Source} PONG :{Token}";
         }
         else
         {

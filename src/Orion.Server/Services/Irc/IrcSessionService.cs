@@ -4,7 +4,6 @@ using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
 using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Foundations.Pool;
-
 using Orion.Network.Core.Interfaces.Services;
 
 namespace Orion.Server.Services.Irc;
@@ -21,6 +20,8 @@ public class IrcSessionService : IIrcSessionService
     private readonly IIrcCommandService _ircCommandService;
 
     private readonly IHyperPostmanService _hyperPostmanService;
+
+    public List<IrcUserSession> Sessions => _sessions.Values.ToList();
 
     public IrcSessionService(
         ILogger<IrcSessionService> logger, INetworkTransportManager networkTransportManager,
@@ -53,6 +54,7 @@ public class IrcSessionService : IIrcSessionService
         var newSession = _sessionPool.Get();
         newSession.SessionId = sessionId;
         newSession.SetCommandService(_ircCommandService);
+        newSession.SetNetworkTransportManager(_networkTransportManager);
 
         _sessions.TryAdd(sessionId, newSession);
         var transport = _networkTransportManager.GetTransport(transportId);
@@ -67,6 +69,7 @@ public class IrcSessionService : IIrcSessionService
         _hyperPostmanService.PublishAsync(new SessionConnectedEvent(sessionId, endpoint, transport.ServerNetworkType));
     }
 
+
     public IrcUserSession GetSession(string sessionId, bool throwIfNotFound = true)
     {
         if (_sessions.TryGetValue(sessionId, out var session))
@@ -80,5 +83,10 @@ public class IrcSessionService : IIrcSessionService
         }
 
         return null;
+    }
+
+    public List<IrcUserSession> QuerySessions(Func<IrcUserSession, bool> predicate)
+    {
+        return Sessions.Where(predicate).ToList();
     }
 }

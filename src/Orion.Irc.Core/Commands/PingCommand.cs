@@ -60,7 +60,7 @@ public class PingCommand : BaseIrcCommand
     {
         if (!string.IsNullOrEmpty(Source))
         {
-            return $":{Source} PING :{Token}";
+            return $"{Source} PING :{Token}";
         }
         else
         {
