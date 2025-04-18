@@ -111,7 +111,7 @@ public class CapCommand : BaseIrcCommand
             }
 
             Source = line.Substring(1, spaceIndex - 1);
-            line = line.Substring(spaceIndex + 1).TrimStart();
+            line = line[(spaceIndex + 1)..].TrimStart();
         }
 
         // Split into tokens

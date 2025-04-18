@@ -107,4 +107,11 @@ public interface INetworkTransport
     /// <param name="sessionId"></param>
     /// <returns></returns>
     bool HaveSession(string sessionId);
+
+    /// <summary>
+    ///  Disconnects a client from the transport.
+    /// </summary>
+    /// <param name="sessionId"></param>
+    /// <returns></returns>
+    Task DisconnectAsync(string sessionId);
 }

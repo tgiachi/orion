@@ -1,8 +1,11 @@
+using HyperCube.Postman.Interfaces.Events;
 using HyperCube.Postman.Interfaces.Services;
 using Microsoft.Extensions.Logging;
+using Orion.Core.Server.Data.Config;
+using Orion.Core.Server.Data.Internal;
+using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Interfaces.Listeners;
 using Orion.Core.Server.Interfaces.Services.Irc;
-
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Network.Core.Extensions;
@@ -21,6 +24,10 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
 
     private readonly IIrcSessionService _sessionService;
 
+    protected IrcServerContextData ServerContextData { get; }
+
+    protected OrionServerConfig Config { get; }
+
 
     // Dictionary that maps command types and network types to their handlers
     private readonly
@@ -28,14 +35,15 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
         _handlers = new();
 
     protected BaseIrcCommandListener(
-        ILogger<BaseIrcCommandListener> logger, IIrcCommandService ircCommandService, IHyperPostmanService postmanService,
-        IIrcSessionService sessionService
+        ILogger<BaseIrcCommandListener> logger, IrcCommandListenerContext context
     )
     {
         Logger = logger;
-        _ircCommandService = ircCommandService;
-        _postmanService = postmanService;
-        _sessionService = sessionService;
+        _ircCommandService = context.CommandService;
+        _postmanService = context.PostmanService;
+        _sessionService = context.SessionService;
+        Config = context.AppContext.Config;
+        ServerContextData = context.ServerContextData;
     }
 
     protected void RegisterHandler<TCommand>(
@@ -57,6 +65,12 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
         _ircCommandService.AddListener<TCommand>(this, serverNetworkType);
     }
 
+    protected List<IrcUserSession> QuerySessions(Func<IrcUserSession, bool> predicate)
+    {
+        // Query sessions based on a predicate
+        return _sessionService.Sessions.Where(predicate).ToList();
+    }
+
     protected void RegisterHandler<TCommand>(
         IIrcCommandListener<TCommand> listener, ServerNetworkType serverNetworkType
     )
@@ -75,7 +89,6 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
         {
             if (command is TCommand typedCommand)
             {
-
                 var session = _sessionService.GetSession(sessionId, false);
                 if (session != null)
                 {
@@ -118,5 +131,16 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
     protected Task SendCommandAsync<TCommand>(string sessionId, TCommand command) where TCommand : IIrcCommand
     {
         return _ircCommandService.SendCommandAsync<TCommand>(sessionId, command);
+    }
+
+
+    protected void SubscribeToPostman<TEvent>(ILetterListener<TEvent> listener) where TEvent : class, IHyperPostmanEvent
+    {
+        _postmanService.Subscribe(listener);
+    }
+
+    protected IrcUserSession? GetSession(string sessionId)
+    {
+        return _sessionService.GetSession(sessionId, false);
     }
 }

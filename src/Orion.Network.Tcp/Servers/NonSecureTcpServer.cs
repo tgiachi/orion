@@ -70,8 +70,8 @@ public class NonSecureTcpServer : TcpServer, INetworkTransport
         }
 
 
+        session.Value.Send(message, 0, message.Length);
 
-        session.Value.Send(message);
 
         return Task.CompletedTask;
     }
@@ -81,6 +81,20 @@ public class NonSecureTcpServer : TcpServer, INetworkTransport
         var session = Sessions.FirstOrDefault(s => s.Key == Guid.Parse(sessionId));
 
         return session.Value != null;
+    }
+
+    public Task DisconnectAsync(string sessionId)
+    {
+        if (!HaveSession(sessionId))
+        {
+            throw new InvalidOperationException($"Session {sessionId} not found.");
+        }
+
+        var session = Sessions.FirstOrDefault(s => s.Key == Guid.Parse(sessionId));
+
+        session.Value?.Disconnect();
+
+        return Task.CompletedTask;
     }
 
 
