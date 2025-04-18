@@ -1,17 +1,20 @@
-name: Auto Versioning
+name: Version and Release
 
 on:
   push:
     branches: [ main ]
 
-jobs:
-  versionize:
-    name: Auto Version with Versionize
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
+permissions:
+  contents: write
+  packages: write
 
+jobs:
+  version-and-release:
+    name: Auto Version and Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      new_version: ${{ steps.versionize.outputs.new_version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -47,8 +50,116 @@ jobs:
             echo "new_version=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Push Changes
+      - name: Get latest version
+        id: get_version
+        if: steps.versionize.outputs.new_version != 'true'
+        run: |
+          VERSION=$(grep -m 1 -oP '## \[\K[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md || echo "0.0.1")
+          echo "No new version. Using existing version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Explicit Push Changes
         if: steps.versionize.outputs.new_version == 'true'
         run: |
-          git push --follow-tags origin main
-          git push origin "v${{ steps.versionize.outputs.version }}"
+          git push origin main
+          # Pusha esplicitamente tutti i tag
+
+      - name: Debug Tags
+        run: |
+          echo "All available tags:"
+          git tag -l
+          echo "Latest tag details:"
+          git show-ref --tags
+          echo "Latest commit:"
+          git log -1 --pretty=format:"%h - %an, %ar : %s"
+
+      - name: Create GitHub Release
+        if: steps.versionize.outputs.new_version == 'true'
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Orion Server v${{ steps.versionize.outputs.version || steps.get_version.outputs.version }}
+          tag_name: v${{ steps.versionize.outputs.version || steps.get_version.outputs.version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+
+  build:
+    name: Build for ${{ matrix.os }}
+    needs: version-and-release
+    if: needs.version-and-release.outputs.new_version == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [win-x64, linux-x64, osx-x64, osx-arm64, linux-arm64]
+        include:
+          - os: win-x64
+            output_name: win-x64
+            binary_name: Orion.Server.exe
+            asset_name: orionirc-server-windows-x64
+          - os: linux-x64
+            output_name: linux-x64
+            binary_name: Orion.Server
+            asset_name: orionirc-server-linux-x64
+          - os: osx-x64
+            output_name: osx-x64
+            binary_name: Orion.Server
+            asset_name: orionirc-server-macos-x64
+          - os: osx-arm64
+            output_name: osx-arm64
+            binary_name: Orion.Server
+            asset_name: orionirc-server-macos-arm64
+          - os: linux-arm64
+            output_name: linux-arm64
+            binary_name: Orion.Server
+            asset_name: orionirc-server-linux-arm64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history and tags
+          ref: main       # Assicurati di usare il branch main aggiornato
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Get release
+        id: get_release
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{owner}/{repo}/releases/tags/v${{ needs.version-and-release.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet publish src/Orion.Server/Orion.Server.csproj -c Release -r ${{ matrix.os }} --self-contained true -p:PublishSingleFile=true -o ./dist/${{ matrix.output_name }}
+
+      - name: Prepare additional files
+        run: |
+          mkdir -p ./dist/${{ matrix.output_name }}/orion/scripts
+          mkdir -p ./dist/${{ matrix.output_name }}/orion/logs
+          mkdir -p ./dist/${{ matrix.output_name }}/orion/messages
+          cp -r scripts/* ./dist/${{ matrix.output_name }}/orion/scripts/ || true
+          cp README.md ./dist/${{ matrix.output_name }}/ || true
+          cp LICENSE ./dist/${{ matrix.output_name }}/ || true
+
+      - name: Create ZIP archive
+        run: |
+          cd ./dist
+          zip -r ${{ matrix.asset_name }}.zip ${{ matrix.output_name }}/
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ fromJson(steps.get_release.outputs.data).upload_url }}
+          asset_path: ./dist/${{ matrix.asset_name }}.zip
+          asset_name: ${{ matrix.asset_name }}.zip
+          asset_content_type: application/zip
