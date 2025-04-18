@@ -73,7 +73,7 @@ public class IrcCommandParser : IIrcCommandParser
 
     public async Task<string> SerializeAsync(IIrcCommand command)
     {
-        return command.Write() + Environment.NewLine;
+        return command.Write() + "\r\n";
     }
 
     public void RegisterCommand<TCommand>() where TCommand : IIrcCommand, new()

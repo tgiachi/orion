@@ -70,7 +70,8 @@ public class NonSecureTcpServer : TcpServer, INetworkTransport
         }
 
 
-        session.Value.Send(message);
+        session.Value.Send(message, 0, message.Length);
+
 
         return Task.CompletedTask;
     }

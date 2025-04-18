@@ -82,13 +82,14 @@ public class NetworkTransportManager : INetworkTransportManager
 
                     var transport = Transports.FirstOrDefault(t => t.Id == sessionTransportId);
 
-                    var byteArray = ArrayPool<byte>.Shared.Rent(message.Message.Length);
-                    var bytes = Encoding.UTF8.GetBytes(message.Message, byteArray);
 
-                    _sessionsMetrics[message.SessionId].AddBytesOut(bytes);
+                    var bytes = Encoding.UTF8.GetBytes(message.Message, 0, message.Message.Length);
+
+
+                    _sessionsMetrics[message.SessionId].AddBytesOut(bytes.Length);
                     _sessionsMetrics[message.SessionId].AddPacketsOut();
 
-                    await transport.Transport.SendAsync(message.SessionId, byteArray);
+                    await transport.Transport.SendAsync(message.SessionId, bytes);
 
                     var sanitizedMessage = message.Message.Replace(Environment.NewLine, " ");
 
