@@ -1,3 +1,4 @@
+using HyperCube.Postman.Interfaces.Events;
 using HyperCube.Postman.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Data.Config;
@@ -130,5 +131,16 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
     protected Task SendCommandAsync<TCommand>(string sessionId, TCommand command) where TCommand : IIrcCommand
     {
         return _ircCommandService.SendCommandAsync<TCommand>(sessionId, command);
+    }
+
+
+    protected void SubscribeToPostman<TEvent>(ILetterListener<TEvent> listener) where TEvent : class, IHyperPostmanEvent
+    {
+        _postmanService.Subscribe(listener);
+    }
+
+    protected IrcUserSession? GetSession(string sessionId)
+    {
+        return _sessionService.GetSession(sessionId, false);
     }
 }

@@ -3,4 +3,4 @@ using Orion.Foundations.Types;
 
 namespace Orion.Core.Server.Events.Irc;
 
-public record SessionConnectedEvent(string Id, string Endpoint, ServerNetworkType NetworkType) : BasePostmanRecordEvent;
+public record SessionConnectedEvent(string SessionId, string Endpoint, ServerNetworkType NetworkType) : BasePostmanRecordEvent;

@@ -9,6 +9,7 @@ public class DefaultIrcListenerModule : IOrionContainerModule
     public IServiceCollection RegisterServices(IServiceCollection services)
     {
         return services
+            .AddIrcListener<ConnectionHandler>()
             .AddIrcListener<PingPongHandler>()
             .AddIrcListener<TestHandler>();
     }

@@ -52,6 +52,9 @@ public class IrcSessionService : IIrcSessionService
     private void OnClientConnected(string transportId, string sessionId, string endpoint)
     {
         var newSession = _sessionPool.Get();
+        newSession.Initialize();
+
+        newSession.Endpoint = endpoint;
         newSession.SessionId = sessionId;
         newSession.SetCommandService(_ircCommandService);
         newSession.SetNetworkTransportManager(_networkTransportManager);
