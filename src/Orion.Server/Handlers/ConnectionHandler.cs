@@ -52,6 +52,8 @@ public class ConnectionHandler
         }
         else
         {
+            Logger.LogWarning("Nickname already in use: {Nickname}", command.Nickname);
+
             await session.SendCommandAsync(
                 ErrNicknameInUse.CreateForUnregistered(ServerContextData.ServerName, command.Nickname)
             );
