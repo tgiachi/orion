@@ -36,9 +36,7 @@ public class IrcUserSession : IDisposable
     public bool IsNickSent { get; set; }
     public bool IsRegistered { get; set; }
 
-
     public string NickName { get; set; }
-
     public string UserName { get; set; }
 
     public string RealName { get; set; }
@@ -91,6 +89,7 @@ public class IrcUserSession : IDisposable
         IsUserSent = false;
         IsNickSent = false;
         IsRegistered = false;
+        NickName = string.Empty;
     }
 
 

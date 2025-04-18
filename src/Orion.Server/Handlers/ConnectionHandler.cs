@@ -7,6 +7,7 @@ using Orion.Core.Server.Interfaces.Listeners;
 using Orion.Foundations.Types;
 using Orion.Foundations.Utils;
 using Orion.Irc.Core.Commands;
+using Orion.Irc.Core.Commands.Errors;
 using Orion.Irc.Core.Data.Messages;
 
 namespace Orion.Server.Handlers;
@@ -18,6 +19,9 @@ public class ConnectionHandler
     public ConnectionHandler(ILogger<ConnectionHandler> logger, IrcCommandListenerContext context) : base(logger, context)
     {
         SubscribeToPostman(this);
+
+        RegisterCommandHandler<NickCommand>(this, ServerNetworkType.Clients);
+        RegisterCommandHandler<UserCommand>(this, ServerNetworkType.Clients);
     }
 
     public Task OnCommandReceivedAsync(IrcUserSession session, ServerNetworkType serverNetworkType, CapCommand command)
@@ -27,12 +31,31 @@ public class ConnectionHandler
 
     public Task OnCommandReceivedAsync(IrcUserSession session, ServerNetworkType serverNetworkType, UserCommand command)
     {
+        session.RealName = command.RealName;
+        session.UserName = command.UserName;
+
+        session.IsUserSent = true;
+
         return Task.CompletedTask;
     }
 
-    public Task OnCommandReceivedAsync(IrcUserSession session, ServerNetworkType serverNetworkType, NickCommand command)
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, NickCommand command
+    )
     {
-        return Task.CompletedTask;
+        var exists = QuerySessions(s => s.NickName.Equals(command.Nickname, StringComparison.OrdinalIgnoreCase));
+
+        if (exists.Count == 0)
+        {
+            session.NickName = command.Nickname;
+            session.IsNickSent = true;
+        }
+        else
+        {
+            await session.SendCommandAsync(
+                ErrNicknameInUse.CreateForUnregistered(ServerContextData.ServerName, command.Nickname)
+            );
+        }
     }
 
     public async Task HandleAsync(SessionConnectedEvent @event, CancellationToken cancellationToken = default)

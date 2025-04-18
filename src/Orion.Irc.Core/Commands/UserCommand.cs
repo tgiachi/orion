@@ -10,7 +10,7 @@ public class UserCommand : BaseIrcCommand
     /// <summary>
     /// The username specified by the client
     /// </summary>
-    public string Username { get; set; }
+    public string UserName { get; set; }
 
     /// <summary>
     /// The mode/flags for the user (usually 0 or 8)
@@ -44,7 +44,7 @@ public class UserCommand : BaseIrcCommand
         }
 
         // parts[0] should be "USER"
-        Username = parts[1];
+        UserName = parts[1];
         Mode = parts[2];
         Unused = parts[3];
 
@@ -59,6 +59,6 @@ public class UserCommand : BaseIrcCommand
 
     public override string Write()
     {
-        return $"USER {Username} {Mode} {Unused} :{RealName}";
+        return $"USER {UserName} {Mode} {Unused} :{RealName}";
     }
 }
