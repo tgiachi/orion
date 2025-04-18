@@ -29,13 +29,13 @@ public static class ConfigLoaderExtension
     }
 
 
-    private static void SaveConfig<TConfig>(this TConfig config, string configFilePath) where TConfig : IOrionServerConfig
+    public static void SaveConfig<TConfig>(this TConfig config, string configFilePath) where TConfig : IOrionServerConfig
     {
         var configContent = config.ToYaml();
         File.WriteAllText(configFilePath, configContent);
     }
 
-    private static TConfig LoadConfig<TConfig>(this TConfig config, string configFilePath) where TConfig : IOrionServerConfig
+    public static TConfig LoadConfig<TConfig>(this TConfig config, string configFilePath) where TConfig : IOrionServerConfig
     {
         var configContent = File.ReadAllText(configFilePath);
         var cfg = configContent.FromYaml<TConfig>();

@@ -71,9 +71,9 @@ public class NetworkService : INetworkService, ILetterListener<ServerReadyEvent>
 
         _logger.LogDebug("Preloading SSL context");
 
-        if (!string.IsNullOrWhiteSpace(_orionConfig.Network.SSL.CertificatePath))
+        if (!string.IsNullOrWhiteSpace(_orionConfig.Network.Certificate.CertificatePath))
         {
-            var certificate = _orionConfig.Network.SSL.LoadCertificate();
+            var certificate = _orionConfig.Network.Certificate.LoadCertificate();
 
             _sslContext = new SslContext(SslProtocols.Tls13, certificate);
 

@@ -26,15 +26,32 @@ public class PingPongHandler : BaseIrcCommandListener, IIrcCommandHandler<PingCo
 
         _schedulerSystemService.RegisterJob("ping_pong", PingPongJobTask, TimeSpan.FromSeconds(1));
         _schedulerSystemService.RegisterJob("registration_check", RegistrationCheckJobTask, TimeSpan.FromSeconds(1));
+        _schedulerSystemService.RegisterJob("dead_ping", DisconnecteDeadPingTask, TimeSpan.FromSeconds(1));
+    }
+
+    private async Task DisconnecteDeadPingTask()
+    {
+        var sessionToDisconnected = QuerySessions(session =>
+            session.LastPingResponse + TimeSpan.FromSeconds(10) <= DateTime.Now && session.IsAuthenticated
+        );
+
+        var rplError = ErrorCommand.CreateFromServer(ServerContextData.ServerName, "Ping timeout");
+
+        foreach (var session in sessionToDisconnected)
+        {
+            await session.SendCommandAsync(rplError);
+            await session.DisconnectAsync();
+        }
     }
 
     private async Task RegistrationCheckJobTask()
     {
         var sessionToDisconnected = QuerySessions(session =>
-            session.LastPing + TimeSpan.FromSeconds(10) <= DateTime.Now && !session.IsAuthenticated
+            session.LastPingResponse + TimeSpan.FromSeconds(Config.Irc.Ping.Timeout) <= DateTime.Now &&
+            !session.IsAuthenticated
         );
 
-        var rplError = ErrorCommand.CreateFromServer(ServerContextData.ServerName, "Registration timeout");
+        var rplError = ErrorCommand.CreateFromServer(ServerContextData.ServerName, "Ping timeout");
 
         foreach (var session in sessionToDisconnected)
         {
@@ -46,7 +63,7 @@ public class PingPongHandler : BaseIrcCommandListener, IIrcCommandHandler<PingCo
     private async Task PingPongJobTask()
     {
         var sessionsToPing = QuerySessions(session =>
-            session.LastPing + TimeSpan.FromSeconds(Config.Irc.Ping.Interval) <= DateTime.Now
+            session.LastPingResponse + TimeSpan.FromSeconds(Config.Irc.Ping.Interval) <= DateTime.Now
             && session.IsAuthenticated
         );
 
@@ -70,7 +87,7 @@ public class PingPongHandler : BaseIrcCommandListener, IIrcCommandHandler<PingCo
 
     public Task OnCommandReceivedAsync(IrcUserSession session, ServerNetworkType serverNetworkType, PongCommand command)
     {
-        session.LastPing = DateTime.Now;
+        session.LastPingResponse = DateTime.Now;
 
         Logger.LogDebug("Received Pong from {SessionId}", session.SessionId);
         return Task.CompletedTask;

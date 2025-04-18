@@ -236,6 +236,11 @@ public class NetworkTransportManager : INetworkTransportManager
         {
             var transport = Transports.FirstOrDefault(t => t.Id == transportId);
 
+            _logger.LogDebug(
+                "Disconnecting session {SessionId} from transport {TransportName}",
+                sessionId.ToShortSessionId(),
+                transport.Name
+            );
             return transport.Transport.DisconnectAsync(sessionId);
         }
 

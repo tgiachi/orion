@@ -139,6 +139,11 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
         _postmanService.Subscribe(listener);
     }
 
+    protected Task PublishEventAsync<TEvent>(TEvent @event) where TEvent : class, IHyperPostmanEvent
+    {
+        return _postmanService.PublishAsync(@event);
+    }
+
     protected IrcUserSession? GetSession(string sessionId)
     {
         return _sessionService.GetSession(sessionId, false);
