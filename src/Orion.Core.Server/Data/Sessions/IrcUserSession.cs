@@ -31,7 +31,7 @@ public class IrcUserSession : IDisposable
     public int RemotePort { get; private set; }
 
     public DateTime LastActivity { get; set; }
-    public DateTime LastPing { get; set; }
+    public DateTime LastPingResponse { get; set; }
     public bool IsUserSent => !string.IsNullOrEmpty(UserName);
     public bool IsNickSent => !string.IsNullOrEmpty(NickName);
     public string NickName { get; set; }
@@ -82,7 +82,7 @@ public class IrcUserSession : IDisposable
     public void Initialize()
     {
         LastActivity = DateTime.Now;
-        LastPing = DateTime.Now;
+        LastPingResponse = DateTime.Now;
         RemoteAddress = string.Empty;
         RemotePort = 0;
         HostName = string.Empty;
