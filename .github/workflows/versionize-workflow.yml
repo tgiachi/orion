@@ -39,7 +39,6 @@ jobs:
           EXIT_CODE=$?
           if [ $EXIT_CODE -eq 0 ]; then
             echo "new_version=true" >> $GITHUB_OUTPUT
-            # Estrai la nuova versione dal CHANGELOG.md
             VERSION=$(grep -m 1 -oP '## \[\K[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md || echo "0.0.1")
             echo "version=$VERSION" >> $GITHUB_OUTPUT
             echo "New version created: $VERSION"
@@ -52,20 +51,4 @@ jobs:
         if: steps.versionize.outputs.new_version == 'true'
         run: |
           git push --follow-tags origin main
-
-  # Trigger other workflows if versionize created a new version
-  trigger-workflows:
-    name: Trigger Other Workflows
-    needs: versionize
-    if: needs.versionize.outputs.new_version == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Trigger workflows via repository_dispatch
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.PAT }}
-          event-type: version-updated
-          client-payload: '{"version": "${{ needs.versionize.outputs.version }}"}'
+          git push origin "v${{ steps.versionize.outputs.version }}"
