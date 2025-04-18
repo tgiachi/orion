@@ -25,6 +25,22 @@ public class PingPongHandler : BaseIrcCommandListener, IIrcCommandHandler<PingCo
         RegisterCommandHandler<PongCommand>(this, ServerNetworkType.Clients);
 
         _schedulerSystemService.RegisterJob("ping_pong", PingPongJobTask, TimeSpan.FromSeconds(1));
+        _schedulerSystemService.RegisterJob("registration_check", RegistrationCheckJobTask, TimeSpan.FromSeconds(1));
+    }
+
+    private async Task RegistrationCheckJobTask()
+    {
+        var sessionToDisconnected = QuerySessions(session =>
+            session.LastPing + TimeSpan.FromSeconds(10) <= DateTime.Now && !session.IsAuthenticated
+        );
+
+        var rplError = ErrorCommand.CreateFromServer(ServerContextData.ServerName, "Registration timeout");
+
+        foreach (var session in sessionToDisconnected)
+        {
+            await session.SendCommandAsync(rplError);
+            await session.DisconnectAsync();
+        }
     }
 
     private async Task PingPongJobTask()

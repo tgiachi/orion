@@ -5,4 +5,7 @@ public class IrcServerConfig
     public OperConfig Opers { get; set; } = new();
 
     public PingConfig Ping { get; set; } = new();
+
+
+
 }

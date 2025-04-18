@@ -82,7 +82,6 @@ public class NetworkTransportManager : INetworkTransportManager
 
                     var transport = Transports.FirstOrDefault(t => t.Id == sessionTransportId);
 
-
                     var bytes = Encoding.UTF8.GetBytes(message.Message, 0, message.Message.Length);
 
 
