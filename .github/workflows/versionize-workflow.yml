@@ -87,11 +87,10 @@ jobs:
   build:
     name: Build for ${{ matrix.os }}
     needs: version-and-release
-    if: needs.version-and-release.outputs.new_version == 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [win-x64, linux-x64, osx-x64, osx-arm64, linux-arm64]
+        os: [ win-x64, linux-x64, osx-x64, osx-arm64, linux-arm64 ]
         include:
           - os: win-x64
             output_name: win-x64
@@ -117,28 +116,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Fetch all history and tags
-          ref: main       # Assicurati di usare il branch main aggiornato
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
 
-      - name: Get release
-        id: get_release
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/{owner}/{repo}/releases/tags/v${{ needs.version-and-release.outputs.version }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build
-        run: dotnet publish src/Orion.Server/Orion.Server.csproj -c Release -r ${{ matrix.os }} --self-contained true -p:PublishSingleFile=true -o ./dist/${{ matrix.output_name }}
+        run: dotnet publish src/Orion.Server/Orion.Server.csproj -c Release -r ${{ matrix.os }} --self-contained true -p:PublishSingleFile=true  -o ./dist/${{ matrix.output_name }}
 
       - name: Prepare additional files
         run: |
@@ -146,7 +134,7 @@ jobs:
           mkdir -p ./dist/${{ matrix.output_name }}/orion/logs
           mkdir -p ./dist/${{ matrix.output_name }}/orion/messages
           cp -r scripts/* ./dist/${{ matrix.output_name }}/orion/scripts/ || true
-          cp README.md ./dist/${{ matrix.output_name }}/ || true
+          cp README.md ./dist/${{ matrix.output_name }}/
           cp LICENSE ./dist/${{ matrix.output_name }}/ || true
 
       - name: Create ZIP archive
@@ -159,7 +147,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ fromJson(steps.get_release.outputs.data).upload_url }}
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ./dist/${{ matrix.asset_name }}.zip
           asset_name: ${{ matrix.asset_name }}.zip
           asset_content_type: application/zip
