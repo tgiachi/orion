@@ -2,6 +2,7 @@ using HyperCube.Postman.Interfaces.Services;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
+using Orion.Core.Server.Events.Users;
 using Orion.Core.Server.Handlers.Base;
 using Orion.Core.Server.Interfaces.Listeners;
 using Orion.Foundations.Types;
@@ -29,14 +30,14 @@ public class ConnectionHandler
         return Task.CompletedTask;
     }
 
-    public Task OnCommandReceivedAsync(IrcUserSession session, ServerNetworkType serverNetworkType, UserCommand command)
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, UserCommand command
+    )
     {
         session.RealName = command.RealName;
         session.UserName = command.UserName;
 
-        session.IsUserSent = true;
-
-        return Task.CompletedTask;
+        await SendIfAuthenticated(session);
     }
 
     public async Task OnCommandReceivedAsync(
@@ -48,7 +49,6 @@ public class ConnectionHandler
         if (exists.Count == 0)
         {
             session.NickName = command.Nickname;
-            session.IsNickSent = true;
         }
         else
         {
@@ -57,6 +57,16 @@ public class ConnectionHandler
             await session.SendCommandAsync(
                 ErrNicknameInUse.CreateForUnregistered(ServerContextData.ServerName, command.Nickname)
             );
+        }
+
+        await SendIfAuthenticated(session);
+    }
+
+    private async Task SendIfAuthenticated(IrcUserSession session)
+    {
+        if (session.IsAuthenticated)
+        {
+            await PublishEventAsync(new UserAuthenticatedEvent(session.SessionId));
         }
     }
 

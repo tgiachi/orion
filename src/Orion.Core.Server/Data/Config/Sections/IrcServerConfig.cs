@@ -6,6 +6,4 @@ public class IrcServerConfig
 
     public PingConfig Ping { get; set; } = new();
 
-
-
 }

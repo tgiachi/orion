@@ -32,13 +32,10 @@ public class IrcUserSession : IDisposable
 
     public DateTime LastActivity { get; set; }
     public DateTime LastPing { get; set; }
-    public bool IsUserSent { get; set; }
-    public bool IsNickSent { get; set; }
-    public bool IsRegistered { get; set; }
-
+    public bool IsUserSent => !string.IsNullOrEmpty(UserName);
+    public bool IsNickSent => !string.IsNullOrEmpty(NickName);
     public string NickName { get; set; }
     public string UserName { get; set; }
-
     public string RealName { get; set; }
     public string HostName { get; set; }
     public string? VHostName { get; set; }
@@ -46,7 +43,7 @@ public class IrcUserSession : IDisposable
 
     public string FullName => $"{NickName}!{UserName}@{VHostName ?? HostName}";
 
-    public bool IsAuthenticated => IsUserSent && IsNickSent && IsRegistered;
+    public bool IsAuthenticated => IsUserSent && IsNickSent;
 
     private IIrcCommandService _ircCommandService;
 
@@ -86,9 +83,12 @@ public class IrcUserSession : IDisposable
     {
         LastActivity = DateTime.Now;
         LastPing = DateTime.Now;
-        IsUserSent = false;
-        IsNickSent = false;
-        IsRegistered = false;
+        RemoteAddress = string.Empty;
+        RemotePort = 0;
+        HostName = string.Empty;
+        VHostName = null;
+        UserName = string.Empty;
+        RealName = string.Empty;
         NickName = string.Empty;
     }
 
