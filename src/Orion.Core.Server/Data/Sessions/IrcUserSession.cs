@@ -40,6 +40,7 @@ public class IrcUserSession : IDisposable
     public string HostName { get; set; }
     public string? VHostName { get; set; }
 
+    public bool IsPasswordValid { get; set; }
 
     public string FullName => $"{NickName}!{UserName}@{VHostName ?? HostName}";
 
@@ -90,6 +91,7 @@ public class IrcUserSession : IDisposable
         UserName = string.Empty;
         RealName = string.Empty;
         NickName = string.Empty;
+        IsPasswordValid = false;
     }
 
 

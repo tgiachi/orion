@@ -15,14 +15,22 @@ namespace Orion.Server.Handlers;
 
 public class ConnectionHandler
     : BaseIrcCommandListener, IIrcCommandHandler<CapCommand>, IIrcCommandHandler<UserCommand>,
-        IIrcCommandHandler<NickCommand>, ILetterListener<SessionConnectedEvent>
+        IIrcCommandHandler<NickCommand>, IIrcCommandHandler<PassCommand>, ILetterListener<SessionConnectedEvent>
 {
+    private readonly bool _isPasswordRequired;
+
     public ConnectionHandler(ILogger<ConnectionHandler> logger, IrcCommandListenerContext context) : base(logger, context)
     {
         SubscribeToPostman(this);
 
         RegisterCommandHandler<NickCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<UserCommand>(this, ServerNetworkType.Clients);
+        RegisterCommandHandler<PassCommand>(this, ServerNetworkType.Clients);
+
+        if (!string.IsNullOrEmpty(Config.Irc.ServerPassword))
+        {
+            _isPasswordRequired = true;
+        }
     }
 
     public Task OnCommandReceivedAsync(IrcUserSession session, ServerNetworkType serverNetworkType, CapCommand command)
@@ -66,7 +74,10 @@ public class ConnectionHandler
     {
         if (session.IsAuthenticated)
         {
-            await PublishEventAsync(new UserAuthenticatedEvent(session.SessionId));
+            if (_isPasswordRequired && session.IsPasswordValid)
+            {
+                await PublishEventAsync(new UserAuthenticatedEvent(session.SessionId));
+            }
         }
     }
 
@@ -75,7 +86,6 @@ public class ConnectionHandler
         var session = GetSession(@event.SessionId);
 
         // Check ident
-
         await session.SendCommandAsync(
             NoticeCommand.CreateFromServer(ServerContextData.ServerName, "*", ServerNotices.Connection.CheckingForClones)
         );
@@ -108,5 +118,26 @@ public class ConnectionHandler
         }
 
         session.HostName = addressFound.HostName;
+    }
+
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, PassCommand command
+    )
+    {
+        if (!string.IsNullOrEmpty(Config.Irc.ServerPassword) && _isPasswordRequired)
+        {
+            if (command.Password != Config.Irc.ServerPassword)
+            {
+                Logger.LogWarning("Invalid password for session {SessionId}", session.SessionId);
+
+                await session.SendCommandAsync(ErrPasswdMismatch.Create(ServerContextData.ServerName, session.NickName));
+
+                await session.DisconnectAsync();
+            }
+            else
+            {
+                Logger.LogInformation("Valid password for session {SessionId}", session.SessionId);
+            }
+        }
     }
 }
