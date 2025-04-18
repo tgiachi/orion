@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Necessario per ottenere la storia completa per versionize
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -33,7 +33,7 @@ jobs:
 
       - name: Run Versionize
         id: versionize
-        continue-on-error: true # Continua anche se non ci sono modifiche da versione
+        continue-on-error: true
         run: |
           versionize --skip-dirty
           EXIT_CODE=$?
@@ -66,6 +66,6 @@ jobs:
       - name: Trigger workflows via repository_dispatch
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
           event-type: version-updated
           client-payload: '{"version": "${{ needs.versionize.outputs.version }}"}'

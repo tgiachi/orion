@@ -4,8 +4,7 @@ on:
   push:
     tags:
       - 'v*'
-  repository_dispatch:
-    types: [ version-updated ]
+
 
 permissions:
   contents: write
