@@ -1,7 +1,6 @@
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Interfaces.Config;
 using Orion.Core.Server.Interfaces.Options;
-
 using Serilog;
 
 namespace Orion.Core.Server.Data.Internal;
@@ -21,4 +20,7 @@ public class AppContextData<TOptions, TConfig>
     public TConfig Config { get; set; }
 
     public LoggerConfiguration LoggerConfiguration { get; set; }
+
+
+    public string ConfigFilePath => Path.Combine(Directories.Root, Options.ConfigFile);
 }

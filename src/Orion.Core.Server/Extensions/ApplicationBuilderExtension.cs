@@ -2,6 +2,7 @@ using System.Reflection;
 using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using Orion.Core.Server.Data.Config;
+using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Interfaces.Options;
@@ -64,6 +65,10 @@ public static class ApplicationBuilderExtension
 
         appContextData.Config =
             directoriesConfig.LoadConfig<TConfig>(serviceCollection, parsedOptions.Value.ConfigFile);
+
+
+
+
 
         serviceCollection.AddSingleton<TConfig>(appContextData.Config);
 
