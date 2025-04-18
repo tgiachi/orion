@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.2.0"></a>
+## [0.2.0](https://www.github.com/tgiachi/Orion/releases/tag/v0.2.0) (2025-04-18)
+
+### Features
+
+* **IrcUserSession.cs:** add properties for user details and authentication status ([240719f](https://www.github.com/tgiachi/Orion/commit/240719feb366f155aacd12d90d5ea65994c37281))
+* **OrionServerConfig.cs:** add IrcServerConfig and PingConfig classes for IRC server configuration ([20ab498](https://www.github.com/tgiachi/Orion/commit/20ab498e683769d2abecf98fed4bbff792c7df0a))
+
+### Bug Fixes
+
+* **IrcCommandParser.cs:** change newline character from Environment.NewLine to "\r\n" for consistency ([029ad40](https://www.github.com/tgiachi/Orion/commit/029ad406b697678e19c3a37157eeedc9476cca3d))
+
 <a name="0.1.10"></a>
 ## [0.1.10](https://www.github.com/tgiachi/Orion/releases/tag/v0.1.10) (2025-04-18)
 
