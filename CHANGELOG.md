@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.3.0"></a>
+## [0.3.0](https://www.github.com/tgiachi/Orion/releases/tag/v0.3.0) (2025-04-18)
+
+### Features
+
+* **IrcServerConfig.cs:** add ServerPassword property to IrcServerConfig class ([ff790d1](https://www.github.com/tgiachi/Orion/commit/ff790d17c50e499c221d386e26d82ce68e4e855c))
+* **OperEntryConfig.cs:** add methods to set and validate password, ensure password starts with 'hash://' ([684e7de](https://www.github.com/tgiachi/Orion/commit/684e7de957624d11949aa4b010d70da12a62ff2c))
+
+### Bug Fixes
+
+* **ConnectionHandler.cs:** add logging for when a nickname is already in use to provide visibility ([501b273](https://www.github.com/tgiachi/Orion/commit/501b273ade67c6046e2942dde5868c746aa01462))
+
 <a name="0.2.0"></a>
 ## [0.2.0](https://www.github.com/tgiachi/Orion/releases/tag/v0.2.0) (2025-04-18)
 
