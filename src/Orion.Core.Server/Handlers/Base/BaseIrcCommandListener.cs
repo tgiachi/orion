@@ -1,11 +1,13 @@
-using HyperCube.Postman.Interfaces.Events;
-using HyperCube.Postman.Interfaces.Services;
+
 using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Interfaces.Listeners;
+using Orion.Core.Server.Interfaces.Listeners.Commands;
+using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Core.Server.Interfaces.Services.Irc;
+using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Network.Core.Extensions;
@@ -20,7 +22,7 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
 
     private readonly IIrcCommandService _ircCommandService;
 
-    private readonly IHyperPostmanService _postmanService;
+    private readonly IEventBusService _eventBusService;
 
     private readonly IIrcSessionService _sessionService;
 
@@ -40,7 +42,7 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
     {
         Logger = logger;
         _ircCommandService = context.CommandService;
-        _postmanService = context.PostmanService;
+        _eventBusService = context.EventBusService;
         _sessionService = context.SessionService;
         Config = context.AppContext.Config;
         ServerContextData = context.ServerContextData;
@@ -134,14 +136,14 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
     }
 
 
-    protected void SubscribeToPostman<TEvent>(ILetterListener<TEvent> listener) where TEvent : class, IHyperPostmanEvent
+    protected void SubscribeToPostman<TEvent>(IEventBusListener<TEvent> listener) where TEvent : class
     {
-        _postmanService.Subscribe(listener);
+        _eventBusService.Subscribe(listener);
     }
 
-    protected Task PublishEventAsync<TEvent>(TEvent @event) where TEvent : class, IHyperPostmanEvent
+    protected Task PublishEventAsync<TEvent>(TEvent @event) where TEvent : class
     {
-        return _postmanService.PublishAsync(@event);
+        return _eventBusService.PublishAsync(@event);
     }
 
     protected IrcUserSession? GetSession(string sessionId)

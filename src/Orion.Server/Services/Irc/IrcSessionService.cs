@@ -1,8 +1,9 @@
+
 using System.Collections.Concurrent;
-using HyperCube.Postman.Interfaces.Services;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
 using Orion.Core.Server.Interfaces.Services.Irc;
+using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Foundations.Pool;
 using Orion.Network.Core.Interfaces.Services;
 
@@ -14,24 +15,25 @@ public class IrcSessionService : IIrcSessionService
 
     private readonly ObjectPool<IrcUserSession> _sessionPool = new();
 
+
     private readonly ConcurrentDictionary<string, IrcUserSession> _sessions = new();
 
     private readonly INetworkTransportManager _networkTransportManager;
     private readonly IIrcCommandService _ircCommandService;
 
-    private readonly IHyperPostmanService _hyperPostmanService;
+    private readonly IEventBusService _eventBusService;
 
     public List<IrcUserSession> Sessions => _sessions.Values.ToList();
 
     public IrcSessionService(
         ILogger<IrcSessionService> logger, INetworkTransportManager networkTransportManager,
-        IIrcCommandService ircCommandService, IHyperPostmanService hyperPostmanService
+        IIrcCommandService ircCommandService, IEventBusService eventBusService
     )
     {
         _logger = logger;
         _networkTransportManager = networkTransportManager;
         _ircCommandService = ircCommandService;
-        _hyperPostmanService = hyperPostmanService;
+        _eventBusService = eventBusService;
 
         _networkTransportManager.ClientConnected += OnClientConnected;
         _networkTransportManager.ClientDisconnected += OnClientDisconnected;
@@ -46,7 +48,7 @@ public class IrcSessionService : IIrcSessionService
             _sessionPool.Return(session);
         }
 
-        _hyperPostmanService.PublishAsync(new SessionDisconnectedEvent(sessionId));
+        _eventBusService.PublishAsync(new SessionDisconnectedEvent(sessionId));
     }
 
     private void OnClientConnected(string transportId, string sessionId, string endpoint)
@@ -69,7 +71,7 @@ public class IrcSessionService : IIrcSessionService
             transport.ServerNetworkType
         );
 
-        _hyperPostmanService.PublishAsync(new SessionConnectedEvent(sessionId, endpoint, transport.ServerNetworkType));
+        _eventBusService.PublishAsync(new SessionConnectedEvent(sessionId, endpoint, transport.ServerNetworkType));
     }
 
 

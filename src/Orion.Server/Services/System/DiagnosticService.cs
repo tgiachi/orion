@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using HyperCube.Postman.Interfaces.Services;
+
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Metrics.Diagnostic;
@@ -18,7 +18,7 @@ public class DiagnosticService : IDiagnosticService
 
     private readonly ILogger<DiagnosticService> _logger;
 
-    private readonly IHyperPostmanService _hyperPostmanService;
+    private readonly IEventBusService _eventBusService;
 
     private readonly ISchedulerSystemService _schedulerService;
     private readonly Subject<DiagnosticMetrics> _metricsSubject = new();
@@ -35,11 +35,11 @@ public class DiagnosticService : IDiagnosticService
 
     public DiagnosticService(
         ILogger<DiagnosticService> logger, ISchedulerSystemService schedulerService, DirectoriesConfig directoriesConfig,
-        IHyperPostmanService hyperPostmanService, OrionServerConfig orionServerConfig
+        IEventBusService eventBusService, OrionServerConfig orionServerConfig
     )
     {
         _schedulerService = schedulerService;
-        _hyperPostmanService = hyperPostmanService;
+        _eventBusService = eventBusService;
         _logger = logger;
 
         PidFilePath = Path.Combine(directoriesConfig.Root, orionServerConfig.Process.PidFile);
@@ -84,7 +84,7 @@ public class DiagnosticService : IDiagnosticService
     {
         var metrics = await CollectMetricsInternalAsync();
         _metricsSubject.OnNext(metrics);
-        await _hyperPostmanService.PublishAsync(new DiagnosticMetricEvent(metrics));
+        await _eventBusService.PublishAsync(new DiagnosticMetricEvent(metrics));
     }
 
     private async Task<DiagnosticMetrics> CollectMetricsInternalAsync()

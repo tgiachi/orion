@@ -1,11 +1,12 @@
 using System.Reflection;
-using HyperCube.Postman.Interfaces.Services;
+
 using Jint;
 using Jint.Runtime.Interop;
 using Orion.Core.Server.Attributes.Scripts;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Events.Server;
+using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Types;
 using Orion.Foundations.Extensions;
@@ -14,7 +15,7 @@ using Orion.Server.Utils.Scripts;
 
 namespace Orion.Server.Services.System;
 
-public class ScriptEngineService : IScriptEngineService, ILetterListener<ServerReadyEvent>
+public class ScriptEngineService : IScriptEngineService, IEventBusListener<ServerReadyEvent>
 {
     private readonly ILogger _logger;
 
@@ -28,12 +29,12 @@ public class ScriptEngineService : IScriptEngineService, ILetterListener<ServerR
     private readonly Dictionary<string, Action<object[]>> _callbacks = new();
     private readonly Dictionary<string, object> _constants = new();
 
-    private readonly IHyperPostmanService _hyperPostmanService;
+    private readonly IEventBusService _eventBusService;
 
 
     public ScriptEngineService(
         ILogger<ScriptEngineService> logger, DirectoriesConfig directoriesConfig, IServiceProvider serviceProvider,
-        List<ScriptModuleData> scriptModules, IHyperPostmanService hyperPostmanService
+        List<ScriptModuleData> scriptModules, IEventBusService eventBusService
     )
     {
         _logger = logger;
@@ -41,7 +42,7 @@ public class ScriptEngineService : IScriptEngineService, ILetterListener<ServerR
         _serviceProvider = serviceProvider;
         _scriptModules = scriptModules;
 
-        _hyperPostmanService = hyperPostmanService;
+        _eventBusService = eventBusService;
 
         var typeResolver = TypeResolver.Default;
 
@@ -55,7 +56,7 @@ public class ScriptEngineService : IScriptEngineService, ILetterListener<ServerR
             }
         );
 
-        _hyperPostmanService.Subscribe(this);
+        _eventBusService.Subscribe(this);
     }
 
     private IEnumerable<string> MemberNameCreator(MemberInfo memberInfo)

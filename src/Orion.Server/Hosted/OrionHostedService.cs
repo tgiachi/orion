@@ -1,7 +1,8 @@
-using HyperCube.Postman.Interfaces.Services;
+
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Events.Server;
 using Orion.Core.Server.Interfaces.Services.Base;
+using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Internal;
 
 using Orion.Irc.Core.Data.Internal;
@@ -12,7 +13,7 @@ public class OrionHostedService : IHostedService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly List<ServiceDefinitionObject> _serviceDefinitions;
-    private readonly IHyperPostmanService _hyperPostmanService;
+    private readonly IEventBusService _eventBusService;
     private readonly ILogger _logger;
 
     private readonly List<IrcListenerDefinition> _ircCommandListeners;
@@ -20,12 +21,12 @@ public class OrionHostedService : IHostedService
 
     public OrionHostedService(
         ILogger<OrionHostedService> logger, List<ServiceDefinitionObject> serviceDefinitions,
-        IHyperPostmanService hyperPostmanService, IServiceProvider serviceProvider,
+        IEventBusService eventBusService, IServiceProvider serviceProvider,
         List<IrcListenerDefinition> ircCommandListeners
     )
     {
         _serviceDefinitions = serviceDefinitions;
-        _hyperPostmanService = hyperPostmanService;
+        _eventBusService = eventBusService;
         _serviceProvider = serviceProvider;
         _ircCommandListeners = ircCommandListeners;
         _logger = logger;
@@ -58,8 +59,8 @@ public class OrionHostedService : IHostedService
             }
         }
 
-        await _hyperPostmanService.PublishAsync(new ServerStartedEvent(), cancellationToken);
-        await _hyperPostmanService.PublishAsync(new ServerReadyEvent(), cancellationToken);
+        await _eventBusService.PublishAsync(new ServerStartedEvent(), cancellationToken);
+        await _eventBusService.PublishAsync(new ServerReadyEvent(), cancellationToken);
 
         _logger.LogInformation("Server started and ready");
 
@@ -71,7 +72,7 @@ public class OrionHostedService : IHostedService
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        await _hyperPostmanService.PublishAsync(new ServerStoppingEvent(), cancellationToken);
+        await _eventBusService.PublishAsync(new ServerStoppingEvent(), cancellationToken);
 
         foreach (var serviceDef in _serviceDefinitions)
         {

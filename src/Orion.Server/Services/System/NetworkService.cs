@@ -1,9 +1,10 @@
 using System.Security.Authentication;
-using HyperCube.Postman.Interfaces.Services;
+
 using NetCoreServer;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Events.Server;
 using Orion.Core.Server.Extensions;
+using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Foundations.Extensions;
 
@@ -13,7 +14,7 @@ using Orion.Network.Tcp.Servers;
 
 namespace Orion.Server.Services.System;
 
-public class NetworkService : INetworkService, ILetterListener<ServerReadyEvent>
+public class NetworkService : INetworkService, IEventBusListener<ServerReadyEvent>
 {
     private readonly ILogger _logger;
 
@@ -22,19 +23,19 @@ public class NetworkService : INetworkService, ILetterListener<ServerReadyEvent>
 
     private SslContext _sslContext;
 
-    private readonly IHyperPostmanService _hyperPostmanService;
+    private readonly IEventBusService _eventBusService;
 
     public NetworkService(
         ILogger<NetworkService> logger, INetworkTransportManager networkTransportManager,
-        IHyperPostmanService hyperPostmanService, OrionServerConfig orionConfig
+        IEventBusService eventBusService, OrionServerConfig orionConfig
     )
     {
         _logger = logger;
         _networkTransportManager = networkTransportManager;
-        _hyperPostmanService = hyperPostmanService;
+        _eventBusService = eventBusService;
         _orionConfig = orionConfig;
 
-        _hyperPostmanService.Subscribe(this);
+        _eventBusService.Subscribe(this);
 
         _networkTransportManager.ClientConnected += ClientConnected;
         _networkTransportManager.ClientDisconnected += ClientDisconnected;

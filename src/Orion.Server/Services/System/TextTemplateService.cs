@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
-using HyperCube.Postman.Interfaces.Services;
 using Orion.Core.Server.Events.TextTemplate;
+using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Core.Server.Interfaces.Services.System;
 
 using Orion.Server.Converters;
@@ -11,22 +11,22 @@ using Scriban.Syntax;
 namespace Orion.Server.Services.System;
 
 public class TextTemplateService
-    : ITextTemplateService, ILetterListener<AddVariableEvent>, ILetterListener<AddVariableBuilderEvent>
+    : ITextTemplateService, IEventBusListener<AddVariableEvent>, IEventBusListener<AddVariableBuilderEvent>
 {
     private readonly ILogger _logger;
     private readonly ConcurrentDictionary<string, Func<object>> _variableBuilder = new();
     private readonly ConcurrentDictionary<string, object> _variables = new();
-    private readonly IHyperPostmanService _hyperPostmanService;
+    private readonly IEventBusService _eventBusService;
 
-    public TextTemplateService(ILogger<TextTemplateService> logger, IHyperPostmanService signalService)
+    public TextTemplateService(ILogger<TextTemplateService> logger, IEventBusService eventBusService)
     {
         _logger = logger;
-        _hyperPostmanService = signalService;
+        _eventBusService = eventBusService;
 
         AddDefaultVariables();
 
-        signalService.Subscribe<AddVariableEvent>(this);
-        signalService.Subscribe<AddVariableBuilderEvent>(this);
+        eventBusService.Subscribe<AddVariableEvent>(this);
+        eventBusService.Subscribe<AddVariableBuilderEvent>(this);
     }
 
     private void AddDefaultVariables()
