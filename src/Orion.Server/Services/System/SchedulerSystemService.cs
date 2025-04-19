@@ -1,21 +1,21 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reactive.Linq;
-using HyperCube.Postman.Interfaces.Services;
 using Orion.Core.Server.Events.Scheduler;
+using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Internal.Scheduler;
 
 
 namespace Orion.Server.Services.System;
 
-public class SchedulerSystemService : ISchedulerSystemService, ILetterListener<AddSchedulerJobEvent>
+public class SchedulerSystemService : ISchedulerSystemService, IEventBusListener<AddSchedulerJobEvent>
 {
     private readonly ILogger _logger;
     private readonly ConcurrentDictionary<string, ScheduledJobData> _jobs;
     private readonly ConcurrentDictionary<string, IDisposable> _pausedJobs;
 
-    public SchedulerSystemService(IHyperPostmanService eventBusService, ILogger<SchedulerSystemService> logger)
+    public SchedulerSystemService(IEventBusService eventBusService, ILogger<SchedulerSystemService> logger)
     {
         _logger = logger;
         _jobs = new ConcurrentDictionary<string, ScheduledJobData>();

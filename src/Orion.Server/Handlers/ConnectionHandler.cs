@@ -1,10 +1,12 @@
-using HyperCube.Postman.Interfaces.Services;
+
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
 using Orion.Core.Server.Events.Users;
 using Orion.Core.Server.Handlers.Base;
 using Orion.Core.Server.Interfaces.Listeners;
+using Orion.Core.Server.Interfaces.Listeners.Commands;
+using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Foundations.Types;
 using Orion.Foundations.Utils;
 using Orion.Irc.Core.Commands;
@@ -15,7 +17,7 @@ namespace Orion.Server.Handlers;
 
 public class ConnectionHandler
     : BaseIrcCommandListener, IIrcCommandHandler<CapCommand>, IIrcCommandHandler<UserCommand>,
-        IIrcCommandHandler<NickCommand>, IIrcCommandHandler<PassCommand>, ILetterListener<SessionConnectedEvent>
+        IIrcCommandHandler<NickCommand>, IIrcCommandHandler<PassCommand>, IEventBusListener<SessionConnectedEvent>
 {
     private readonly bool _isPasswordRequired;
 

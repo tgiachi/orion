@@ -1,6 +1,5 @@
-using HyperCube.Postman.Config;
-using HyperCube.Postman.Interfaces.Services;
-using HyperCube.Postman.Services;
+
+using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Interfaces.Modules;
 using Orion.Core.Server.Interfaces.Services.Irc;
@@ -18,7 +17,7 @@ public class DefaultServicesModule : IOrionContainerModule
 {
     public IServiceCollection RegisterServices(IServiceCollection services)
     {
-        services.AddSingleton(new HyperPostmanConfig()
+        services.AddSingleton(new EventBusConfig()
         {
             MaxConcurrentTasks = 4
         });
@@ -29,7 +28,7 @@ public class DefaultServicesModule : IOrionContainerModule
             .AddService<IIrcCommandParser, IrcCommandParser>();
 
         return services
-            .AddService<IHyperPostmanService, HyperPostmanService>()
+            .AddService<IEventBusService, EventBusService>()
             .AddService<IDiagnosticService, DiagnosticService>()
             .AddService<ITextTemplateService, TextTemplateService>()
             .AddService<ISchedulerSystemService, SchedulerSystemService>()

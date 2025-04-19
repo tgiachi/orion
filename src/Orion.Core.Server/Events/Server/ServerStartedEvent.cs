@@ -1,5 +1,5 @@
-using HyperCube.Postman.Base.Events;
+
 
 namespace Orion.Core.Server.Events.Server;
 
-public record ServerStartedEvent : BasePostmanRecordEvent;
+public record ServerStartedEvent;

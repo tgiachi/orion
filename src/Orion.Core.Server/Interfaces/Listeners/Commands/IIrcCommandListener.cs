@@ -1,8 +1,7 @@
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Interfaces.Commands;
-using Orion.Network.Core.Interfaces.Services;
 
-namespace Orion.Core.Server.Interfaces.Listeners;
+namespace Orion.Core.Server.Interfaces.Listeners.Commands;
 
 public interface IIrcCommandListener
 {

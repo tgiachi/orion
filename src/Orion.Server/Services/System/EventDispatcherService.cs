@@ -1,4 +1,4 @@
-using HyperCube.Postman.Interfaces.Services;
+
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Foundations.Extensions;
 
@@ -10,10 +10,10 @@ public class EventDispatcherService : IEventDispatcherService
 
     private readonly ILogger _logger;
 
-    public EventDispatcherService(ILogger<EventDispatcherService> logger, IHyperPostmanService postmanService)
+    public EventDispatcherService(ILogger<EventDispatcherService> logger, IEventBusService eventBusService)
     {
         _logger = logger;
-        postmanService.AllEventsObservable.Subscribe(OnEvent);
+        eventBusService.AllEventsObservable.Subscribe(OnEvent);
     }
 
     private void OnEvent(object obj)
