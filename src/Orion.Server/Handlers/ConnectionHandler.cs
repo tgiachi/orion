@@ -23,7 +23,7 @@ public class ConnectionHandler
 
     public ConnectionHandler(ILogger<ConnectionHandler> logger, IrcCommandListenerContext context) : base(logger, context)
     {
-        SubscribeToPostman(this);
+        SubscribeToEventBus(this);
 
         RegisterCommandHandler<NickCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<UserCommand>(this, ServerNetworkType.Clients);
@@ -79,6 +79,7 @@ public class ConnectionHandler
             if (_isPasswordRequired && session.IsPasswordValid)
             {
                 await PublishEventAsync(new UserAuthenticatedEvent(session.SessionId));
+                session.LastPingResponse = DateTime.Now;
             }
         }
     }
@@ -139,6 +140,7 @@ public class ConnectionHandler
             else
             {
                 Logger.LogInformation("Valid password for session {SessionId}", session.SessionId);
+                session.IsPasswordValid = true;
             }
         }
     }

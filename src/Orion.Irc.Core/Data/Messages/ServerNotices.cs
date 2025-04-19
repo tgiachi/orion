@@ -29,4 +29,6 @@ public static class ServerNotices
         public static string RegistrationComplete => "*** Registration completed";
         // Add other authentication-related messages as needed
     }
+
+
 }
