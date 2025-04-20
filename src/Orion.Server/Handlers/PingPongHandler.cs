@@ -33,7 +33,7 @@ public class PingPongHandler : BaseIrcCommandListener, IIrcCommandHandler<PingCo
     private async Task DisconnecteDeadPingTask()
     {
         var sessionToDisconnected = QuerySessions(session =>
-            session.LastPingResponse + TimeSpan.FromSeconds(10) <= DateTime.Now && session.IsAuthenticated
+            session.LastPingResponse + TimeSpan.FromSeconds(Config.Irc.Ping.Timeout) <= DateTime.Now && session.IsAuthenticated
         );
 
         var rplError = ErrorCommand.CreateFromServer(ServerHostName, "Ping timeout");
