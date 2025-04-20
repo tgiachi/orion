@@ -8,5 +8,5 @@ public class IrcServerConfig
     public PingConfig Ping { get; set; } = new();
     public string ServerPassword { get; set; }
 
-
+    public IrcSupportConfig Limits { get; set; } = new();
 }

@@ -11,12 +11,36 @@ public class WelcomeHandler : BaseIrcCommandListener, IEventBusListener<UserAuth
 {
     private readonly IVersionService _versionService;
 
+
     public WelcomeHandler(
         ILogger<WelcomeHandler> logger, IrcCommandListenerContext context, IVersionService versionService
     ) : base(logger, context)
     {
         _versionService = versionService;
         SubscribeToEventBus(this);
+    }
+
+    private RplISupport BuildISupport(string nickName)
+    {
+        var rplISupport = new RplISupport();
+
+        var limits = Config.Irc.Limits;
+
+        rplISupport.ServerName = ServerContextData.ServerName;
+        rplISupport.AwayLen = limits.AwayLength;
+        rplISupport.CaseMapping = "rfc1459";
+        rplISupport.ChannelLen = limits.ChanLength;
+        rplISupport.Parameters["CHANMODES"] = limits.ChanModes;
+        rplISupport.Network = ServerContextData.NetworkName;
+        rplISupport.HostLen = limits.HostLength;
+        rplISupport.UserLen = limits.UserLength;
+        rplISupport.NickLen = limits.NickLength;
+        rplISupport.TopicLen = limits.TopicLength;
+        rplISupport.MaxTargets = limits.MaxTargets;
+
+        rplISupport.Nickname = nickName;
+
+        return rplISupport;
     }
 
     public async Task HandleAsync(UserAuthenticatedEvent @event, CancellationToken cancellationToken = default)
@@ -43,6 +67,11 @@ public class WelcomeHandler : BaseIrcCommandListener, IEventBusListener<UserAuth
 
         await session.SendCommandAsync(
             RplCreated.Create(ServerContextData.ServerName, session.NickName, null, ServerContextData.ServerStartTime)
+        );
+
+
+        await session.SendCommandAsync(
+            BuildISupport(session.NickName)
         );
     }
 }
