@@ -99,7 +99,9 @@ public class Program
 
         var apiRoute = app.MapGroup("/api/v1");
 
-        apiRoute.MapStatus();
+        apiRoute
+            .MapSystem()
+            .MapStatus();
 
         app.MapOpenApi(_openApiPath);
 

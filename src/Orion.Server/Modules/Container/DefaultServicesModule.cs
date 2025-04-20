@@ -35,6 +35,7 @@ public class DefaultServicesModule : IOrionContainerModule
             .AddService<IEventDispatcherService, EventDispatcherService>()
             .AddService<IScriptEngineService, ScriptEngineService>()
             .AddService<INetworkService, NetworkService>()
+            .AddService<IVersionService, VersionService>()
             .AddService<IProcessQueueService, ProcessQueueService>();
 
     }
