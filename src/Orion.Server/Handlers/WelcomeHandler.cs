@@ -26,12 +26,12 @@ public class WelcomeHandler : BaseIrcCommandListener, IEventBusListener<UserAuth
 
         var limits = Config.Irc.Limits;
 
-        rplISupport.ServerName = ServerContextData.ServerName;
+        rplISupport.ServerName = ServerHostName;
         rplISupport.AwayLen = limits.AwayLength;
         rplISupport.CaseMapping = "rfc1459";
         rplISupport.ChannelLen = limits.ChanLength;
         rplISupport.Parameters["CHANMODES"] = limits.ChanModes;
-        rplISupport.Network = ServerContextData.NetworkName;
+        rplISupport.Network = ServerHostName;
         rplISupport.HostLen = limits.HostLength;
         rplISupport.UserLen = limits.UserLength;
         rplISupport.NickLen = limits.NickLength;
@@ -50,28 +50,111 @@ public class WelcomeHandler : BaseIrcCommandListener, IEventBusListener<UserAuth
 
         await session.SendCommandAsync(
             RplWelcome.Create(
-                ServerContextData.ServerName,
+                ServerHostName,
                 session.NickName,
-                ServerContextData.NetworkName,
+                ListenerContext.ServerContextData.NetworkName,
                 session.FullAddress
             )
         );
 
         await session.SendCommandAsync(
             (RplYourHost.Create(
-                ServerContextData.ServerName,
+                ServerHostName,
                 session.NickName,
                 "orionirc-server " + _versionService.GetVersionInfo().Version
             ))
         );
 
         await session.SendCommandAsync(
-            RplCreated.Create(ServerContextData.ServerName, session.NickName, null, ServerContextData.ServerStartTime)
+            RplCreated.Create(ServerHostName, session.NickName, null, ListenerContext.ServerContextData.ServerStartTime)
+        );
+
+
+        await session.SendCommandAsync(
+            RplMyInfo.Create(
+                ServerHostName,
+                Config.Irc.Limits.UserModes,
+                Config.Irc.Limits.ChannelModes,
+                session.NickName
+            )
         );
 
 
         await session.SendCommandAsync(
             BuildISupport(session.NickName)
         );
+
+
+        await session.SendCommandAsync(
+            RplLuserClient.Create(
+                ServerHostName,
+                session.NickName,
+                ListenerContext.SessionService.TotalSessions,
+                ListenerContext.SessionService.TotalInvisibleSessions,
+                1
+            )
+        );
+
+        await session.SendCommandAsync(
+            RplLuserOp.Create(ServerHostName, session.NickName, ListenerContext.SessionService.TotalOpers)
+        );
+
+        await session.SendCommandAsync(
+            RplLocalUsers.Create(
+                ServerHostName,
+                session.NickName,
+                ListenerContext.SessionService.TotalSessions,
+                ListenerContext.SessionService.MaxSessions
+            )
+        );
+
+        await session.SendCommandAsync(
+            RplGlobalUsers.Create(
+                ServerHostName,
+                session.NickName,
+                ListenerContext.SessionService.TotalSessions,
+                ListenerContext.SessionService.MaxSessions
+            )
+        );
+
+        await session.SendCommandAsync(
+            RplLuserMe.Create(ServerHostName, session.NickName, ListenerContext.SessionService.TotalSessions, 1)
+        );
+
+        await session.SendCommandAsync(RplMotdStart.Create(ServerHostName, session.NickName));
+
+        foreach (var line in await LoadMotdAsync())
+        {
+            await session.SendCommandAsync(RplMotd.Create(ServerHostName, session.NickName, line));
+        }
+
+        await session.SendCommandAsync(RplEndOfMotd.Create(ServerHostName, session.NickName));
+    }
+
+    private async Task<List<string>> LoadMotdAsync()
+    {
+        var motd = new List<string>();
+
+        if (Config.Irc.Motd.StartsWith("file://"))
+        {
+            var filePath = Path.Combine(ListenerContext.AppContext.Directories.Root, Config.Irc.Motd[7..]);
+
+            if (!File.Exists(filePath))
+            {
+                throw new Exception("Motd file not found");
+            }
+
+            using var reader = new StreamReader(filePath);
+            while (!reader.EndOfStream)
+            {
+                var line = await reader.ReadLineAsync();
+                if (line != null)
+                {
+                    motd.Add(TranslateText(line));
+                }
+            }
+        }
+
+        return motd;
     }
 }

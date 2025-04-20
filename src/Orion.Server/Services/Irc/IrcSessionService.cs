@@ -11,6 +11,12 @@ namespace Orion.Server.Services.Irc;
 
 public class IrcSessionService : IIrcSessionService
 {
+
+    public int TotalSessions => _sessions.Count;
+    public int TotalInvisibleSessions => _sessions.Values.Count(x => x.IsInvisible);
+    public int MaxSessions { get; private set; }
+    public int TotalOpers => _sessions.Values.Count(x => x.IsOperator);
+
     private readonly ILogger _logger;
 
     private readonly ObjectPool<IrcUserSession> _sessionPool = new();
@@ -72,6 +78,8 @@ public class IrcSessionService : IIrcSessionService
         );
 
         _eventBusService.PublishAsync(new SessionConnectedEvent(sessionId, endpoint, transport.ServerNetworkType));
+
+        MaxSessions++;
     }
 
 
@@ -94,4 +102,6 @@ public class IrcSessionService : IIrcSessionService
     {
         return Sessions.Where(predicate).ToList();
     }
+
+
 }

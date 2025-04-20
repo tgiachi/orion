@@ -11,4 +11,15 @@ public class IrcSupportConfig
 
     public int HostLength { get; set; } = 64;
     public string ChanModes { get; set; } = "eIbq,k,flj,CFLMPQScgimnprstz";
+
+
+    /// <summary>
+    /// User modes supported by this server
+    /// </summary>
+    public string UserModes { get; set; } = "iwos";
+
+    /// <summary>
+    /// Channel modes supported by this server
+    /// </summary>
+    public string ChannelModes { get; set; } = "bklmntsiIpK";
 }

@@ -13,6 +13,9 @@ public class IrcCommandListenerContext
     public IIrcSessionService SessionService { get; }
     public AppContextData<OrionServerOptions, OrionServerConfig> AppContext { get; }
 
+
+    public ITextTemplateService TextTemplateService { get; }
+
     public IrcServerContextData ServerContextData { get; set; } = new();
 
 
@@ -21,12 +24,15 @@ public class IrcCommandListenerContext
         IEventBusService eventBusService,
         IIrcSessionService sessionService,
         IrcServerContextData serverContextData,
-        AppContextData<OrionServerOptions, OrionServerConfig> appContext)
+        ITextTemplateService textTemplateService,
+        AppContextData<OrionServerOptions,
+            OrionServerConfig> appContext)
     {
         ServerContextData = serverContextData;
         CommandService = commandService;
         EventBusService = eventBusService;
         SessionService = sessionService;
         AppContext = appContext;
+        TextTemplateService = textTemplateService;
     }
 }

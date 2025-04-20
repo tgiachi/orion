@@ -9,4 +9,11 @@ public class IrcServerConfig
     public string ServerPassword { get; set; }
 
     public IrcSupportConfig Limits { get; set; } = new();
+
+    /// <summary>
+    ///  Motd (Message of the Day) for the server
+    ///  use file:// to load from a file (from orion root) and [CRLF] for line breaks
+    /// </summary>
+    public string Motd { get; set; } =
+        "Welcome to Orion IRC Server[CRLF]This is a test server[CRLF]Please use /help for more information";
 }

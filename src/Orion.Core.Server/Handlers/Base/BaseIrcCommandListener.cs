@@ -1,17 +1,14 @@
-
 using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
-using Orion.Core.Server.Interfaces.Listeners;
 using Orion.Core.Server.Interfaces.Listeners.Commands;
 using Orion.Core.Server.Interfaces.Listeners.EventBus;
-using Orion.Core.Server.Interfaces.Services.Irc;
+
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Network.Core.Extensions;
-using Serilog;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Orion.Core.Server.Handlers.Base;
@@ -20,15 +17,14 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
 {
     protected ILogger Logger { get; }
 
-    private readonly IIrcCommandService _ircCommandService;
-
-    private readonly IEventBusService _eventBusService;
-
-    private readonly IIrcSessionService _sessionService;
-
-    protected IrcServerContextData ServerContextData { get; }
+    protected IrcCommandListenerContext ListenerContext { get; }
 
     protected OrionServerConfig Config { get; }
+
+    protected ITextTemplateService TextTemplateService { get; }
+
+
+    protected string ServerHostName => ListenerContext.ServerContextData.ServerName;
 
 
     // Dictionary that maps command types and network types to their handlers
@@ -40,12 +36,10 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
         ILogger<BaseIrcCommandListener> logger, IrcCommandListenerContext context
     )
     {
+        ListenerContext = context;
         Logger = logger;
-        _ircCommandService = context.CommandService;
-        _eventBusService = context.EventBusService;
-        _sessionService = context.SessionService;
         Config = context.AppContext.Config;
-        ServerContextData = context.ServerContextData;
+        TextTemplateService = context.TextTemplateService;
     }
 
     protected void RegisterHandler<TCommand>(
@@ -64,13 +58,13 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
             return Task.CompletedTask;
         };
 
-        _ircCommandService.AddListener<TCommand>(this, serverNetworkType);
+        ListenerContext.CommandService.AddListener<TCommand>(this, serverNetworkType);
     }
 
     protected List<IrcUserSession> QuerySessions(Func<IrcUserSession, bool> predicate)
     {
         // Query sessions based on a predicate
-        return _sessionService.Sessions.Where(predicate).ToList();
+        return ListenerContext.SessionService.Sessions.Where(predicate).ToList();
     }
 
     protected void RegisterHandler<TCommand>(
@@ -91,7 +85,7 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
         {
             if (command is TCommand typedCommand)
             {
-                var session = _sessionService.GetSession(sessionId, false);
+                var session = ListenerContext.SessionService.GetSession(sessionId, false);
                 if (session != null)
                 {
                     await handler.OnCommandReceivedAsync(session, networkType, typedCommand);
@@ -108,7 +102,7 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
         };
 
         var cmd = new TCommand();
-        _ircCommandService.AddListener<TCommand>(this, serverNetworkType);
+        ListenerContext.CommandService.AddListener<TCommand>(this, serverNetworkType);
     }
 
     public virtual Task OnCommandReceivedAsync(string sessionId, ServerNetworkType serverNetworkType, IIrcCommand command)
@@ -132,22 +126,27 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
 
     protected Task SendCommandAsync<TCommand>(string sessionId, TCommand command) where TCommand : IIrcCommand
     {
-        return _ircCommandService.SendCommandAsync<TCommand>(sessionId, command);
+        return ListenerContext.CommandService.SendCommandAsync<TCommand>(sessionId, command);
     }
 
 
     protected void SubscribeToEventBus<TEvent>(IEventBusListener<TEvent> listener) where TEvent : class
     {
-        _eventBusService.Subscribe(listener);
+        ListenerContext.EventBusService.Subscribe(listener);
     }
 
     protected Task PublishEventAsync<TEvent>(TEvent @event) where TEvent : class
     {
-        return _eventBusService.PublishAsync(@event);
+        return ListenerContext.EventBusService.PublishAsync(@event);
     }
 
     protected IrcUserSession? GetSession(string sessionId)
     {
-        return _sessionService.GetSession(sessionId, false);
+        return ListenerContext.SessionService.GetSession(sessionId, false);
+    }
+
+    protected string TranslateText(string text, object context = null)
+    {
+        return TextTemplateService.TranslateText(text, context);
     }
 }
