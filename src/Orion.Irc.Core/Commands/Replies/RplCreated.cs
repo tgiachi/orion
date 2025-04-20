@@ -114,7 +114,8 @@ public class RplCreated : BaseIrcCommand
     public static RplCreated Create(
         string serverName,
         string nickname,
-        string creationMessage = null)
+        string creationMessage = null,
+        DateTime? creationTime = null)
     {
         // If no message provided, generate a default one
         creationMessage ??= $"This server was created {DateTime.Now:ddd MMM dd yyyy} at {DateTime.Now:HH:mm:ss} UTC";
@@ -124,7 +125,7 @@ public class RplCreated : BaseIrcCommand
             ServerName = serverName,
             Nickname = nickname,
             CreationMessage = creationMessage,
-            CreationTime = DateTime.UtcNow
+            CreationTime = creationTime ?? DateTime.UtcNow
         };
     }
 }

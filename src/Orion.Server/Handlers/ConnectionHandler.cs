@@ -65,7 +65,7 @@ public class ConnectionHandler
             Logger.LogWarning("Nickname already in use: {Nickname}", command.Nickname);
 
             await session.SendCommandAsync(
-                ErrNicknameInUse.CreateForUnregistered(ServerContextData.ServerName, command.Nickname)
+                ErrNicknameInUse.CreateForUnregistered(ServerHostName, command.Nickname)
             );
         }
 
@@ -90,11 +90,11 @@ public class ConnectionHandler
 
         // Check ident
         await session.SendCommandAsync(
-            NoticeCommand.CreateFromServer(ServerContextData.ServerName, "*", ServerNotices.Connection.CheckingForClones)
+            NoticeCommand.CreateFromServer(ServerHostName, "*", ServerNotices.Connection.CheckingForClones)
         );
 
         await session.SendCommandAsync(
-            NoticeCommand.CreateFromServer(ServerContextData.ServerName, "*", ServerNotices.Connection.LookingUpHostname)
+            NoticeCommand.CreateFromServer(ServerHostName, "*", ServerNotices.Connection.LookingUpHostname)
         );
 
         var addressFound = await DnsUtils.TryResolveHostnameAsync(session.RemoteAddress);
@@ -103,7 +103,7 @@ public class ConnectionHandler
         {
             await session.SendCommandAsync(
                 NoticeCommand.CreateFromServer(
-                    ServerContextData.ServerName,
+                    ServerHostName,
                     "*",
                     ServerNotices.Connection.ConnectingToHost + " " + addressFound.HostName
                 )
@@ -113,7 +113,7 @@ public class ConnectionHandler
         {
             await session.SendCommandAsync(
                 NoticeCommand.CreateFromServer(
-                    ServerContextData.ServerName,
+                    ServerHostName,
                     "*",
                     ServerNotices.Connection.HostnameLookupFailed
                 )
@@ -133,7 +133,7 @@ public class ConnectionHandler
             {
                 Logger.LogWarning("Invalid password for session {SessionId}", session.SessionId);
 
-                await session.SendCommandAsync(ErrPasswdMismatch.Create(ServerContextData.ServerName, session.NickName));
+                await session.SendCommandAsync(ErrPasswdMismatch.Create(ServerHostName, session.NickName));
 
                 await session.DisconnectAsync();
             }

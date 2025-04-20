@@ -13,4 +13,12 @@ public class IrcServerContextData
     ///   Network name of the server.
     /// </summary>
     public string NetworkName { get; set; }
+
+
+    /// <summary>
+    ///  The start time of the server.
+    /// </summary>
+    public DateTime ServerStartTime { get; set; } = DateTime.UtcNow;
 }
+
+

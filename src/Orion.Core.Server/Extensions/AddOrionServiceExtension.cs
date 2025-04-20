@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Orion.Core.Server.Interfaces.Services.Base;
 using Orion.Core.Server.Internal;
+using Orion.Core.Server.Internal.Services;
 using Orion.Foundations.Types;
 
 namespace Orion.Core.Server.Extensions;

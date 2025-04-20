@@ -12,5 +12,12 @@ public interface IIrcSessionService : IOrionService
 
     List<IrcUserSession> QuerySessions(Func<IrcUserSession, bool> predicate);
 
+    int TotalSessions { get; }
+    int TotalInvisibleSessions { get; }
+
+    int MaxSessions { get; }
+
+    int TotalOpers { get; }
+
 
 }
