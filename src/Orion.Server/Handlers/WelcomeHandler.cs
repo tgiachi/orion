@@ -40,5 +40,9 @@ public class WelcomeHandler : BaseIrcCommandListener, IEventBusListener<UserAuth
                 "orionirc-server " + _versionService.GetVersionInfo().Version
             ))
         );
+
+        await session.SendCommandAsync(
+            RplCreated.Create(ServerContextData.ServerName, session.NickName, null, ServerContextData.ServerStartTime)
+        );
     }
 }
