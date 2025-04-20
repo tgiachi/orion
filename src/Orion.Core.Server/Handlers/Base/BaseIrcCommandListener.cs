@@ -136,7 +136,7 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
     }
 
 
-    protected void SubscribeToPostman<TEvent>(IEventBusListener<TEvent> listener) where TEvent : class
+    protected void SubscribeToEventBus<TEvent>(IEventBusListener<TEvent> listener) where TEvent : class
     {
         _eventBusService.Subscribe(listener);
     }

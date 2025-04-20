@@ -42,7 +42,7 @@ public class IrcUserSession : IDisposable
 
     public bool IsPasswordValid { get; set; }
 
-    public string FullName => $"{NickName}!{UserName}@{VHostName ?? HostName}";
+    public string FullAddress => $"{NickName}!{UserName}@{VHostName ?? HostName}";
 
     public bool IsAuthenticated => IsUserSent && IsNickSent;
 

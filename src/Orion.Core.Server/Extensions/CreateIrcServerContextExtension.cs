@@ -13,7 +13,8 @@ public static class CreateIrcServerContextExtension
         services.AddSingleton(
             new IrcServerContextData
             {
-                ServerName = serverConfig.Server.Host
+                ServerName = serverConfig.Server.Host,
+                NetworkName = serverConfig.Server.Network
             }
         );
 

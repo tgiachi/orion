@@ -7,4 +7,10 @@ public class IrcServerContextData
     ///  Example: irc.example.com
     /// </summary>
     public string ServerName { get; set; }
+
+
+    /// <summary>
+    ///   Network name of the server.
+    /// </summary>
+    public string NetworkName { get; set; }
 }
