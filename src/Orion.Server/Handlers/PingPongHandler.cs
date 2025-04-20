@@ -69,7 +69,7 @@ public class PingPongHandler : BaseIrcCommandListener, IIrcCommandHandler<PingCo
         );
 
         var pingCommand = PingCommand.CreateFromServer(
-            ServerHostName,
+            null,
             DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString()
         );
 
