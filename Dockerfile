@@ -10,10 +10,10 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 ARG BUILD_CONFIGURATION=Release
 ARG TARGETARCH
 WORKDIR /src
-COPY ["src/Orion.Server/Orion.Server.csproj", "src/Orion.Server/"]
+COPY ["./", "./"]
 RUN dotnet restore "src/Orion.Server/Orion.Server.csproj" -a $TARGETARCH
 COPY . .
-WORKDIR "/src/src/Orion.Server"
+WORKDIR "src/Orion.Server"
 RUN dotnet build "Orion.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build -a $TARGETARCH
 
 # Publish image with single file
@@ -25,6 +25,13 @@ RUN dotnet publish "Orion.Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish
     -p:PublishSingleFile=true \
     -p:PublishReadyToRun=true
 
+
+RUN rm .git/ -Rf
+RUN rm .github/ -Rf
+RUN rm .gitignore -Rf
+RUN rm .dockerignore -Rf
+RUN rm ./assets -Rf
+RUN rm src -Rf
 # Final image
 FROM base AS final
 WORKDIR /app
