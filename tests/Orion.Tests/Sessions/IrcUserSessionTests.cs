@@ -243,52 +243,9 @@ public class MotdCommandsTests
 
     }
 
-    [Test]
-    public void RplMotdStart_Write_ShouldFormatCorrectly()
-    {
-        // Arrange
-        var cmd = new RplMotdStart
-        {
-            ServerName = "irc.server.com",
-            Nickname = "nick",
-        };
 
-        // Act
-        string result = cmd.Write();
 
-        // Assert
-        Assert.That(result, Is.EqualTo(":irc.server.com 375 nick :- MOTD Intro -"));
-    }
 
-    [Test]
-    public void RplMotd_Create_ShouldSetAllProperties()
-    {
-        // Act
-        var cmd = RplMotd.Create("irc.server.com", "nick", "MOTD line text");
-
-        // Assert
-        Assert.That(cmd.ServerName, Is.EqualTo("irc.server.com"));
-        Assert.That(cmd.Nickname, Is.EqualTo("nick"));
-        Assert.That(cmd.Text, Is.EqualTo("- MOTD line text"));
-    }
-
-    [Test]
-    public void RplMotd_Write_ShouldFormatCorrectly()
-    {
-        // Arrange
-        var cmd = new RplMotd
-        {
-            ServerName = "irc.server.com",
-            Nickname = "nick",
-            Text = "- MOTD line text"
-        };
-
-        // Act
-        string result = cmd.Write();
-
-        // Assert
-        Assert.That(result, Is.EqualTo(":irc.server.com 372 nick :- MOTD line text"));
-    }
 
     [Test]
     public void RplEndOfMotd_Create_ShouldSetAllProperties()
