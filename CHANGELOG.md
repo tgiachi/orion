@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.6.0"></a>
+## [0.6.0](https://www.github.com/tgiachi/Orion/releases/tag/v0.6.0) (2025-04-20)
+
+### Features
+
+* **IrcServerConfig.cs:** add IrcSupportConfig class to manage IRC server limits ([b331259](https://www.github.com/tgiachi/Orion/commit/b331259c3a7eada7d6d5dc4e33a4bafdf01d51a6))
+* **IrcServerConfig.cs:** add Motd property to store Message of the Day for the server ([206f9eb](https://www.github.com/tgiachi/Orion/commit/206f9eb81319e23c7a197fca0848b02e8739805e))
+* **IrcServerContextData.cs:** add ServerStartTime property to store the start time of the server ([ed974f4](https://www.github.com/tgiachi/Orion/commit/ed974f4f898af876adc63a1f1692bc422fd87a35))
+* **IrcUserSession.cs:** add IsAway and AwayMessage properties for managing away status ([198a196](https://www.github.com/tgiachi/Orion/commit/198a19638faa63bea768b4500fdf925a37f3e0a5))
+
+### Bug Fixes
+
+* **PingConfig.cs:** update default values for Interval and Timeout properties to improve ([e8caefc](https://www.github.com/tgiachi/Orion/commit/e8caefc94f5f7ce9c1f1f64fcec8d9974ec22013))
+* **PingPongHandler.cs:** remove unnecessary ServerHostName variable usage in PingCommand creation ([a239bbf](https://www.github.com/tgiachi/Orion/commit/a239bbfe403a992390fe1ba9afca58e6d3d66df8))
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://www.github.com/tgiachi/Orion/releases/tag/v0.5.1) (2025-04-20)
 
