@@ -1,6 +1,6 @@
 using Orion.Foundations.Types;
 
-namespace Orion.Core.Server.Internal;
+namespace Orion.Core.Server.Internal.Services;
 
 /// <summary>
 ///  ServiceDefinitionObject is a record that represents a service definition.

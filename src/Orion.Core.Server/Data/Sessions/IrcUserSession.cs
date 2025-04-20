@@ -357,6 +357,8 @@ public class IrcUserSession : IDisposable
         NickName = string.Empty;
         IsPasswordValid = false;
 
+        IsAway = false;
+        AwayMessage = string.Empty;
         _userModes.Clear();
     }
 
