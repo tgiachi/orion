@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <Version>0.4.0</Version>
+        <Version>0.5.0</Version>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -25,12 +25,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Orion.Core.Server.Web\Orion.Core.Server.Web.csproj"/>
-        <ProjectReference Include="..\Orion.Core.Server\Orion.Core.Server.csproj"/>
-        <ProjectReference Include="..\Orion.Foundations\Orion.Foundations.csproj"/>
-        <ProjectReference Include="..\Orion.Irc.Core\Orion.Irc.Core.csproj"/>
-        <ProjectReference Include="..\Orion.Network.Core\Orion.Network.Core.csproj"/>
-        <ProjectReference Include="..\Orion.Network.Tcp\Orion.Network.Tcp.csproj"/>
+        <ProjectReference Include="..\Orion.Core.Server.Web\Orion.Core.Server.Web.csproj" />
+        <ProjectReference Include="..\Orion.Core.Server\Orion.Core.Server.csproj" />
+        <ProjectReference Include="..\Orion.Foundations\Orion.Foundations.csproj" />
+        <ProjectReference Include="..\Orion.Irc.Core\Orion.Irc.Core.csproj" />
+        <ProjectReference Include="..\Orion.Network.Core\Orion.Network.Core.csproj" />
+        <ProjectReference Include="..\Orion.Network.Tcp\Orion.Network.Tcp.csproj" />
     </ItemGroup>
 
 
@@ -39,17 +39,17 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Jint" Version="4.2.2"/>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4"/>
-        <PackageReference Include="Scalar.AspNetCore" Version="2.1.17"/>
-        <PackageReference Include="Scriban" Version="6.2.1"/>
-        <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.1"/>
+        <PackageReference Include="Jint" Version="4.2.2" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.1.17" />
+        <PackageReference Include="Scriban" Version="6.2.1" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.1" />
     </ItemGroup>
 
 
     <ItemGroup>
-        <None Remove="Assets\header.txt"/>
-        <EmbeddedResource Include="Assets\header.txt"/>
+        <None Remove="Assets\header.txt" />
+        <EmbeddedResource Include="Assets\header.txt" />
     </ItemGroup>
 
 </Project>
