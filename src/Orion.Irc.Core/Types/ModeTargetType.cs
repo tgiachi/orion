@@ -5,6 +5,7 @@ namespace Orion.Irc.Core.Types;
 /// </summary>
 public enum ModeTargetType
 {
+    None,
     /// <summary>Channel mode</summary>
     Channel,
     /// <summary>User mode</summary>

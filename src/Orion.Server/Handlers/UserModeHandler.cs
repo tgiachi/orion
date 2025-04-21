@@ -5,6 +5,7 @@ using Orion.Core.Server.Interfaces.Listeners.Commands;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Errors;
+using Orion.Irc.Core.Commands.Replies;
 using Orion.Irc.Core.Types;
 
 namespace Orion.Server.Handlers;
@@ -20,7 +21,7 @@ public class UserModeHandler : BaseIrcCommandListener, IIrcCommandHandler<ModeCo
         IrcUserSession session, ServerNetworkType serverNetworkType, ModeCommand command
     )
     {
-        if (command.TargetType == ModeTargetType.Channel)
+        if (command.TargetType == ModeTargetType.Channel || string.IsNullOrEmpty(command.Target) )
         {
             return;
         }
@@ -40,8 +41,40 @@ public class UserModeHandler : BaseIrcCommandListener, IIrcCommandHandler<ModeCo
         if (ListenerContext.SessionService.FindByNickName(command.Target) == null)
         {
             await session.SendCommandAsync(ErrNoSuchNick.Create(ServerHostName, command.Target, session.NickName));
+
+            return;
         }
 
-        
+        if (command.ModeChanges.Count == 0)
+        {
+            await session.SendCommandAsync(
+                RplUModeIs.Create(
+                    ServerHostName,
+                    command.Target,
+                    session.ModesString
+                )
+            );
+            return;
+        }
+
+        foreach (var modeChange in command.ModeChanges)
+        {
+            if (modeChange.IsAdding)
+            {
+                session.AddMode(modeChange.Mode);
+            }
+            else
+            {
+                session.RemoveMode(modeChange.Mode);
+            }
+        }
+
+        await session.SendCommandAsync(
+            RplUModeIs.Create(
+                ServerHostName,
+                command.Target,
+                session.ModesString
+            )
+        );
     }
 }
