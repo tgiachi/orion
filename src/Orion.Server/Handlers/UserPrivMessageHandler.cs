@@ -1,11 +1,13 @@
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
+using Orion.Core.Server.Events.Irc;
 using Orion.Core.Server.Handlers.Base;
 using Orion.Core.Server.Interfaces.Listeners.Commands;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Errors;
 using Orion.Irc.Core.Commands.Replies;
+using Orion.Irc.Core.Data.Messages;
 
 namespace Orion.Server.Handlers;
 
@@ -78,6 +80,10 @@ public class UserPrivMessageHandler : BaseIrcCommandListener, IIrcCommandHandler
 
         await targetSession.SendCommandAsync(
             PrivMsgCommand.CreateFromUser(session.FullAddress, target, message)
+        );
+
+        await PublishEventAsync(
+            new UserPrivateMessageEvent(session.FullAddress, target, message, PrivMessageTarget.TargetType.User)
         );
 
         if (targetSession.IsAway)

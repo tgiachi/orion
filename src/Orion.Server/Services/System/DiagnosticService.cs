@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Metrics.Diagnostic;
@@ -117,6 +116,8 @@ public class DiagnosticService : IDiagnosticService
     {
         try
         {
+            DeletePidFile();
+
             File.WriteAllText(PidFilePath, _currentProcess.Id.ToString());
         }
         catch (Exception ex)

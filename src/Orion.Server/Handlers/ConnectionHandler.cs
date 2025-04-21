@@ -1,4 +1,3 @@
-
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
@@ -76,11 +75,13 @@ public class ConnectionHandler
     {
         if (session.IsAuthenticated)
         {
-            if (_isPasswordRequired && session.IsPasswordValid)
+            if (_isPasswordRequired && !session.IsPasswordValid)
             {
-                await PublishEventAsync(new UserAuthenticatedEvent(session.SessionId));
-                session.LastPingResponse = DateTime.Now;
+                return;
             }
+
+            await PublishEventAsync(new UserAuthenticatedEvent(session.SessionId));
+            session.LastPingResponse = DateTime.Now;
         }
     }
 
