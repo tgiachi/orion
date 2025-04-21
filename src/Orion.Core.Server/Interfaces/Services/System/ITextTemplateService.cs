@@ -8,6 +8,8 @@ public interface ITextTemplateService
 
     string TranslateText(string text, object context = null);
 
+    Dictionary<string, string> GetVariablesAndContent();
+
     List<string> GetVariables();
 
     void RebuildVariables();

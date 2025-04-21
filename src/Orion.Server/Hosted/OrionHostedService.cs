@@ -1,4 +1,3 @@
-
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Events.Server;
 using Orion.Core.Server.Interfaces.Services.Base;
@@ -34,6 +33,14 @@ public class OrionHostedService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        var serverContext = _serviceProvider.GetRequiredService<IrcServerContextData>();
+        var textService = _serviceProvider.GetRequiredService<ITextTemplateService>();
+
+
+        textService.AddVariable("network_name", serverContext.NetworkName);
+        textService.AddVariable("server_name", serverContext.ServerName);
+        textService.AddVariable("server_started", serverContext.ServerStartTime);
+
         foreach (var serviceDef in _serviceDefinitions)
         {
             try
