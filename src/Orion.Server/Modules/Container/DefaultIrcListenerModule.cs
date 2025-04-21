@@ -13,6 +13,7 @@ public class DefaultIrcListenerModule : IOrionContainerModule
             .AddIrcListener<PingPongHandler>()
             .AddIrcListener<WelcomeHandler>()
             .AddIrcListener<UserModeHandler>()
+            .AddIrcListener<UserPrivMessageHandler>()
             .AddIrcListener<TestHandler>();
     }
 }
