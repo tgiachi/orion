@@ -12,6 +12,8 @@ public interface IIrcSessionService : IOrionService
 
     List<IrcUserSession> QuerySessions(Func<IrcUserSession, bool> predicate);
 
+    IrcUserSession? FindByNickName(string nickName);
+
     int TotalSessions { get; }
     int TotalInvisibleSessions { get; }
 
