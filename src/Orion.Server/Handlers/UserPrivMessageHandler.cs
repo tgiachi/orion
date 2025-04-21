@@ -5,6 +5,7 @@ using Orion.Core.Server.Interfaces.Listeners.Commands;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Errors;
+using Orion.Irc.Core.Commands.Replies;
 
 namespace Orion.Server.Handlers;
 
@@ -22,12 +23,45 @@ public class UserPrivMessageHandler : BaseIrcCommandListener, IIrcCommandHandler
         IrcUserSession session, ServerNetworkType serverNetworkType, PrivMsgCommand command
     )
     {
-        if (command.IsChannelMessage)
+        if (command.Targets.Length == 0)
+        {
+            await session.SendCommandAsync(
+                ErrNoRecipients.Create(
+                    ServerHostName,
+                    session.NickName,
+                    command.Code
+                )
+            );
+            return;
+        }
+
+        var targets = command.Targets.Where(s => s.IsUser).ToList();
+
+        if (!targets.Any())
         {
             return;
         }
 
-        var targetSession = ListenerContext.SessionService.FindByNickName(command.Target);
+        if (string.IsNullOrEmpty(command.Message))
+        {
+            await session.SendCommandAsync(
+                ErrNoTextToSend.Create(
+                    ServerHostName,
+                    session.NickName
+                )
+            );
+            return;
+        }
+
+        foreach (var target in targets)
+        {
+            await SendPrivMessage(session, target, command.Message);
+        }
+    }
+
+    private async Task SendPrivMessage(IrcUserSession session, string target, string message)
+    {
+        var targetSession = ListenerContext.SessionService.FindByNickName(target);
 
         if (targetSession == null)
         {
@@ -35,14 +69,27 @@ public class UserPrivMessageHandler : BaseIrcCommandListener, IIrcCommandHandler
                 ErrNoSuchNick.Create(
                     ServerHostName,
                     session.NickName,
-                    command.Target
+                    target
                 )
             );
+
             return;
         }
 
         await targetSession.SendCommandAsync(
-            PrivMsgCommand.CreateFromUser(session.FullAddress, command.Target, command.Message)
+            PrivMsgCommand.CreateFromUser(session.FullAddress, target, message)
         );
+
+        if (targetSession.IsAway)
+        {
+            await session.SendCommandAsync(
+                RplAway.Create(
+                    ServerHostName,
+                    session.NickName,
+                    targetSession.NickName,
+                    targetSession.AwayMessage
+                )
+            );
+        }
     }
 }
