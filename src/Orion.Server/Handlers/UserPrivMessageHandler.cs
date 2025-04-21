@@ -37,6 +37,18 @@ public class UserPrivMessageHandler : BaseIrcCommandListener, IIrcCommandHandler
             return;
         }
 
+        if (command.Targets.Length > Config.Irc.Limits.MaxTargets)
+        {
+            await session.SendCommandAsync(
+                ErrTooManyTargets.Create(
+                    ServerHostName,
+                    session.NickName,
+                    command.Target
+                )
+            );
+            return;
+        }
+
         var targets = command.Targets.Where(s => s.IsUser).ToList();
 
         if (!targets.Any())
