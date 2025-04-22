@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.7.0"></a>
+## [0.7.0](https://www.github.com/tgiachi/Orion/releases/tag/v0.7.0) (2025-04-22)
+
+### Features
+
+* **ChannelDeletedEvent.cs:** add ChannelDeletedEvent record to represent a channel deletion event ([013d433](https://www.github.com/tgiachi/Orion/commit/013d4339f7e194c294aa78ec38778b51244f6fd9))
+* **ChannelJoinResult.cs:** add ChannelJoinResult class to represent the result of joining a channel ([d614de1](https://www.github.com/tgiachi/Orion/commit/d614de1968cc77a1c7e390b8ad1062bc30ee581a))
+* **ChannelJoinResult.cs:** add JoinedUserCommands and MembersCommands properties ([889499e](https://www.github.com/tgiachi/Orion/commit/889499eb5d29cff2bc92eb5161fef5774fd2ee48))
+* **ErrNoRecipients.cs:** add new class ErrNoRecipients to handle ERR_NORECIPIENT error in IRC commands ([bb64b0a](https://www.github.com/tgiachi/Orion/commit/bb64b0a0ee6b1c7223932ce6c6d2f9ca1a0612ba))
+* **Events:** add UserJoinChannelEvent, UserPrivateMessageEvent, and UserQuitEvent records to handle IRC user events ([63f1815](https://www.github.com/tgiachi/Orion/commit/63f18158f28c8f0d1f133e81efea0ea9dfd076d2))
+* **IrcSessionService.cs:** add FindByNickName method to retrieve an IRC user session by nickname ([8ef41b3](https://www.github.com/tgiachi/Orion/commit/8ef41b31aae533009dee82e80168afb922c84141))
+* **ITextTemplateService.cs:** add method GetVariablesAndContent to retrieve all variables and their content ([545fd9c](https://www.github.com/tgiachi/Orion/commit/545fd9c492e84bf0b6fef101d5ad52d5f6d74b6f))
+* **NoticeCommand.cs:** add new property TargetType to determine the type of target for notice messages ([3ab2b62](https://www.github.com/tgiachi/Orion/commit/3ab2b628641d2688896ed540667ee49713e3df41))
+* **README.md:** rename Orion.Core to Orion.Foundations for better clarity and consistency ([8545f57](https://www.github.com/tgiachi/Orion/commit/8545f577e00a2b142ff55f2cad55ca1ed9ec7865))
+* **UserPrivateMessageEvent.cs:** add UserPrivateMessageEvent record to handle private messages in IRC ([fa01e0d](https://www.github.com/tgiachi/Orion/commit/fa01e0d103f1c74a2a6100bf7c1d0eaac8a0efc4))
+* **UserPrivMessageHandler.cs:** add check for maximum targets limit to prevent sending messages to too many users at once ([91c4672](https://www.github.com/tgiachi/Orion/commit/91c4672ea40360826b79f03f6180650795c7c805))
+* **UserPrivMessageHandler.cs:** add UserPrivMessageHandler class to handle private messages between users ([61cd19d](https://www.github.com/tgiachi/Orion/commit/61cd19de784e29b1a4ceb14968849f5d5d15c12b))
+
+### Bug Fixes
+
+* **ChannelsHandler.cs:** fix a bug where a member was not removed from the channel data when leaving a channel ([d7b9bf9](https://www.github.com/tgiachi/Orion/commit/d7b9bf9841ac4862b1be4bf2887fa9e4bfed0a87))
+
 <a name="0.6.1"></a>
 ## [0.6.1](https://www.github.com/tgiachi/Orion/releases/tag/v0.6.1) (2025-04-20)
 
