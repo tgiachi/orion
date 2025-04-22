@@ -74,6 +74,28 @@ public class ChannelsHandler
         IrcUserSession session, ServerNetworkType serverNetworkType, PartCommand command
     )
     {
+        foreach (var channel in command.Channels)
+        {
+            if (!_channelManagerService.ChannelExists(channel))
+            {
+                await session.SendCommandAsync(
+                    ErrNoSuchChannel.Create(ServerHostName, session.NickName, channel)
+                );
+                continue;
+            }
+
+
+            if (!_channelManagerService.UserInChannel(session, channel))
+            {
+                await session.SendCommandAsync(
+                    ErrNotOnChannel.Create(ServerHostName, session.NickName, channel)
+                );
+                continue;
+            }
+
+
+            await _channelManagerService.PartChannel(session, channel, command.PartMessage);
+        }
     }
 
     public async Task OnCommandReceivedAsync(

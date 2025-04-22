@@ -20,15 +20,19 @@ public class ChannelManagerService : IChannelManagerService
 
     private readonly Dictionary<string, ChannelData> _channels = new(StringComparer.OrdinalIgnoreCase);
 
+    private readonly IIrcSessionService _sessionService;
+
     private readonly IrcServerContextData _serverContextData;
 
     public ChannelManagerService(
-        ILogger<ChannelManagerService> logger, IEventBusService eventBusService, IrcServerContextData serverContextData
+        ILogger<ChannelManagerService> logger, IEventBusService eventBusService, IrcServerContextData serverContextData,
+        IIrcSessionService sessionService
     )
     {
         _logger = logger;
         _eventBusService = eventBusService;
         _serverContextData = serverContextData;
+        _sessionService = sessionService;
     }
 
     public bool ChannelExists(string channelName)
@@ -190,6 +194,54 @@ public class ChannelManagerService : IChannelManagerService
         var channelData = GetChannel(channelName);
 
         return channelData.GetMemberList().ToList();
+    }
+
+    public Task<bool> PartChannel(string nickName, string channelName, string? partMessage = null)
+    {
+        var session = _sessionService.FindByNickName(nickName);
+        return session == null ? Task.FromResult(false) : PartChannel(session, channelName, partMessage);
+    }
+
+    public async Task<bool> PartChannel(IrcUserSession session, string channelName, string? partMessage = null)
+    {
+        if (!ChannelExists(channelName))
+        {
+            return false;
+        }
+
+        var channelData = GetChannel(channelName);
+
+        if (!channelData.IsMember(session.NickName))
+        {
+            return false;
+        }
+
+        channelData.RemoveMember(session.NickName);
+
+
+        if (channelData.MemberCount == 0)
+        {
+            _channels.Remove(channelName);
+            await _eventBusService.PublishAsync(new ChannelDeletedEvent(channelName, session.NickName));
+        }
+        else
+        {
+            var partCommand = PartCommand.CreateForChannel(session.FullAddress, channelName, partMessage);
+
+            await session.SendCommandAsync(partCommand);
+
+            foreach (var member in channelData.GetMemberList())
+            {
+                var memberSession = _sessionService.FindByNickName(member);
+                if (memberSession != null && memberSession != session)
+                {
+                    memberSession.SendCommandAsync(partCommand);
+                }
+            }
+        }
+
+
+        return true;
     }
 
 

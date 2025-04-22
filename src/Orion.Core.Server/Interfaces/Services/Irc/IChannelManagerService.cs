@@ -18,4 +18,9 @@ public interface IChannelManagerService : IOrionService
     bool UserInChannel(IrcUserSession session, string channelName);
     List<string> GetUsersInChannel(string channelName);
 
+    Task<bool> PartChannel(IrcUserSession session, string channelName, string? partMessage = null);
+
+    Task<bool> PartChannel(string nickName, string channelName, string? partMessage = null);
+
+
 }
