@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
+using Orion.Core.Server.Events.Irc.Sessions;
 using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Foundations.Pool;

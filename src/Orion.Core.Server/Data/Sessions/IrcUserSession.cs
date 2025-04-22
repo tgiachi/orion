@@ -10,6 +10,14 @@ namespace Orion.Core.Server.Data.Sessions;
 /// </summary>
 public class IrcUserSession : IDisposable, IEquatable<IrcUserSession>
 {
+    #region S2S
+
+    public bool IsLocal { get; set; } = true;
+
+    public string RemoteServerId { get; set; } = string.Empty;
+
+    #endregion
+
     #region Fields
 
     /// <summary>
@@ -133,7 +141,9 @@ public class IrcUserSession : IDisposable, IEquatable<IrcUserSession>
     /// <summary>
     /// Indicates if the user is fully authenticated.
     /// </summary>
-    public bool IsAuthenticated => IsUserSent && IsNickSent;
+    public bool IsAuthenticated => IsUserSent && IsNickSent && !IsRegistered;
+
+    public bool IsRegistered { get; set; }
 
     /// <summary>
     /// Indicates if the user has set AWAY status.
@@ -360,6 +370,10 @@ public class IrcUserSession : IDisposable, IEquatable<IrcUserSession>
         IsAway = false;
         AwayMessage = string.Empty;
         _userModes.Clear();
+
+        IsRegistered = false;
+        IsLocal = true;
+        RemoteServerId = string.Empty;
     }
 
     #endregion

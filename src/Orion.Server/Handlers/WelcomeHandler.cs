@@ -129,6 +129,8 @@ public class WelcomeHandler : BaseIrcCommandListener, IEventBusListener<UserAuth
         }
 
         await session.SendCommandAsync(RplEndOfMotd.Create(ServerHostName, session.NickName));
+
+        session.IsRegistered = true;
     }
 
     private async Task<List<string>> LoadMotdAsync()

@@ -244,7 +244,7 @@ public class ChannelManagerService : IChannelManagerService
             return false;
         }
 
-        if (!channelData.IsOperator(session.NickName))
+        if (!channelData.IsOperator(session.NickName) && !session.IsOperator)
         {
             session.SendCommandAsync(
                 ErrChanOpPrivsNeeded.Create(_serverContextData.ServerName, session.NickName, channelName)
@@ -336,6 +336,9 @@ public class ChannelManagerService : IChannelManagerService
         };
 
         _channels.Add(channelName, channelData);
+
+
+        channelData.SetTopicProtection();
 
         _logger.LogDebug("Channel {ChannelName} created.", channelName);
 

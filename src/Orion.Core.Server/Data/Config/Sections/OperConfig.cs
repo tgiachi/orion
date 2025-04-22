@@ -5,4 +5,6 @@ namespace Orion.Core.Server.Data.Config.Sections;
 public class OperConfig : BaseConfigSection
 {
     public List<OperEntryConfig> Entries { get; set; } = new();
+
+
 }

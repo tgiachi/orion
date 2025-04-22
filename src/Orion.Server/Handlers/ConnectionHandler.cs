@@ -1,6 +1,7 @@
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
+using Orion.Core.Server.Events.Irc.Sessions;
 using Orion.Core.Server.Events.Irc.Users;
 using Orion.Core.Server.Events.Users;
 using Orion.Core.Server.Handlers.Base;
@@ -61,7 +62,13 @@ public class ConnectionHandler
 
         if (exists.Count == 0)
         {
+            var oldNickName = session.NickName;
             session.NickName = command.Nickname;
+
+            if (session.IsRegistered)
+            {
+                await PublishEventAsync(new UserNickNameChangeEvent(session.SessionId, oldNickName, command.Nickname));
+            }
         }
         else
         {
@@ -158,6 +165,5 @@ public class ConnectionHandler
         Logger.LogInformation("User {SessionId} quit with message: {Message}", session.SessionId, command.Message ?? "NONE");
 
         await PublishEventAsync(new UserQuitEvent(session.NickName, command.Message));
-
     }
 }
