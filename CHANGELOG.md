@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.8.0"></a>
+## [0.8.0](https://www.github.com/tgiachi/orion/releases/tag/v0.8.0) (2025-04-22)
+
+### Features
+
+* **IrcUserSession.cs:** add IsLocal and RemoteServerId properties to improve S2S communication handling ([ce54a87](https://www.github.com/tgiachi/orion/commit/ce54a87fc456d2a4e6d75406559da0112d80a05a))
+* **Orion.Core.Server:** add support for away functionality with AwayCommand ([ae4c704](https://www.github.com/tgiachi/orion/commit/ae4c704ab64a5049f593d83e3dc014510769e1ca))
+
 <a name="0.7.0"></a>
 ## [0.7.0](https://www.github.com/tgiachi/Orion/releases/tag/v0.7.0) (2025-04-22)
 
