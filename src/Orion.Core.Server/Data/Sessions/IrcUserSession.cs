@@ -133,7 +133,9 @@ public class IrcUserSession : IDisposable, IEquatable<IrcUserSession>
     /// <summary>
     /// Indicates if the user is fully authenticated.
     /// </summary>
-    public bool IsAuthenticated => IsUserSent && IsNickSent;
+    public bool IsAuthenticated => IsUserSent && IsNickSent && !IsRegistered;
+
+    public bool IsRegistered { get; set; }
 
     /// <summary>
     /// Indicates if the user has set AWAY status.

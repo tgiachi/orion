@@ -66,7 +66,7 @@ public static class HashUtils
         var hash = pbkdf2.GetBytes(32);
         return CryptographicOperations.FixedTimeEquals(hash, expectedHash);
     }
-    
+
     /// <summary>
     /// Creates a formatted password hash string in the format "Hash:Salt".
     /// </summary>
@@ -77,7 +77,7 @@ public static class HashUtils
         var (hash, salt) = HashPassword(password);
         return $"{hash}:{salt}";
     }
-    
+
     /// <summary>
     /// Verifies a password against a combined hash:salt string.
     /// </summary>
@@ -87,16 +87,21 @@ public static class HashUtils
     /// <exception cref="FormatException">Thrown when the combined hash:salt string is not in the correct format.</exception>
     public static bool VerifyPassword(string password, string hashSaltCombined)
     {
+        if (hashSaltCombined.StartsWith("hash://"))
+        {
+            hashSaltCombined = hashSaltCombined[7..];
+        }
+
         var parts = hashSaltCombined.Split(':');
-        
+
         if (parts.Length != 2)
         {
             throw new FormatException("The hash:salt combined string is not in the correct format. Expected 'Hash:Salt'.");
         }
-        
+
         var hash = parts[0];
         var salt = parts[1];
-        
+
         return CheckPasswordHash(password, hash, salt);
     }
 

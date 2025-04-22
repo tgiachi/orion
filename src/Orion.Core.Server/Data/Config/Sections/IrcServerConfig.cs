@@ -16,4 +16,7 @@ public class IrcServerConfig
     /// </summary>
     public string Motd { get; set; } =
         "Welcome to Orion IRC Server[CRLF]This is a test server[CRLF]Please use /help for more information";
+
+
+
 }
