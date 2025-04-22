@@ -13,6 +13,11 @@ public class ChannelData
     public string Name { get; }
 
     /// <summary>
+    ///  The channel founder (creator)
+    /// </summary>
+    public string Founder { get; set; } = string.Empty;
+
+    /// <summary>
     /// The channel topic
     /// </summary>
     public string Topic { get; set; } = string.Empty;
