@@ -13,6 +13,11 @@ public class ChannelData
     public string Name { get; }
 
     /// <summary>
+    ///  The channel founder (creator)
+    /// </summary>
+    public string Founder { get; set; } = string.Empty;
+
+    /// <summary>
     /// The channel topic
     /// </summary>
     public string Topic { get; set; } = string.Empty;
@@ -511,13 +516,40 @@ public class ChannelData
     }
 
 
+    public void SetTopic(string fullName, string topic)
+    {
+        Topic = topic;
+        TopicSetBy = fullName;
+        TopicSetTime = DateTime.Now;
+    }
+
+    public bool UserCanSendMessage(string nickname)
+    {
+        if (IsModerated && !IsMember(nickname) && !IsOperator(nickname))
+        {
+            return false;
+        }
+
+        if (NoExternalMessages && !IsMember(nickname))
+        {
+            return false;
+        }
+
+        if (IsInviteOnly && !IsInvited(nickname))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+
     public bool NickNameCanJoin(string nickname)
     {
         if (IsInviteOnly && !IsInvited(nickname))
         {
             return false;
         }
-
 
 
         return true;

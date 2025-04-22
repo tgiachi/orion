@@ -1,4 +1,5 @@
 using Orion.Irc.Core.Commands.Base;
+using Orion.Irc.Core.Data.Messages;
 
 namespace Orion.Irc.Core.Commands;
 
@@ -21,6 +22,9 @@ public class NoticeCommand : BaseIrcCommand
     /// The message content of the notice
     /// </summary>
     public string Message { get; set; }
+
+
+    public PrivMessageTarget.TargetType TargetType { get; set; }
 
     /// <summary>
     /// Indicates if this is a server notice
@@ -69,6 +73,19 @@ public class NoticeCommand : BaseIrcCommand
             if (messageStart != -1)
             {
                 Message = line.Substring(messageStart + 1);
+            }
+        }
+
+        // Determine target type
+        if (!string.IsNullOrEmpty(Target))
+        {
+            if (Target.StartsWith("#") || Target.StartsWith("&"))
+            {
+                TargetType = PrivMessageTarget.TargetType.Channel;
+            }
+            else
+            {
+                TargetType = PrivMessageTarget.TargetType.User;
             }
         }
     }

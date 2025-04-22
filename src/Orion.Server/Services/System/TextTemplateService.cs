@@ -89,6 +89,23 @@ public class TextTemplateService
         }
     }
 
+    public Dictionary<string, string> GetVariablesAndContent()
+    {
+        var list = new Dictionary<string, string>();
+
+        foreach (var variable in _variables)
+        {
+            list[variable.Key] = variable.Value?.ToString() ?? string.Empty;
+        }
+
+        foreach (var builder in _variableBuilder)
+        {
+            list[builder.Key] = builder.Value.Invoke().ToString() ?? string.Empty;
+        }
+
+        return list;
+    }
+
     public List<string> GetVariables()
     {
         var list = new List<string>();

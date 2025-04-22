@@ -26,7 +26,7 @@ public class ModeCommand : BaseIrcCommand
     /// <summary>
     ///     Type of the mode target
     /// </summary>
-    public ModeTargetType TargetType { get; private set; }
+    public ModeTargetType TargetType { get; private set; } = ModeTargetType.None;
 
     /// <summary>
     ///     List of mode changes
@@ -40,6 +40,10 @@ public class ModeCommand : BaseIrcCommand
     /// <returns>Mode target type</returns>
     private ModeTargetType DetermineTargetType(string target)
     {
+        if (string.IsNullOrEmpty(target))
+        {
+            return ModeTargetType.None;
+        }
         // Channel prefixes as per RFC 1459
         char[] channelPrefixes = ['#', '&', '+', '!'];
 

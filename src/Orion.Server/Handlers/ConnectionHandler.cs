@@ -1,7 +1,7 @@
-
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
+using Orion.Core.Server.Events.Irc.Users;
 using Orion.Core.Server.Events.Users;
 using Orion.Core.Server.Handlers.Base;
 using Orion.Core.Server.Interfaces.Listeners;
@@ -17,17 +17,20 @@ namespace Orion.Server.Handlers;
 
 public class ConnectionHandler
     : BaseIrcCommandListener, IIrcCommandHandler<CapCommand>, IIrcCommandHandler<UserCommand>,
+        IIrcCommandHandler<QuitCommand>,
         IIrcCommandHandler<NickCommand>, IIrcCommandHandler<PassCommand>, IEventBusListener<SessionConnectedEvent>
 {
     private readonly bool _isPasswordRequired;
 
     public ConnectionHandler(ILogger<ConnectionHandler> logger, IrcCommandListenerContext context) : base(logger, context)
     {
-        SubscribeToEventBus(this);
+        SubscribeToEventBus<SessionConnectedEvent>(this);
+
 
         RegisterCommandHandler<NickCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<UserCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<PassCommand>(this, ServerNetworkType.Clients);
+        RegisterCommandHandler<QuitCommand>(this, ServerNetworkType.Clients);
 
         if (!string.IsNullOrEmpty(Config.Irc.ServerPassword))
         {
@@ -76,11 +79,13 @@ public class ConnectionHandler
     {
         if (session.IsAuthenticated)
         {
-            if (_isPasswordRequired && session.IsPasswordValid)
+            if (_isPasswordRequired && !session.IsPasswordValid)
             {
-                await PublishEventAsync(new UserAuthenticatedEvent(session.SessionId));
-                session.LastPingResponse = DateTime.Now;
+                return;
             }
+
+            await PublishEventAsync(new UserAuthenticatedEvent(session.SessionId));
+            session.LastPingResponse = DateTime.Now;
         }
     }
 
@@ -143,5 +148,16 @@ public class ConnectionHandler
                 session.IsPasswordValid = true;
             }
         }
+    }
+
+
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, QuitCommand command
+    )
+    {
+        Logger.LogInformation("User {SessionId} quit with message: {Message}", session.SessionId, command.Message ?? "NONE");
+
+        await PublishEventAsync(new UserQuitEvent(session.NickName, command.Message));
+
     }
 }

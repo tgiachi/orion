@@ -1,4 +1,3 @@
-
 using System.Collections.Concurrent;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
@@ -11,7 +10,6 @@ namespace Orion.Server.Services.Irc;
 
 public class IrcSessionService : IIrcSessionService
 {
-
     public int TotalSessions => _sessions.Count;
     public int TotalInvisibleSessions => _sessions.Values.Count(x => x.IsInvisible);
     public int MaxSessions { get; private set; }
@@ -103,5 +101,8 @@ public class IrcSessionService : IIrcSessionService
         return Sessions.Where(predicate).ToList();
     }
 
-
+    public IrcUserSession? FindByNickName(string nickName)
+    {
+        return Sessions.FirstOrDefault(session => session.NickName.Equals(nickName, StringComparison.OrdinalIgnoreCase));
+    }
 }

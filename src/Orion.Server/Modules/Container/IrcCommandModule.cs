@@ -16,6 +16,13 @@ public class IrcCommandModule : IOrionContainerModule
                 .AddIrcCommand<PingCommand>()
                 .AddIrcCommand<PongCommand>()
                 .AddIrcCommand<PassCommand>()
+                .AddIrcCommand<PrivMsgCommand>()
+                .AddIrcCommand<JoinCommand>()
+                .AddIrcCommand<PartCommand>()
+                .AddIrcCommand<TopicCommand>()
+                .AddIrcCommand<QuitCommand>()
+                .AddIrcCommand<ModeCommand>()
+                .AddIrcCommand<NoticeCommand>()
             ;
     }
 }

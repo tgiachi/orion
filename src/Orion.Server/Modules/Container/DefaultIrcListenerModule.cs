@@ -12,6 +12,10 @@ public class DefaultIrcListenerModule : IOrionContainerModule
             .AddIrcListener<ConnectionHandler>()
             .AddIrcListener<PingPongHandler>()
             .AddIrcListener<WelcomeHandler>()
+            .AddIrcListener<UserModeHandler>()
+            .AddIrcListener<UserPrivMessageHandler>()
+            .AddIrcListener<ChannelsHandler>()
+            .AddIrcListener<NoticeHandler>()
             .AddIrcListener<TestHandler>();
     }
 }

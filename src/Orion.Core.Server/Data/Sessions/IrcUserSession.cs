@@ -8,7 +8,7 @@ namespace Orion.Core.Server.Data.Sessions;
 /// Represents an active IRC user session on the server.
 /// Manages user state, modes, and provides methods to interact with the connection.
 /// </summary>
-public class IrcUserSession : IDisposable
+public class IrcUserSession : IDisposable, IEquatable<IrcUserSession>
 {
     #region Fields
 
@@ -376,4 +376,44 @@ public class IrcUserSession : IDisposable
     }
 
     #endregion
+
+    public bool Equals(IrcUserSession? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return SessionId == other.SessionId;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (obj.GetType() != GetType())
+        {
+            return false;
+        }
+
+        return Equals((IrcUserSession)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return SessionId.GetHashCode();
+    }
 }
