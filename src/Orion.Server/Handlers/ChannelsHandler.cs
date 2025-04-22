@@ -174,6 +174,7 @@ public class ChannelsHandler
         foreach (var channel in channels)
         {
             var channelData = _channelManagerService.GetChannel(channel);
+            channelData.RemoveMember(@event.NickName);
 
             var partCommand = PartCommand.CreateForChannel(
                 session.FullAddress,
