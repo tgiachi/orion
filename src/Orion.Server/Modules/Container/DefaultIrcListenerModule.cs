@@ -14,6 +14,7 @@ public class DefaultIrcListenerModule : IOrionContainerModule
             .AddIrcListener<WelcomeHandler>()
             .AddIrcListener<UserModeHandler>()
             .AddIrcListener<UserPrivMessageHandler>()
+            .AddIrcListener<ChannelsHandler>()
             .AddIrcListener<TestHandler>();
     }
 }

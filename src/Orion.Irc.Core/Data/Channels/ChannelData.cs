@@ -515,6 +515,26 @@ public class ChannelData
         return InviteList.Contains(nickname);
     }
 
+    public bool UserCanSendMessage(string nickname)
+    {
+        if (IsModerated && !IsMember(nickname) && !IsOperator(nickname))
+        {
+            return false;
+        }
+
+        if (NoExternalMessages && !IsMember(nickname))
+        {
+            return false;
+        }
+
+        if (IsInviteOnly && !IsInvited(nickname))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
 
     public bool NickNameCanJoin(string nickname)
     {

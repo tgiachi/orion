@@ -145,6 +145,11 @@ public abstract class BaseIrcCommandListener : IIrcCommandListener
         return ListenerContext.SessionService.GetSession(sessionId, false);
     }
 
+    protected IrcUserSession? GetSessionByNickName(string nickName)
+    {
+        return ListenerContext.SessionService.FindByNickName(nickName);
+    }
+
     protected string TranslateText(string text, object context = null)
     {
         return TextTemplateService.TranslateText(text, context);

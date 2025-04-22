@@ -25,6 +25,7 @@ public class DefaultServicesModule : IOrionContainerModule
         services
             .AddService<IIrcCommandService, IrcCommandService>()
             .AddService<IIrcSessionService, IrcSessionService>()
+            .AddService<IChannelManagerService, ChannelManagerService>()
             .AddService<IIrcCommandParser, IrcCommandParser>();
 
         return services
