@@ -1,6 +1,6 @@
 using Orion.Irc.Core.Data.Messages;
 
-namespace Orion.Core.Server.Events.Irc;
+namespace Orion.Core.Server.Events.Irc.Users;
 
 /// <summary>
 /// This event is triggered when a user sends a private message to another user (the aim of the message is not to be spyed, but for put antispam ).

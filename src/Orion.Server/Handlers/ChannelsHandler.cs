@@ -1,8 +1,10 @@
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
+using Orion.Core.Server.Events.Irc.Users;
 using Orion.Core.Server.Exceptions.Channels;
 using Orion.Core.Server.Handlers.Base;
 using Orion.Core.Server.Interfaces.Listeners.Commands;
+using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Commands;
@@ -12,7 +14,7 @@ namespace Orion.Server.Handlers;
 
 public class ChannelsHandler
     : BaseIrcCommandListener, IIrcCommandHandler<JoinCommand>, IIrcCommandHandler<PartCommand>,
-        IIrcCommandHandler<PrivMsgCommand>
+        IIrcCommandHandler<PrivMsgCommand>, IIrcCommandHandler<TopicCommand>, IEventBusListener<UserQuitEvent>
 {
     private readonly IChannelManagerService _channelManagerService;
 
@@ -25,6 +27,9 @@ public class ChannelsHandler
         RegisterCommandHandler<JoinCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<PartCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<PrivMsgCommand>(this, ServerNetworkType.Clients);
+        RegisterCommandHandler<TopicCommand>(this, ServerNetworkType.Clients);
+
+        SubscribeToEventBus(this);
     }
 
     public async Task OnCommandReceivedAsync(
@@ -149,6 +154,40 @@ public class ChannelsHandler
             if (memberSession != null && memberSession != session)
             {
                 await memberSession.SendCommandAsync(messageCommand);
+            }
+        }
+    }
+
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, TopicCommand command
+    )
+    {
+        await _channelManagerService.SetTopic(session, command.Channel, command.Topic);
+    }
+
+    public async Task HandleAsync(UserQuitEvent @event, CancellationToken cancellationToken = default)
+    {
+        var channels = await _channelManagerService.GetChannelsForNickNameAsync(@event.NickName);
+
+        var session = GetSessionByNickName(@event.NickName);
+
+        foreach (var channel in channels)
+        {
+            var channelData = _channelManagerService.GetChannel(channel);
+
+            var partCommand = PartCommand.CreateForChannel(
+                session.FullAddress,
+                channel,
+                @event.Message
+            );
+
+            foreach (var member in channelData.GetMemberList())
+            {
+                var memberSession = GetSessionByNickName(member);
+                if (memberSession != null && memberSession != session)
+                {
+                    await memberSession.SendCommandAsync(partCommand);
+                }
             }
         }
     }

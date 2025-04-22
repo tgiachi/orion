@@ -23,4 +23,9 @@ public interface IChannelManagerService : IOrionService
     Task<bool> PartChannel(string nickName, string channelName, string? partMessage = null);
 
 
+    Task<bool> SetTopic(IrcUserSession session, string channelName, string topicName);
+    Task<bool> SetTopic(string nickName, string channelName, string topicName);
+
+
+    Task<List<string>> GetChannelsForNickNameAsync(string nickName);
 }

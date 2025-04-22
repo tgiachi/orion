@@ -90,7 +90,7 @@ public class ChannelManagerService : IChannelManagerService
 
         channelData.AddMember(session.NickName);
 
-        if (channelData.MemberCount == 0)
+        if (channelData.MemberCount == 1)
         {
             // If the channel is empty, add the user as operator
             channelData.SetOperator(session.NickName, true);
@@ -200,6 +200,69 @@ public class ChannelManagerService : IChannelManagerService
     {
         var session = _sessionService.FindByNickName(nickName);
         return session == null ? Task.FromResult(false) : PartChannel(session, channelName, partMessage);
+    }
+
+    public async Task<bool> SetTopic(IrcUserSession session, string channelName, string topicName)
+    {
+        if (!ChannelExists(channelName))
+        {
+            session.SendCommandAsync(
+                ErrNoSuchChannel.Create(_serverContextData.ServerName, session.NickName, channelName)
+            );
+
+            return false;
+        }
+
+        var channelData = GetChannel(channelName);
+
+        if (!channelData.IsMember(session.NickName))
+        {
+            session.SendCommandAsync(
+                ErrNotOnChannel.Create(_serverContextData.ServerName, session.NickName, channelName)
+            );
+
+            return false;
+        }
+
+        if (!channelData.IsOperator(session.NickName))
+        {
+            session.SendCommandAsync(
+                ErrChanOpPrivsNeeded.Create(_serverContextData.ServerName, session.NickName, channelName)
+            );
+
+            return false;
+        }
+
+        channelData.SetTopic(session.FullAddress, topicName);
+
+        var topicCommand = RplTopic.Create(
+            _serverContextData.ServerName,
+            session.NickName,
+            channelName,
+            topicName
+        );
+
+        foreach (var member in channelData.GetMemberList())
+        {
+            var memberSession = _sessionService.FindByNickName(member);
+
+            await memberSession.SendCommandAsync(topicCommand);
+        }
+
+        return true;
+    }
+
+    public Task<bool> SetTopic(string nickName, string channelName, string topicName)
+    {
+        var session = _sessionService.FindByNickName(nickName);
+        return session == null ? Task.FromResult(false) : SetTopic(session, channelName, topicName);
+    }
+
+    public async Task<List<string>> GetChannelsForNickNameAsync(string nickName)
+    {
+        var channels = (from channel in _channels.Values where channel.IsMember(nickName) select channel.Name).ToList();
+
+        return channels;
     }
 
     public async Task<bool> PartChannel(IrcUserSession session, string channelName, string? partMessage = null)

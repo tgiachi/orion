@@ -1,6 +1,7 @@
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc;
+using Orion.Core.Server.Events.Irc.Users;
 using Orion.Core.Server.Handlers.Base;
 using Orion.Core.Server.Interfaces.Listeners.Commands;
 using Orion.Foundations.Types;

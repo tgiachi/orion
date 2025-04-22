@@ -19,6 +19,8 @@ public class IrcCommandModule : IOrionContainerModule
                 .AddIrcCommand<PrivMsgCommand>()
                 .AddIrcCommand<JoinCommand>()
                 .AddIrcCommand<PartCommand>()
+                .AddIrcCommand<TopicCommand>()
+                .AddIrcCommand<QuitCommand>()
                 .AddIrcCommand<ModeCommand>()
             ;
     }

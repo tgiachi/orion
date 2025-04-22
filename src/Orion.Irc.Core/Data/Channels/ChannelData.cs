@@ -515,6 +515,14 @@ public class ChannelData
         return InviteList.Contains(nickname);
     }
 
+
+    public void SetTopic(string fullName, string topic)
+    {
+        Topic = topic;
+        TopicSetBy = fullName;
+        TopicSetTime = DateTime.Now;
+    }
+
     public bool UserCanSendMessage(string nickname)
     {
         if (IsModerated && !IsMember(nickname) && !IsOperator(nickname))
@@ -542,7 +550,6 @@ public class ChannelData
         {
             return false;
         }
-
 
 
         return true;
