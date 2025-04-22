@@ -22,6 +22,7 @@ public class IrcCommandModule : IOrionContainerModule
                 .AddIrcCommand<TopicCommand>()
                 .AddIrcCommand<QuitCommand>()
                 .AddIrcCommand<ModeCommand>()
+                .AddIrcCommand<NoticeCommand>()
             ;
     }
 }

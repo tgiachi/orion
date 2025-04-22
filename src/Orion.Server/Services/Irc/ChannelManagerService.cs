@@ -9,6 +9,7 @@ using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Errors;
 using Orion.Irc.Core.Commands.Replies;
 using Orion.Irc.Core.Data.Channels;
+using Orion.Irc.Core.Types;
 
 namespace Orion.Server.Services.Irc;
 
@@ -97,18 +98,19 @@ public class ChannelManagerService : IChannelManagerService
         }
 
 
+        foreach (var member in channelData.GetMemberList())
+        {
+            result.AddMemberCommand(member, JoinCommand.CreateForChannels(session.FullAddress, channelName));
+        }
+
+
         result.AddJoinedUserCommand(
-            RplNameReply.Create(
+            RplChannelModeIs.Create(
                 _serverContextData.ServerName,
                 session.NickName,
                 channelData.Name,
-                channelData.GetPrefixedMemberList()
+                channelData.GetModeString()
             )
-        );
-
-
-        result.AddJoinedUserCommand(
-            RplEndOfNames.Create(_serverContextData.ServerName, session.NickName, channelData.Name)
         );
 
         result.AddJoinedUserCommand(
@@ -135,20 +137,38 @@ public class ChannelManagerService : IChannelManagerService
 
 
         result.AddJoinedUserCommand(
-            RplChannelModeIs.Create(
+            RplNameReply.Create(
                 _serverContextData.ServerName,
                 session.NickName,
                 channelData.Name,
-                channelData.GetModeString()
+                channelData.GetPrefixedMemberList()
             )
         );
 
-        ///TODO: Add ban list
 
-        foreach (var member in channelData.GetMemberList())
+        result.AddJoinedUserCommand(
+            RplEndOfNames.Create(_serverContextData.ServerName, session.NickName, channelData.Name)
+        );
+
+
+        var membership = channelData.GetMembership(session.NickName);
+
+        if (membership.IsOperator)
         {
-            result.AddMemberCommand(member, JoinCommand.CreateForChannels(session.FullAddress, channelName));
+            result.AddJoinedUserCommand(
+                ModeCommand.CreateWithModes(
+                    _serverContextData.ServerName,
+                    channelName,
+                    new[]
+                    {
+                        new ModeChangeType(true, 'o', session.NickName)
+                    }
+                )
+            );
         }
+
+
+        ///TODO: Add ban list
 
 
         result.IsSuccess = true;
