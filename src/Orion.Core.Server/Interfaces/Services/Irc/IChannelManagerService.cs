@@ -2,6 +2,7 @@ using Orion.Core.Server.Data.Channels;
 using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Interfaces.Services.Base;
 using Orion.Irc.Core.Data.Channels;
+using Orion.Irc.Core.Interfaces.Commands;
 
 namespace Orion.Core.Server.Interfaces.Services.Irc;
 
@@ -28,4 +29,10 @@ public interface IChannelManagerService : IOrionService
 
 
     Task<List<string>> GetChannelsForNickNameAsync(string nickName);
+
+    Task<List<IIrcCommand>> GetNamesAsync(string nickName, string channelName);
+
+    Task<List<IIrcCommand>> GetTopicsAsync(string nickName, string channelName);
+
+    Task<List<IIrcCommand>> ListChannelsAsync(string nickName, string[] channels = null, string query = null);
 }

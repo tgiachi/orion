@@ -9,6 +9,8 @@ using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Errors;
 using Orion.Irc.Core.Commands.Replies;
 using Orion.Irc.Core.Data.Channels;
+using Orion.Irc.Core.Filters;
+using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Irc.Core.Types;
 
 namespace Orion.Server.Services.Irc;
@@ -101,6 +103,8 @@ public class ChannelManagerService : IChannelManagerService
         foreach (var member in channelData.GetMemberList())
         {
             result.AddMemberCommand(member, JoinCommand.CreateForChannels(session.FullAddress, channelName));
+            result.AddMemberCommand(member, (await GetNamesAsync(member, channelName)).ToArray());
+
         }
 
 
@@ -122,33 +126,8 @@ public class ChannelManagerService : IChannelManagerService
             )
         );
 
-        if (channelData.HaveTopic)
-        {
-            result.AddJoinedUserCommand(
-                RplTopic.Create(_serverContextData.ServerName, session.NickName, channelData.Name, channelData.Topic)
-            );
-        }
-        else
-        {
-            result.AddJoinedUserCommand(
-                RplNoTopic.Create(_serverContextData.ServerName, session.NickName, channelData.Name)
-            );
-        }
-
-
-        result.AddJoinedUserCommand(
-            RplNameReply.Create(
-                _serverContextData.ServerName,
-                session.NickName,
-                channelData.Name,
-                channelData.GetPrefixedMemberList()
-            )
-        );
-
-
-        result.AddJoinedUserCommand(
-            RplEndOfNames.Create(_serverContextData.ServerName, session.NickName, channelData.Name)
-        );
+        result.AddJoinedUserCommand((await GetTopicsAsync(session.NickName, channelName)).ToArray());
+        result.AddJoinedUserCommand((await GetNamesAsync(session.NickName, channelName)).ToArray());
 
 
         var membership = channelData.GetMembership(session.NickName);
@@ -165,6 +144,7 @@ public class ChannelManagerService : IChannelManagerService
                     }
                 )
             );
+
         }
 
 
@@ -176,6 +156,7 @@ public class ChannelManagerService : IChannelManagerService
 
         return result;
     }
+
 
     public Task<List<ChannelTopicEntry>> GetChannelTopicsAsync(bool hidePrivateChannels = true)
     {
@@ -283,6 +264,128 @@ public class ChannelManagerService : IChannelManagerService
         var channels = (from channel in _channels.Values where channel.IsMember(nickName) select channel.Name).ToList();
 
         return channels;
+    }
+
+    public async Task<List<IIrcCommand>> GetNamesAsync(string nickName, string channelName)
+    {
+        var session = _sessionService.FindByNickName(nickName);
+
+        if (session == null)
+        {
+            return [];
+        }
+
+
+        if (!ChannelExists(channelName))
+        {
+            await session.SendCommandAsync(
+                ErrNoSuchChannel.Create(_serverContextData.ServerName, session.NickName, channelName)
+            );
+
+            return [];
+        }
+
+        var channelData = GetChannel(channelName);
+        var commandResult = new List<IIrcCommand>();
+
+        foreach (var namesChunk in channelData.GetPrefixedMemberList().Chunk(5))
+        {
+            commandResult.Add(
+                RplNameReply.Create(_serverContextData.ServerName, session.NickName, channelData.Name, namesChunk)
+            );
+        }
+
+        commandResult.Add(RplEndOfNames.Create(_serverContextData.ServerName, session.NickName, channelData.Name));
+
+
+        return commandResult;
+    }
+
+    public async Task<List<IIrcCommand>> GetTopicsAsync(string nickName, string channelName)
+    {
+        var session = _sessionService.FindByNickName(nickName);
+
+        if (session == null)
+        {
+            return [];
+        }
+
+        if (!ChannelExists(channelName))
+        {
+            await session.SendCommandAsync(
+                ErrNoSuchChannel.Create(_serverContextData.ServerName, session.NickName, channelName)
+            );
+
+            return [];
+        }
+
+        var channelData = GetChannel(channelName);
+
+        var commandResult = new List<IIrcCommand>();
+
+        if (channelData.HaveTopic)
+        {
+            commandResult.Add(
+                RplTopic.Create(_serverContextData.ServerName, session.NickName, channelData.Name, channelData.Topic)
+            );
+
+            commandResult.Add(
+                RplTopicWhoTime.Create(
+                    _serverContextData.ServerName,
+                    nickName,
+                    channelData.Name,
+                    channelData.TopicSetBy,
+                    channelData.TopicSetTime
+                )
+            );
+        }
+        else
+        {
+            commandResult.Add(RplNoTopic.Create(_serverContextData.ServerName, session.NickName, channelData.Name));
+        }
+
+        return commandResult;
+    }
+
+    public async Task<List<IIrcCommand>> ListChannelsAsync(string nickName, string[]? channels = null, string? query = null)
+    {
+        var filter = new ListQueryFilter();
+
+
+        if (query != null)
+        {
+            filter = ListQueryFilter.Parse(query);
+        }
+
+        var channResult = _channels.Values.Where(s => filter.Matches(
+                    s.MemberCount,
+                    (int)(DateTime.Now - s.CreationTime).TotalMinutes,
+                    (int)(DateTime.Now - s.TopicSetTime).TotalMinutes
+                )
+            )
+            .ToList();
+
+
+        var result = new List<IIrcCommand>();
+
+
+        result.Add(RplListStart.Create(_serverContextData.ServerName, nickName));
+
+        foreach (var channel in channResult)
+        {
+            result.Add(RplList.Create(
+                _serverContextData.ServerName,
+                nickName,
+                channel.Name,
+                channel.MemberCount,
+                channel.Topic ?? null
+            ));
+        }
+
+        result.Add(RplListEnd.Create(_serverContextData.ServerName, nickName));
+
+
+        return result;
     }
 
     public async Task<bool> PartChannel(IrcUserSession session, string channelName, string? partMessage = null)

@@ -100,8 +100,8 @@ public class ChannelData
     public ChannelData(string name)
     {
         Name = name;
-        CreationTime = DateTime.UtcNow;
-        TopicSetTime = DateTime.UtcNow;
+        CreationTime = DateTime.Now;
+        TopicSetTime = DateTime.MaxValue;
     }
 
     #endregion

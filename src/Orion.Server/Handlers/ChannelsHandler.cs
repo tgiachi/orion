@@ -9,11 +9,13 @@ using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Errors;
+using Orion.Irc.Core.Data.Messages;
 
 namespace Orion.Server.Handlers;
 
 public class ChannelsHandler
     : BaseIrcCommandListener, IIrcCommandHandler<JoinCommand>, IIrcCommandHandler<PartCommand>,
+        IIrcCommandHandler<NamesCommand>, IIrcCommandHandler<ListCommand>,
         IIrcCommandHandler<PrivMsgCommand>, IIrcCommandHandler<TopicCommand>, IEventBusListener<UserQuitEvent>
 {
     private readonly IChannelManagerService _channelManagerService;
@@ -28,6 +30,8 @@ public class ChannelsHandler
         RegisterCommandHandler<PartCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<PrivMsgCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<TopicCommand>(this, ServerNetworkType.Clients);
+        RegisterCommandHandler<NamesCommand>(this, ServerNetworkType.Clients);
+        RegisterCommandHandler<ListCommand>(this, ServerNetworkType.Clients);
 
         SubscribeToEventBus(this);
     }
@@ -148,6 +152,7 @@ public class ChannelsHandler
             message
         );
 
+
         foreach (var memberNickName in channelData.GetMemberList())
         {
             var memberSession = GetSessionByNickName(memberNickName);
@@ -156,6 +161,10 @@ public class ChannelsHandler
                 await memberSession.SendCommandAsync(messageCommand);
             }
         }
+
+        await PublishEventAsync(
+            new UserPrivateMessageEvent(session.NickName, channel, message, PrivMessageTarget.TargetType.Channel)
+        );
     }
 
     public async Task OnCommandReceivedAsync(
@@ -190,6 +199,34 @@ public class ChannelsHandler
                     await memberSession.SendCommandAsync(partCommand);
                 }
             }
+        }
+    }
+
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, NamesCommand command
+    )
+    {
+        foreach (var channel in command.Channels)
+        {
+            var result = await _channelManagerService.GetNamesAsync(session.NickName, channel);
+
+            session.SendCommandAsync(result.ToArray());
+        }
+    }
+
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, ListCommand command
+    )
+    {
+        var commands = await _channelManagerService.ListChannelsAsync(
+            session.NickName,
+            command.Channels.ToArray(),
+            command.Query
+        );
+
+        foreach (var listCommand in commands)
+        {
+            await session.SendCommandAsync(listCommand);
         }
     }
 }

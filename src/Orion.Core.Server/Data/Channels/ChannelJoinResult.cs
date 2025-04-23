@@ -16,12 +16,12 @@ public class ChannelJoinResult
     public Dictionary<string, List<IIrcCommand>> MembersCommands { get; set; } = new();
 
 
-    public void AddJoinedUserCommand(IIrcCommand command)
+    public void AddJoinedUserCommand(params IIrcCommand[] command)
     {
-        JoinedUserCommands.Add(command);
+        JoinedUserCommands.AddRange(command);
     }
 
-    public void AddMemberCommand(string nickName, IIrcCommand command)
+    public void AddMemberCommand(string nickName, params IIrcCommand[] command)
     {
         if (!MembersCommands.TryGetValue(nickName, out List<IIrcCommand>? value))
         {
@@ -29,6 +29,6 @@ public class ChannelJoinResult
             MembersCommands[nickName] = value;
         }
 
-        value.Add(command);
+        value.AddRange(command);
     }
 }

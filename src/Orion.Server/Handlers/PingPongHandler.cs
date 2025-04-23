@@ -64,7 +64,7 @@ public class PingPongHandler : BaseIrcCommandListener, IIrcCommandHandler<PingCo
     private async Task PingPongJobTask()
     {
         var sessionsToPing = QuerySessions(session =>
-            session.LastPingResponse + TimeSpan.FromSeconds(Config.Irc.Ping.Interval) <= DateTime.Now
+            session.LastPingResponse + TimeSpan.FromSeconds(Config.Irc.Ping.Interval) >= DateTime.Now
             && session.IsAuthenticated
         );
 
