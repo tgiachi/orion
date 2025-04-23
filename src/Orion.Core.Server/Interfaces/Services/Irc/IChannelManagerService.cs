@@ -35,4 +35,7 @@ public interface IChannelManagerService : IOrionService
     Task<List<IIrcCommand>> GetTopicsAsync(string nickName, string channelName);
 
     Task<List<IIrcCommand>> ListChannelsAsync(string nickName, string[] channels = null, string query = null);
+
+    Task<List<string>> GetConnectedUsersAsync(string nickName);
+    void UpdateNickName(string oldNickName, string newNickName);
 }

@@ -104,7 +104,6 @@ public class ChannelManagerService : IChannelManagerService
         {
             result.AddMemberCommand(member, JoinCommand.CreateForChannels(session.FullAddress, channelName));
             result.AddMemberCommand(member, (await GetNamesAsync(member, channelName)).ToArray());
-
         }
 
 
@@ -144,7 +143,6 @@ public class ChannelManagerService : IChannelManagerService
                     }
                 )
             );
-
         }
 
 
@@ -373,19 +371,51 @@ public class ChannelManagerService : IChannelManagerService
 
         foreach (var channel in channResult)
         {
-            result.Add(RplList.Create(
-                _serverContextData.ServerName,
-                nickName,
-                channel.Name,
-                channel.MemberCount,
-                channel.Topic ?? null
-            ));
+            result.Add(
+                RplList.Create(
+                    _serverContextData.ServerName,
+                    nickName,
+                    channel.Name,
+                    channel.MemberCount,
+                    channel.Topic ?? null
+                )
+            );
         }
 
         result.Add(RplListEnd.Create(_serverContextData.ServerName, nickName));
 
 
         return result;
+    }
+
+    public async Task<List<string>> GetConnectedUsersAsync(string nickName)
+    {
+        var result = new HashSet<string>();
+
+        var channels = await GetChannelsForNickNameAsync(nickName);
+
+        foreach (var channel in channels)
+        {
+            var channelData = GetChannel(channel);
+
+            foreach (var member in channelData.GetMemberList())
+            {
+                result.Add(member);
+            }
+        }
+
+        return result.ToList();
+    }
+
+    public void UpdateNickName(string oldNickName, string newNickName)
+    {
+        foreach (var channel in _channels.Values)
+        {
+            if (channel.IsMember(oldNickName))
+            {
+                channel.UpdateNickName(oldNickName, newNickName);
+            }
+        }
     }
 
     public async Task<bool> PartChannel(IrcUserSession session, string channelName, string? partMessage = null)

@@ -9,13 +9,16 @@ using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Errors;
+using Orion.Irc.Core.Commands.Replies;
 using Orion.Irc.Core.Data.Messages;
+using Orion.Irc.Core.Types;
 
 namespace Orion.Server.Handlers;
 
 public class ChannelsHandler
     : BaseIrcCommandListener, IIrcCommandHandler<JoinCommand>, IIrcCommandHandler<PartCommand>,
         IIrcCommandHandler<NamesCommand>, IIrcCommandHandler<ListCommand>,
+        IIrcCommandHandler<ModeCommand>,
         IIrcCommandHandler<PrivMsgCommand>, IIrcCommandHandler<TopicCommand>, IEventBusListener<UserQuitEvent>
 {
     private readonly IChannelManagerService _channelManagerService;
@@ -32,6 +35,7 @@ public class ChannelsHandler
         RegisterCommandHandler<TopicCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<NamesCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<ListCommand>(this, ServerNetworkType.Clients);
+        RegisterCommandHandler<ModeCommand>(this, ServerNetworkType.Clients);
 
         SubscribeToEventBus(this);
     }
@@ -227,6 +231,74 @@ public class ChannelsHandler
         foreach (var listCommand in commands)
         {
             await session.SendCommandAsync(listCommand);
+        }
+    }
+
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, ModeCommand command
+    )
+    {
+        if (command.TargetType == ModeTargetType.Channel)
+        {
+            if (!_channelManagerService.ChannelExists(command.Target))
+            {
+                await session.SendCommandAsync(
+                    ErrNoSuchChannel.Create(ServerHostName, session.NickName, command.Target)
+                );
+                return;
+            }
+
+            var channelData = _channelManagerService.GetChannel(command.Target);
+
+
+            if (command.ModeChanges.Count == 0)
+            {
+                await session.SendCommandAsync(
+                    RplChannelModeIs.Create(
+                        ServerHostName,
+                        session.NickName,
+                        command.Target,
+                        channelData.GetModeString()
+                    )
+                );
+
+                return;
+            }
+
+            if (!channelData.GetMembership(session.NickName).IsOperator)
+            {
+                await session.SendCommandAsync(
+                    ErrChanOpPrivsNeeded.Create(
+                        ServerHostName,
+                        session.NickName,
+                        command.Target
+                    )
+                );
+
+                return;
+            }
+
+
+            foreach (var modeChange in command.ModeChanges)
+            {
+                channelData.SetMode(modeChange);
+            }
+
+            var modeCommand = ModeCommand.CreateWithModes(
+                command.Target,
+                channelData.Name,
+                command.ModeChanges.ToArray()
+            );
+
+            foreach (var member in channelData.GetMemberList())
+            {
+                var memberSession = GetSessionByNickName(member);
+                if (memberSession != null )
+                {
+                    await memberSession.SendCommandAsync(modeCommand);
+                }
+            }
+
         }
     }
 }
