@@ -25,7 +25,8 @@ public static class SystemRoutes
                     return Results.Ok(sessions);
 
                 }).Produces<List<IrcUserSession>>()
-            .WithDescription("Get the sessions");
+            .WithDescription("Get the sessions")
+            .RequireAuthorization();
 
         return endpoints;
 

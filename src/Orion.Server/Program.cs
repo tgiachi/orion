@@ -1,5 +1,8 @@
+using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.IdentityModel.Tokens;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Internal;
@@ -32,6 +35,25 @@ public class Program
 
         builder.WebHost.ConfigureKestrelFromConfig(appContext.Config.WebHttp);
         builder.Services.ConfigureHttpJsonOptions(WebJsonExtension.ConfigureWebJson());
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = appContext.Config.WebHttp.JwtAuth.Issuer,
+                        ValidAudience = appContext.Config.WebHttp.JwtAuth.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(appContext.Config.WebHttp.JwtAuth.Secret)
+                        )
+                    };
+                }
+            );
+        builder.Services.AddAuthorization();
 
 
         Log.Logger = appContext.LoggerConfiguration.CreateLogger();
@@ -89,10 +111,20 @@ public class Program
 
         app.MapOpenApi();
 
+        app.UseAuthentication();
+        app.UseAuthorization();
+
         app.MapScalarApiReference(o =>
             {
                 o.Title = "Orion Server";
                 o.Theme = ScalarTheme.Kepler;
+                o.Authentication = new ScalarAuthenticationOptions()
+                {
+                    PreferredSecurityScheme = "Bearer",
+                    Http = new HttpOptions()
+                    {
+                    }
+                };
             }
         );
 
