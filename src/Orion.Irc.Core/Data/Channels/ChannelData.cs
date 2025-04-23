@@ -100,8 +100,8 @@ public class ChannelData
     public ChannelData(string name)
     {
         Name = name;
-        CreationTime = DateTime.UtcNow;
-        TopicSetTime = DateTime.UtcNow;
+        CreationTime = DateTime.Now;
+        TopicSetTime = DateTime.MaxValue;
     }
 
     #endregion
@@ -131,6 +131,20 @@ public class ChannelData
         }
 
         return added;
+    }
+
+    public bool SetMode(ModeChangeType modeChange)
+    {
+        if (modeChange.IsAdding)
+        {
+            SetMode(modeChange.Mode, modeChange.Parameter);
+        }
+        else
+        {
+            RemoveMode(modeChange.Mode);
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -393,6 +407,17 @@ public class ChannelData
     public bool IsMember(string nickname)
     {
         return _members.ContainsKey(nickname);
+    }
+
+    public bool UpdateNickName(string oldNick, string newNick)
+    {
+        if (_members.TryRemove(oldNick, out var membership))
+        {
+            _members.TryAdd(newNick, membership);
+            return true;
+        }
+
+        return false;
     }
 
     public bool IsOperator(string nickname)

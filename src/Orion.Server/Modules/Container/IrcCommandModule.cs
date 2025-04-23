@@ -26,6 +26,8 @@ public class IrcCommandModule : IOrionContainerModule
                 .AddIrcCommand<AwayCommand>()
                 .AddIrcCommand<OperCommand>()
                 .AddIrcCommand<KillCommand>()
+                .AddIrcCommand<NamesCommand>()
+                .AddIrcCommand<ListCommand>()
                 .AddIrcCommand<NoticeCommand>()
             ;
     }

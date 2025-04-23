@@ -3,6 +3,7 @@ using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc.Opers;
 using Orion.Core.Server.Handlers.Base;
 using Orion.Core.Server.Interfaces.Listeners.Commands;
+using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Foundations.Types;
 using Orion.Foundations.Utils;
 using Orion.Irc.Core.Commands;
@@ -13,8 +14,11 @@ namespace Orion.Server.Handlers;
 
 public class OperHandler : BaseIrcCommandListener, IIrcCommandHandler<OperCommand>, IIrcCommandHandler<KillCommand>
 {
-    public OperHandler(ILogger<OperHandler> logger, IrcCommandListenerContext context) : base(logger, context)
+
+    private readonly IChannelManagerService _channelManagerService;
+    public OperHandler(ILogger<OperHandler> logger, IrcCommandListenerContext context, IChannelManagerService channelManagerService) : base(logger, context)
     {
+        _channelManagerService = channelManagerService;
         RegisterCommandHandler<OperCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<KillCommand>(this, ServerNetworkType.Clients);
     }
@@ -61,5 +65,67 @@ public class OperHandler : BaseIrcCommandListener, IIrcCommandHandler<OperComman
         IrcUserSession session, ServerNetworkType serverNetworkType, KillCommand command
     )
     {
+        if (!session.IsOperator)
+        {
+            await session.SendCommandAsync(
+                ErrNoOperHost.Create(
+                    ServerHostName,
+                    session.NickName
+                )
+            );
+
+            return;
+        }
+
+        var targetSession = GetSessionByNickName(command.TargetNickname);
+
+        if (targetSession == null)
+        {
+            await session.SendCommandAsync(
+                ErrNoSuchNick.Create(
+                    ServerHostName,
+                    session.NickName,
+                    command.TargetNickname
+                )
+            );
+
+            return;
+        }
+
+        if (targetSession.IsOperator)
+        {
+            await session.SendCommandAsync(
+                ErrCantKillServer.Create(
+                    ServerHostName,
+                    session.NickName,
+                    command.TargetNickname
+                )
+            );
+
+            return;
+        }
+
+
+        await session.SendCommandAsync(
+            KillCommand.CreateWithSource(session.NickName, command.TargetNickname, command.Reason)
+        );
+
+        targetSession.SendCommandAsync(
+            KillCommand.CreateWithSource(session.NickName, command.TargetNickname, command.Reason)
+        );
+
+        var usersConnected = await _channelManagerService.GetConnectedUsersAsync(command.TargetNickname);
+
+        foreach (var user in usersConnected)
+        {
+            var userSession = GetSessionByNickName(user);
+            await userSession.SendCommandAsync(
+                KillCommand.CreateWithSource(session.NickName, command.TargetNickname, command.Reason)
+            );
+        }
+
+
+        await targetSession.DisconnectAsync();
+
     }
 }

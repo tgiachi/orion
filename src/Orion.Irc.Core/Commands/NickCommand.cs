@@ -85,4 +85,34 @@ public class NickCommand : BaseIrcCommand
             return $"NICK {Nickname}";
         }
     }
+
+    /// <summary>
+    /// Creates a new NICK command for the specified nickname
+    /// </summary>
+    /// <param name="nickname">The nickname to request</param>
+    /// <returns>A new NICK command instance</returns>
+    public static NickCommand Create(string nickname)
+    {
+        return new NickCommand
+        {
+            Nickname = nickname,
+            IsChangeNotification = false
+        };
+    }
+
+    /// <summary>
+    /// Creates a nickname change notification from a source
+    /// </summary>
+    /// <param name="source">The source prefix (typically oldnick!user@host)</param>
+    /// <param name="newNickname">The new nickname being changed to</param>
+    /// <returns>A new NICK command instance representing a nickname change</returns>
+    public static NickCommand CreateChangeNotification(string source, string newNickname)
+    {
+        return new NickCommand
+        {
+            Source = source,
+            Nickname = newNickname,
+            IsChangeNotification = true
+        };
+    }
 }

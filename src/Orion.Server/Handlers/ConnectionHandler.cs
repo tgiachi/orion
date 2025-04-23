@@ -63,12 +63,16 @@ public class ConnectionHandler
         if (exists.Count == 0)
         {
             var oldNickName = session.NickName;
-            session.NickName = command.Nickname;
 
             if (session.IsRegistered)
             {
                 await PublishEventAsync(new UserNickNameChangeEvent(session.SessionId, oldNickName, command.Nickname));
+
+                return;
             }
+
+            session.NickName = command.Nickname;
+
         }
         else
         {

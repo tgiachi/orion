@@ -24,6 +24,9 @@ public class ListCommand : BaseIrcCommand
     /// </summary>
     public ComparisonType Comparison { get; set; } = ComparisonType.GreaterThan;
 
+
+    public string? Query { get; set; }
+
     /// <summary>
     /// Numeric value for the filter
     /// </summary>
@@ -65,6 +68,8 @@ public class ListCommand : BaseIrcCommand
             Channels.AddRange(firstParam.Split(','));
             return;
         }
+
+        Query = firstParam;
 
         // Check for filter patterns
         var match = Regex.Match(firstParam, @"^([CUT])?([<>=])?(\d+)$");
