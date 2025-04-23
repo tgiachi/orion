@@ -22,6 +22,9 @@ public class DefaultServicesModule : IOrionContainerModule
             MaxConcurrentTasks = 4
         });
 
+
+        services.AddService<IAuthService, AuthService>();
+
         services
             .AddService<IIrcCommandService, IrcCommandService>()
             .AddService<IIrcSessionService, IrcSessionService>()

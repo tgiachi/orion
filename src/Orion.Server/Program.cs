@@ -102,6 +102,7 @@ public class Program
         apiRoute
             .MapSystem()
             .MapVariables()
+            .MapAuth()
             .MapStatus();
 
         app.MapOpenApi(_openApiPath);

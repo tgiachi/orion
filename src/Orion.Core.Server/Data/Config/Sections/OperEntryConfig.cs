@@ -1,9 +1,17 @@
+using System.Text.Json.Serialization;
 using Orion.Foundations.Utils;
+using YamlDotNet.Serialization;
 
 namespace Orion.Core.Server.Data.Config.Sections;
 
 public class OperEntryConfig
 {
+
+
+    [YamlIgnore]
+    [JsonIgnore]
+    public string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
+
     public string Host { get; set; } = "*@*";
 
     public string VHost { get; set; } = "opers.orion.io";
