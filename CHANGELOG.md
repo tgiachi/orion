@@ -1,5 +1,18 @@
 # Change Log
 
+All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
+
+<a name="0.9.0"></a>
+## [0.9.0](https://www.github.com/tgiachi/orion/releases/tag/v0.9.0) (2025-04-23)
+
+### Features
+
+* **ChannelJoinResult.cs:** change AddJoinedUserCommand method signature to accept multiple commands ([74b1bc5](https://www.github.com/tgiachi/orion/commit/74b1bc5d6f069ed560d295db4fbf7870cb9c1b74))
+* **IChannelManagerService.cs:** add method GetConnectedUsersAsync to retrieve connected users ([668e728](https://www.github.com/tgiachi/orion/commit/668e728f705d1e6a31a90a4ae693f5c9be6d960e))
+* **OperEntryConfig.cs:** add Id property with YamlIgnore and JsonIgnore attributes ([8535df2](https://www.github.com/tgiachi/orion/commit/8535df290320bdb6d1219d81ec410e9f02d4d07c))
+* **OperHandler.cs:** add IChannelManagerService dependency to OperHandler constructor for managing channel users and improve modularity ([2e9c62d](https://www.github.com/tgiachi/orion/commit/2e9c62d73ea4e45fc19e22a228ee4054b422f67b))
+* **Program.cs:** add JWT authentication and authorization configuration for improved security ([a3410c1](https://www.github.com/tgiachi/orion/commit/a3410c10e80840fb29c974f93d9517c642aa82de))
+
 <a name="0.8.0"></a>
 ## [0.8.0](https://www.github.com/tgiachi/orion/releases/tag/v0.8.0) (2025-04-22)
 
