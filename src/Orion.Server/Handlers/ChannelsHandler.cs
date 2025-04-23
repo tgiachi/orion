@@ -1,5 +1,6 @@
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Sessions;
+using Orion.Core.Server.Events.Irc.Channels;
 using Orion.Core.Server.Events.Irc.Users;
 using Orion.Core.Server.Exceptions.Channels;
 using Orion.Core.Server.Handlers.Base;
@@ -19,7 +20,8 @@ public class ChannelsHandler
     : BaseIrcCommandListener, IIrcCommandHandler<JoinCommand>, IIrcCommandHandler<PartCommand>,
         IIrcCommandHandler<NamesCommand>, IIrcCommandHandler<ListCommand>,
         IIrcCommandHandler<ModeCommand>,
-        IIrcCommandHandler<PrivMsgCommand>, IIrcCommandHandler<TopicCommand>, IEventBusListener<UserQuitEvent>
+        IIrcCommandHandler<PrivMsgCommand>, IIrcCommandHandler<TopicCommand>, IEventBusListener<UserQuitEvent>,
+        IEventBusListener<JoinRequestEvent>
 {
     private readonly IChannelManagerService _channelManagerService;
 
@@ -37,7 +39,9 @@ public class ChannelsHandler
         RegisterCommandHandler<ListCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<ModeCommand>(this, ServerNetworkType.Clients);
 
-        SubscribeToEventBus(this);
+        SubscribeToEventBus<UserQuitEvent>(this);
+        SubscribeToEventBus<JoinRequestEvent>(this);
+
     }
 
     public async Task OnCommandReceivedAsync(
@@ -293,12 +297,24 @@ public class ChannelsHandler
             foreach (var member in channelData.GetMemberList())
             {
                 var memberSession = GetSessionByNickName(member);
-                if (memberSession != null )
+                if (memberSession != null)
                 {
                     await memberSession.SendCommandAsync(modeCommand);
                 }
             }
-
         }
+    }
+
+    public async Task HandleAsync(JoinRequestEvent @event, CancellationToken cancellationToken = default)
+    {
+        var session = GetSessionByNickName(@event.Nickname);
+
+        if (session == null)
+        {
+            Logger.LogWarning("Session not found for nickname: {NickName}", @event.Nickname);
+            return;
+        }
+
+        await OnCommandReceivedAsync(session, ServerNetworkType.Clients, JoinCommand.Create(@event.Channels));
     }
 }

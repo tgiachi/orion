@@ -18,6 +18,7 @@ public class DefaultIrcListenerModule : IOrionContainerModule
             .AddIrcListener<NoticeHandler>()
             .AddIrcListener<AwayHandler>()
             .AddIrcListener<OperHandler>()
+            .AddIrcListener<WhoHandler>()
             .AddIrcListener<UserHandler>()
 
             ;

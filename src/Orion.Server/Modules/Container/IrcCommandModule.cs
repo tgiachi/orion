@@ -28,6 +28,9 @@ public class IrcCommandModule : IOrionContainerModule
                 .AddIrcCommand<KillCommand>()
                 .AddIrcCommand<NamesCommand>()
                 .AddIrcCommand<ListCommand>()
+                .AddIrcCommand<WhoCommand>()
+                .AddIrcCommand<WhoIsCommand>()
+                .AddIrcCommand<IsonCommand>()
                 .AddIrcCommand<NoticeCommand>()
             ;
     }
