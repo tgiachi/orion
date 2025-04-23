@@ -8,6 +8,8 @@ namespace Orion.Core.Server.Interfaces.Services.Irc;
 
 public interface IChannelManagerService : IOrionService
 {
+    List<ChannelData> Channels { get; }
+
     bool ChannelExists(string channelName);
 
     ChannelData? GetChannel(string channelName);

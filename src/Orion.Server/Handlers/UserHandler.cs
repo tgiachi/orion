@@ -1,14 +1,19 @@
 using Orion.Core.Server.Data.Internal;
+using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Events.Irc.Users;
 using Orion.Core.Server.Handlers.Base;
+using Orion.Core.Server.Interfaces.Listeners.Commands;
 using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Core.Server.Interfaces.Services.Irc;
+using Orion.Foundations.Types;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Errors;
+using Orion.Irc.Core.Commands.Replies;
 
 namespace Orion.Server.Handlers;
 
-public class UserHandler : BaseIrcCommandListener, IEventBusListener<UserNickNameChangeEvent>
+public class UserHandler
+    : BaseIrcCommandListener, IEventBusListener<UserNickNameChangeEvent>, IIrcCommandHandler<IsonCommand>
 {
     private readonly IChannelManagerService _channelManagerService;
 
@@ -18,6 +23,7 @@ public class UserHandler : BaseIrcCommandListener, IEventBusListener<UserNickNam
     {
         _channelManagerService = channelManagerService;
         SubscribeToEventBus(this);
+        RegisterCommandHandler<IsonCommand>(this, ServerNetworkType.Clients);
     }
 
     public async Task HandleAsync(UserNickNameChangeEvent @event, CancellationToken cancellationToken = default)
@@ -62,6 +68,39 @@ public class UserHandler : BaseIrcCommandListener, IEventBusListener<UserNickNam
             "User {OldNickName} changed nickname to {NewNickName}",
             @event.OldNickName,
             @event.NewNickName
+        );
+    }
+
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, IsonCommand command
+    )
+    {
+        var rplIson = RplIson.CreateEmpty(
+            ServerHostName,
+            session.NickName
+        );
+
+        foreach (var nickname in command.Nicknames)
+        {
+            if (GetSessionByNickName(nickname) != null)
+            {
+                rplIson.OnlineNicknames.Add(nickname);
+            }
+        }
+
+
+        if (rplIson.OnlineNicknames.Count > 0)
+        {
+            await session.SendCommandAsync(rplIson);
+            return;
+        }
+
+        await session.SendCommandAsync(
+            ErrNoSuchNick.Create(
+                ServerHostName,
+                session.NickName,
+                command.Nicknames.FirstOrDefault() ?? string.Empty
+            )
         );
     }
 }

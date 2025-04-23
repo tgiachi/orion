@@ -135,6 +135,7 @@ public class Program
             .MapSystem()
             .MapVariables()
             .MapAuth()
+            .MapChannels()
             .MapStatus();
 
         app.MapOpenApi(_openApiPath);

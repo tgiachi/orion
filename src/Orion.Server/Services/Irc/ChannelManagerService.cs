@@ -17,6 +17,8 @@ namespace Orion.Server.Services.Irc;
 
 public class ChannelManagerService : IChannelManagerService
 {
+    public List<ChannelData> Channels => _channels.Values.ToList();
+
     private readonly ILogger _logger;
 
     private readonly IEventBusService _eventBusService;
@@ -37,6 +39,7 @@ public class ChannelManagerService : IChannelManagerService
         _serverContextData = serverContextData;
         _sessionService = sessionService;
     }
+
 
     public bool ChannelExists(string channelName)
     {
