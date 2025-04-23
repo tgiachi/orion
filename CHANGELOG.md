@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.10.0"></a>
+## [0.10.0](https://www.github.com/tgiachi/orion/releases/tag/v0.10.0) (2025-04-23)
+
+### Features
+
+* **ChannelEntry.cs:** add ChannelEntry record for representing channel data ([1c05bfa](https://www.github.com/tgiachi/orion/commit/1c05bfa0a95cffcb20a9b7d34b5dd19dc596f47e))
+* **WhoHandler.cs:** add WhoHandler class to handle WhoCommand and WhoIsCommand ([da83bd8](https://www.github.com/tgiachi/orion/commit/da83bd843149ae0fb35256d29c23633d3697076a))
+
 <a name="0.9.0"></a>
 ## [0.9.0](https://www.github.com/tgiachi/orion/releases/tag/v0.9.0) (2025-04-23)
 
