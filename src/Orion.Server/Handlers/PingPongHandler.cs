@@ -26,7 +26,7 @@ public class PingPongHandler : BaseIrcCommandListener, IIrcCommandHandler<PingCo
         RegisterCommandHandler<PongCommand>(this, ServerNetworkType.Clients);
 
         _schedulerSystemService.RegisterJob("ping_pong", PingPongJobTask, TimeSpan.FromSeconds(1));
-        _schedulerSystemService.RegisterJob("registration_check", RegistrationCheckJobTask, TimeSpan.FromSeconds(1));
+       // _schedulerSystemService.RegisterJob("registration_check", RegistrationCheckJobTask, TimeSpan.FromSeconds(1));
         _schedulerSystemService.RegisterJob("dead_ping", DisconnecteDeadPingTask, TimeSpan.FromSeconds(1));
     }
 
@@ -64,9 +64,10 @@ public class PingPongHandler : BaseIrcCommandListener, IIrcCommandHandler<PingCo
     private async Task PingPongJobTask()
     {
         var sessionsToPing = QuerySessions(session =>
-            session.LastPingResponse + TimeSpan.FromSeconds(Config.Irc.Ping.Interval) >= DateTime.Now
+            session.LastPingResponse + TimeSpan.FromSeconds(Config.Irc.Ping.Interval) <= DateTime.Now
             && session.IsAuthenticated
         );
+
 
         var pingCommand = PingCommand.CreateFromServer(
             null,
