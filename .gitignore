@@ -567,3 +567,4 @@ crashlytics-build.properties
 *.dll
 **/**/.DS_Store
 *.world
+src/Orion.Server/Assets/Web
