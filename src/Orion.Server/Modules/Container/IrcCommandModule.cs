@@ -30,6 +30,7 @@ public class IrcCommandModule : IOrionContainerModule
                 .AddIrcCommand<ListCommand>()
                 .AddIrcCommand<WhoCommand>()
                 .AddIrcCommand<WhoIsCommand>()
+                .AddIrcCommand<KickCommand>()
                 .AddIrcCommand<IsonCommand>()
                 .AddIrcCommand<NoticeCommand>()
             ;
