@@ -72,6 +72,13 @@ public class ChannelData
     /// </summary>
     public string Key => GetModeParameter('k');
 
+
+    /// <summary>
+    ///  The list of channel members
+    /// </summary>
+    public IReadOnlyCollection<ChannelMembership> Members => _members.Values.ToList();
+
+
     /// <summary>
     /// The channel user limit if set (mode +l)
     /// </summary>
@@ -385,7 +392,10 @@ public class ChannelData
             return null;
         }
 
-        var membership = new ChannelMembership();
+        var membership = new ChannelMembership
+        {
+            NickName = nickname
+        };
         return _members.TryAdd(nickname, membership) ? membership : null;
     }
 

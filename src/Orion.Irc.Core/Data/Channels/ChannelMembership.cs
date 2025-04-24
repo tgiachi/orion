@@ -5,6 +5,12 @@ namespace Orion.Irc.Core.Data.Channels;
 /// </summary>
 public class ChannelMembership
 {
+
+    /// <summary>
+    ///  Member's nickname in the channel
+    /// </summary>
+    public string NickName { get; set; }
+
     /// <summary>
     /// Whether the client has operator status (+o) in the channel
     /// </summary>
@@ -24,4 +30,6 @@ public class ChannelMembership
     {
         JoinTime = DateTime.UtcNow;
     }
+
+    public string PrefixNickname => IsOperator ? $"@{NickName}" : HasVoice ? $"+{NickName}" : NickName;
 }
