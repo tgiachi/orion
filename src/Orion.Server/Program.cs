@@ -124,7 +124,7 @@ public class Program
 
         app.UseCors("AllowLocalhost");
 
-        app.Map("/", () => Results.Text("Orion Server"));
+        app.Map("/", () => Results.Redirect("/index.html"));
 
         app.MapOpenApi();
 
