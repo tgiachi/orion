@@ -44,6 +44,9 @@ public class IrcUserSession : IDisposable, IEquatable<IrcUserSession>
     /// </summary>
     public string SessionId { get; set; }
 
+
+    public bool IsSecureConnection { get; set; }
+
     /// <summary>
     /// Remote endpoint in "address:port" format.
     /// </summary>
@@ -117,6 +120,12 @@ public class IrcUserSession : IDisposable, IEquatable<IrcUserSession>
     /// Date and time of the user's last activity.
     /// </summary>
     public DateTime LastActivity { get; set; }
+
+
+    /// <summary>
+    ///  Date and time when the session was created.
+    /// </summary>
+    public DateTime Created { get; set; }
 
     /// <summary>
     /// Date and time of the last PONG response received.
@@ -368,12 +377,14 @@ public class IrcUserSession : IDisposable, IEquatable<IrcUserSession>
         IsPasswordValid = false;
 
         IsAway = false;
+        IsSecureConnection = false;
         AwayMessage = string.Empty;
         _userModes.Clear();
 
         IsRegistered = false;
         IsLocal = true;
         RemoteServerId = string.Empty;
+        Created = DateTime.Now;
     }
 
     #endregion

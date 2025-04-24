@@ -4,6 +4,7 @@ using Orion.Core.Server.Data.Sessions;
 using Orion.Core.Server.Handlers.Base;
 using Orion.Core.Server.Interfaces.Listeners.Commands;
 using Orion.Core.Server.Interfaces.Services.Irc;
+using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Errors;
@@ -15,12 +16,15 @@ namespace Orion.Server.Handlers;
 public class WhoHandler : BaseIrcCommandListener, IIrcCommandHandler<WhoCommand>, IIrcCommandHandler<WhoIsCommand>
 {
     private readonly IChannelManagerService _channelManagerService;
+    private readonly IVersionService _versionService;
 
     public WhoHandler(
-        ILogger<WhoHandler> logger, IrcCommandListenerContext context, IChannelManagerService channelManagerService
+        ILogger<WhoHandler> logger, IrcCommandListenerContext context, IChannelManagerService channelManagerService,
+        IVersionService versionService
     ) : base(logger, context)
     {
         _channelManagerService = channelManagerService;
+        _versionService = versionService;
         RegisterCommandHandler<WhoCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<WhoIsCommand>(this, ServerNetworkType.Clients);
     }
@@ -118,7 +122,9 @@ public class WhoHandler : BaseIrcCommandListener, IIrcCommandHandler<WhoCommand>
 
     private async Task WhoUser(IrcUserSession session, string nickName)
     {
-        var userSessions = QuerySessions(s => s.IsRegistered && !s.IsInvisible && s.NickName.Equals(nickName, StringComparison.OrdinalIgnoreCase));
+        var userSessions = QuerySessions(s =>
+            s.IsRegistered && !s.IsInvisible && s.NickName.Equals(nickName, StringComparison.OrdinalIgnoreCase)
+        );
 
         foreach (var userSession in userSessions)
         {
@@ -143,5 +149,160 @@ public class WhoHandler : BaseIrcCommandListener, IIrcCommandHandler<WhoCommand>
         IrcUserSession session, ServerNetworkType serverNetworkType, WhoIsCommand command
     )
     {
+        if (command.Nicknames.Count == 0)
+        {
+            await session.SendCommandAsync(
+                ErrNoSuchNick.Create(
+                    ServerHostName,
+                    session.NickName,
+                    command.Nicknames.FirstOrDefault() ?? string.Empty
+                )
+            );
+        }
+
+        foreach (var nickName in command.Nicknames)
+        {
+            var targetSession = GetSessionByNickName(nickName);
+
+            if (targetSession != null)
+            {
+                await WhoIsUser(session, targetSession);
+            }
+        }
+
+
+        await session.SendCommandAsync(
+            RplEndOfWho.Create(
+                ServerHostName,
+                session.NickName,
+                string.Join(',', command.Nicknames)
+            )
+        );
     }
+
+
+    private async Task WhoIsUser(IrcUserSession source, IrcUserSession targetSession)
+    {
+        await source.SendCommandAsync(RplWhoisRegNick.Create(ServerHostName, source.NickName, targetSession.NickName));
+        await source.SendCommandAsync(
+            RplWhoisUser.Create(
+                ServerHostName,
+                source.NickName,
+                targetSession.NickName,
+                targetSession.UserName,
+                targetSession.VHostName ?? targetSession.HostName,
+                targetSession.RealName
+            )
+        );
+
+        await source.SendCommandAsync(
+            RplWhoisServer.Create(
+                ServerHostName,
+                source.NickName,
+                targetSession.NickName,
+                Config.Server.Host,
+                _versionService.GetVersionInfo().AppName + " v" + _versionService.GetVersionInfo().Version
+            )
+        );
+
+        if (targetSession.IsOperator)
+        {
+            await source.SendCommandAsync(
+                RplWhoisOperator.Create(
+                    ServerHostName,
+                    source.NickName,
+                    targetSession.NickName
+                )
+            );
+        }
+
+        await source.SendCommandAsync(
+            RplWhoisIdle.Create(
+                ServerHostName,
+                source.NickName,
+                targetSession.NickName,
+                (int)(DateTime.Now - targetSession.LastActivity).TotalSeconds,
+                targetSession.Created
+            )
+        );
+
+
+        var channels = await _channelManagerService.GetChannelsForNickNameAsync(targetSession.NickName);
+
+        foreach (var channel in channels)
+        {
+            var channelData = _channelManagerService.GetChannel(channel);
+
+            if (channelData == null)
+            {
+                continue;
+            }
+
+            var channelMemberShip = channelData.GetMembership(targetSession.NickName);
+
+            await source.SendCommandAsync(
+                RplWhoisChannels.CreateWithStatus(
+                    ServerHostName,
+                    source.NickName,
+                    targetSession.NickName,
+                    new Dictionary<string, (bool isOperator, bool isVoiced)>()
+                    {
+                        { channelData.Name, (channelMemberShip.IsOperator, channelMemberShip.HasVoice) }
+                    }
+                )
+            );
+        }
+
+        var ipAddress = targetSession.RemoteAddress;
+
+        if (targetSession.IsOperator)
+        {
+            ipAddress = "0.0.0.0";
+        }
+
+        await source.SendCommandAsync(
+            RplWhoisHost.CreateWithHostAndIp(
+                ServerHostName,
+                source.NickName,
+                targetSession.HostName,
+                targetSession.VHostName ?? targetSession.HostName,
+                ipAddress
+            )
+        );
+
+
+        await source.SendCommandAsync(
+            RplWhoisModes.CreateFromModes(
+                ServerHostName,
+                source.NickName,
+                targetSession.NickName,
+                targetSession.ModesString
+            )
+        );
+
+        if (targetSession.IsSecureConnection)
+        {
+            await source.SendCommandAsync(
+                RplWhoisSecure.Create(
+                    ServerHostName,
+                    source.NickName,
+                    targetSession.NickName
+                )
+            );
+        }
+
+        if (targetSession.IsAway)
+        {
+            await source.SendCommandAsync(
+                RplAway.Create(
+                    ServerHostName,
+                    source.NickName,
+                    targetSession.NickName,
+                    targetSession.AwayMessage
+                )
+            );
+        }
+    }
+
+
 }
