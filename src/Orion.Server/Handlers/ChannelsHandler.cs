@@ -269,7 +269,7 @@ public class ChannelsHandler
                 return;
             }
 
-            if (!channelData.GetMembership(session.NickName).IsOperator)
+            if (!channelData.GetMembership(session.NickName).IsOperator && !session.IsOperator)
             {
                 await session.SendCommandAsync(
                     ErrChanOpPrivsNeeded.Create(

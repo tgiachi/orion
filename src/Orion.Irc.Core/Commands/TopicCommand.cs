@@ -61,11 +61,20 @@ public class TopicCommand : BaseIrcCommand
         {
             Channel = parts[1];
 
-            // Check for topic (starts with ':')
-            int colonIndex = line.IndexOf(':', parts[0].Length + parts[1].Length + 2);
-            if (colonIndex != -1)
+            try
             {
-                Topic = line.Substring(colonIndex + 1);
+                // Check for topic (starts with ':')
+                int colonIndex = line.IndexOf(':', parts[0].Length + parts[1].Length + 2);
+                if (colonIndex != -1)
+                {
+                    Topic = line.Substring(colonIndex + 1);
+                }
+            }
+            catch (Exception)
+            {
+                // Handle any exceptions that may occur during parsing
+                // For example, if the topic is not formatted correctly
+                Topic = null;
             }
         }
     }
