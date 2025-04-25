@@ -1,7 +1,6 @@
 import { RootStore } from "./rootStore";
 import { makeAutoObservable, runInAction } from "mobx";
 
-import { BaseStore } from "./baseStore";
 import { ApiStore } from "./apiStore";
 import { LoginRequest, LoginResponse } from "../api/Api";
 
@@ -13,7 +12,7 @@ interface AuthLocalStorageData {
   username: string;
 }
 
-export class AuthStore extends BaseStore {
+export class AuthStore {
   rootStore: RootStore
   jwtToken: string | null = null
   refreshToken: string | null = null
@@ -23,16 +22,27 @@ export class AuthStore extends BaseStore {
   isAuthicated: boolean = false;
   apiStore: ApiStore;
 
+  counter: number = 0;
+
   constructor(rootStore: RootStore) {
-    super();
+
+    makeAutoObservable(this)
     this.rootStore = rootStore;
     this.apiStore = rootStore.apiStore;
 
-    makeAutoObservable(this);
+    setInterval(() => {
+      this.increment()
+      console.log('Increment')
+    }, 1000)
+
 
     runInAction(() => {
       this.loadAuthState();
     });
+  }
+
+  increment() {
+    this.counter++
   }
 
   logout() {
@@ -43,6 +53,7 @@ export class AuthStore extends BaseStore {
     this.username = null;
     this.isAuthicated = false;
 
+
     runInAction(() => {
       this.saveAuthState();
     });
@@ -50,7 +61,6 @@ export class AuthStore extends BaseStore {
 
   async login(username: string, password: string) {
 
-    this.setLoading("login", true)
     const response = await this.apiStore.post<LoginResponse>(
       "auth/login",
       { username, password } as LoginRequest,
@@ -68,7 +78,6 @@ export class AuthStore extends BaseStore {
       })
     }
 
-    this.setLoading("loading", false)
 
   }
 

@@ -2,9 +2,17 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { observer } from "mobx-react-lite"
+import { useStore } from './stores/rootStore'
 
-function App() {
+
+
+const App = observer(() => {
   const [count, setCount] = useState(0)
+
+  const rootStore = useStore()
+
+
 
   return (
     <>
@@ -17,6 +25,7 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
+      <h2>{rootStore.authStore.counter}</h2>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -30,6 +39,9 @@ function App() {
       </p>
     </>
   )
-}
+})
+
+
+
 
 export default App

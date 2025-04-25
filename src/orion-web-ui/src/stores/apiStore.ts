@@ -1,16 +1,14 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from "./rootStore";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { BaseStore } from "./baseStore";
 
 
-export class ApiStore extends BaseStore {
+export class ApiStore {
   rootStore: RootStore;
   api: AxiosInstance;
   errors: Record<string, string | null> = {};
 
   constructor(rootStore: RootStore) {
-    super()
     this.rootStore = rootStore;
     this.api = axios.create({
       baseURL: "/api/v1",
@@ -19,9 +17,10 @@ export class ApiStore extends BaseStore {
       },
     });
 
-    this.setupInterceptors();
+    this.setupInterceptors()
 
-    makeAutoObservable(this);
+    makeAutoObservable(this)
+
   }
 
   /**
@@ -119,7 +118,7 @@ export class ApiStore extends BaseStore {
     config?: AxiosRequestConfig,
   ): Promise<T | null> {
     try {
-      this.setLoading(requestKey, true);
+      this.rootStore.loadingStore.setLoading(requestKey);
       this.resetError(requestKey);
 
       const response = await this.api.get<T>(url, config);
@@ -128,7 +127,7 @@ export class ApiStore extends BaseStore {
       this.handleRequestError(error, requestKey);
       return null;
     } finally {
-      this.setLoading(requestKey, false);
+      this.rootStore.loadingStore.hideLoading()
     }
   }
 
@@ -155,7 +154,7 @@ export class ApiStore extends BaseStore {
       this.handleRequestError(error, requestKey);
       return null;
     } finally {
-      this.setLoading(requestKey, false);
+      this.rootStore.loadingStore.setLoading(requestKey);
     }
   }
 
@@ -173,7 +172,7 @@ export class ApiStore extends BaseStore {
     config?: AxiosRequestConfig,
   ): Promise<T | null> {
     try {
-      this.setLoading(requestKey, true);
+      this.rootStore.loadingStore.setLoading(requestKey);
       this.resetError(requestKey);
 
       const response = await this.api.put<T>(url, data, config);
@@ -182,7 +181,7 @@ export class ApiStore extends BaseStore {
       this.handleRequestError(error, requestKey);
       return null;
     } finally {
-      this.setLoading(requestKey, false);
+      this.rootStore.loadingStore.hideLoading()
     }
   }
 
@@ -198,7 +197,7 @@ export class ApiStore extends BaseStore {
     config?: AxiosRequestConfig,
   ): Promise<T | null> {
     try {
-      this.setLoading(requestKey, true);
+      this.rootStore.loadingStore.setLoading(requestKey);
       this.resetError(requestKey);
 
       const response = await this.api.delete<T>(url, config);
@@ -207,7 +206,7 @@ export class ApiStore extends BaseStore {
       this.handleRequestError(error, requestKey);
       return null;
     } finally {
-      this.setLoading(requestKey, false);
+      this.rootStore.loadingStore.hideLoading()
     }
   }
 
@@ -225,7 +224,7 @@ export class ApiStore extends BaseStore {
     config?: AxiosRequestConfig,
   ): Promise<T | null> {
     try {
-      this.setLoading(requestKey, true);
+      this.rootStore.loadingStore.setLoading(requestKey)
       this.resetError(requestKey);
 
       const response = await this.api.patch<T>(url, data, config);
@@ -234,7 +233,7 @@ export class ApiStore extends BaseStore {
       this.handleRequestError(error, requestKey);
       return null;
     } finally {
-      this.setLoading(requestKey, false);
+      this.rootStore.loadingStore.hideLoading()
     }
   }
 

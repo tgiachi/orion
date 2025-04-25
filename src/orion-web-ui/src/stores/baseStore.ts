@@ -8,6 +8,10 @@ type LoadingState = {
 
 export class BaseStore {
   loadingState: LoadingState = {}
+
+  constructor() {
+  }
+
   /**
    * Set loading state for a specific request key
    */
