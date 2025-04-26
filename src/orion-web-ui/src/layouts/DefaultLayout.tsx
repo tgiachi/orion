@@ -1,5 +1,7 @@
 import { Link } from "@heroui/link";
 import { Navbar } from "../components/navbar";
+import { useStore } from "../stores/rootStore";
+import { VersionStatus } from "../components/VersionStatus";
 
 
 export default function DefaultLayout({
@@ -7,9 +9,11 @@ export default function DefaultLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  const rootStore = useStore()
   return (
     <div className="relative flex flex-col h-screen">
-      <Navbar />
+      {rootStore.authStore.isAuthicated && <Navbar />}
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
         {children}
       </main>
@@ -22,6 +26,7 @@ export default function DefaultLayout({
         >
           <span className="text-default-600">Orion</span>
           <p className="text-primary">IRC Server</p>
+          <VersionStatus />
         </Link>
       </footer>
     </div>

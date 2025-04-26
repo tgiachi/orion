@@ -11,12 +11,13 @@ export class ApiStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     this.api = axios.create({
-      baseURL: "/api/v1",
+      baseURL: "http://0.0.0.0:23021/api/v1",
       headers: {
         "Content-Type": "application/json",
       },
     });
 
+    console.log('initialize api store')
     this.setupInterceptors()
 
     makeAutoObservable(this)
@@ -107,11 +108,11 @@ export class ApiStore {
   }
 
   /**
-   * Perform a GET request
-   * @param url - API endpoint
-   * @param requestKey - Unique key for tracking loading state
-   * @param config - Axios request config
-   */
+    * Perform a GET request
+    * @param url - API endpoint
+    * @param requestKey - Unique key for tracking loading state
+    * @param config - Axios request config
+    */
   async get<T>(
     url: string,
     requestKey: string,
@@ -127,9 +128,10 @@ export class ApiStore {
       this.handleRequestError(error, requestKey);
       return null;
     } finally {
-      this.rootStore.loadingStore.hideLoading()
+      this.rootStore.loadingStore.hideLoading();
     }
   }
+
 
   /**
    * Perform a POST request
@@ -145,7 +147,7 @@ export class ApiStore {
     config?: AxiosRequestConfig,
   ): Promise<T | null> {
     try {
-      this.setLoading(requestKey, true);
+      this.rootStore.loadingStore.setLoading(requestKey)
       this.resetError(requestKey);
 
       const response = await this.api.post<T>(url, data, config);

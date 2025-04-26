@@ -30,20 +30,12 @@ export class AuthStore {
     this.rootStore = rootStore;
     this.apiStore = rootStore.apiStore;
 
-    setInterval(() => {
-      this.increment()
-      console.log('Increment')
-    }, 1000)
-
 
     runInAction(() => {
       this.loadAuthState();
     });
   }
 
-  increment() {
-    this.counter++
-  }
 
   logout() {
     this.jwtToken = null;
