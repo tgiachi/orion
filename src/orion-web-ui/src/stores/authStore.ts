@@ -54,7 +54,7 @@ export class AuthStore {
   async login(username: string, password: string) {
 
     const response = await this.apiStore.post<LoginResponse>(
-      "auth/login",
+      "/auth/login",
       { username, password } as LoginRequest,
       "login",
     );
@@ -68,9 +68,11 @@ export class AuthStore {
         this.refreshToken = response.refresh_token!
         this.saveAuthState()
       })
+
+      return true
     }
 
-
+    return false
   }
 
   loadAuthState() {
