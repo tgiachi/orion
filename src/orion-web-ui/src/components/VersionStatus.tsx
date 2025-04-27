@@ -7,7 +7,7 @@ export const VersionStatus = observer(() => {
 
   return <>
     <div className="flex flex-wrap gap-4">
-      <Code color="primary">{rootStore.statusStore.isOnline && "isOnline"}</Code>
+      <Code color="primary">{rootStore.statusStore.isOnline && "v" + rootStore.statusStore.versionInfo?.version}</Code>
     </div>
   </>
 })

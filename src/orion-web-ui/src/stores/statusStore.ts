@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from "./rootStore";
 import { VersionInfoData } from "../api/Api";
 import { ApiStore } from "./apiStore";
@@ -18,14 +18,21 @@ export class StatusStore {
     this.loadingStore = rootStore.loadingStore
 
     makeAutoObservable(this)
-    setInterval(() => this.checkStatus(), 1000)
+
+    setInterval(() => this.checkStatus(), 5000)
   }
 
-  checkStatus() {
+  async checkStatus() {
     console.log('checking version')
+    const result = await this.apiStore.get<VersionInfoData>(`/system/version`, "")
 
-    this.apiStore.get(`/system/version`, "")
+    if (result) {
+      runInAction(() => {
+        this.isOnline = true;
+        this.versionInfo = result
 
+      })
+    }
 
 
   }

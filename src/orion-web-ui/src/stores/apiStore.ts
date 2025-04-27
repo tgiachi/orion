@@ -9,7 +9,9 @@ export class ApiStore {
   errors: Record<string, string | null> = {};
 
   constructor(rootStore: RootStore) {
+
     this.rootStore = rootStore;
+
     this.api = axios.create({
       baseURL: "http://0.0.0.0:23021/api/v1",
       headers: {
@@ -20,7 +22,8 @@ export class ApiStore {
     console.log('initialize api store')
     this.setupInterceptors()
 
-    makeAutoObservable(this)
+
+
 
   }
 
@@ -121,7 +124,6 @@ export class ApiStore {
     try {
       this.rootStore.loadingStore.setLoading(requestKey);
       this.resetError(requestKey);
-
       const response = await this.api.get<T>(url, config);
       return response.data;
     } catch (error) {
