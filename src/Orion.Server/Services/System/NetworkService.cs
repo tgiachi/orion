@@ -1,5 +1,6 @@
 using System.Security.Authentication;
 using NetCoreServer;
+using Orion.Core.Irc.Server.Interfaces.Services.System;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Events.Server;
 using Orion.Core.Server.Extensions;
