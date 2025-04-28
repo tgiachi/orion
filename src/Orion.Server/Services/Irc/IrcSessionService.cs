@@ -6,6 +6,7 @@ using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Foundations.Pool;
 using Orion.Network.Core.Interfaces.Services;
+using Orion.Network.Core.Types;
 
 namespace Orion.Server.Services.Irc;
 
@@ -66,8 +67,14 @@ public class IrcSessionService : IIrcSessionService
         newSession.SetCommandService(_ircCommandService);
         newSession.SetNetworkTransportManager(_networkTransportManager);
 
+
         _sessions.TryAdd(sessionId, newSession);
         var transport = _networkTransportManager.GetTransport(transportId);
+
+        if (transport.Transport.Security == NetworkSecurityType.Ssl || endpoint.Contains("127.0.0.1"))
+        {
+            newSession.IsSecureConnection = true;
+        }
 
         _logger.LogDebug(
             "Adding session {SessionId} to transport {TransportId} ({TransportType})",

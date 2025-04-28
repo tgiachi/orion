@@ -42,7 +42,7 @@
         </PackageReference>
         <PackageReference Include="Jint" Version="4.2.2" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
-        <PackageReference Include="Scalar.AspNetCore" Version="2.2.0" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.2.1" />
         <PackageReference Include="Scriban" Version="6.2.1" />
         <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
@@ -52,6 +52,9 @@
     <ItemGroup>
         <None Remove="Assets\header.txt" />
         <EmbeddedResource Include="Assets\header.txt" />
+        <None Update="Assets\Web\**\*">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

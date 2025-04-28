@@ -18,9 +18,13 @@ namespace Orion.Server.Handlers;
 
 public class ChannelsHandler
     : BaseIrcCommandListener, IIrcCommandHandler<JoinCommand>, IIrcCommandHandler<PartCommand>,
-        IIrcCommandHandler<NamesCommand>, IIrcCommandHandler<ListCommand>,
+        IIrcCommandHandler<NamesCommand>,
+        IIrcCommandHandler<ListCommand>,
         IIrcCommandHandler<ModeCommand>,
-        IIrcCommandHandler<PrivMsgCommand>, IIrcCommandHandler<TopicCommand>, IEventBusListener<UserQuitEvent>,
+        IIrcCommandHandler<PrivMsgCommand>,
+        IIrcCommandHandler<TopicCommand>,
+        IIrcCommandHandler<KickCommand>,
+        IEventBusListener<UserQuitEvent>,
         IEventBusListener<JoinRequestEvent>
 {
     private readonly IChannelManagerService _channelManagerService;
@@ -38,10 +42,10 @@ public class ChannelsHandler
         RegisterCommandHandler<NamesCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<ListCommand>(this, ServerNetworkType.Clients);
         RegisterCommandHandler<ModeCommand>(this, ServerNetworkType.Clients);
+        RegisterCommandHandler<KickCommand>(this, ServerNetworkType.Clients);
 
         SubscribeToEventBus<UserQuitEvent>(this);
         SubscribeToEventBus<JoinRequestEvent>(this);
-
     }
 
     public async Task OnCommandReceivedAsync(
@@ -269,7 +273,7 @@ public class ChannelsHandler
                 return;
             }
 
-            if (!channelData.GetMembership(session.NickName).IsOperator)
+            if (!channelData.GetMembership(session.NickName).IsOperator && !session.IsOperator)
             {
                 await session.SendCommandAsync(
                     ErrChanOpPrivsNeeded.Create(
@@ -316,5 +320,55 @@ public class ChannelsHandler
         }
 
         await OnCommandReceivedAsync(session, ServerNetworkType.Clients, JoinCommand.Create(@event.Channels));
+    }
+
+    public async Task OnCommandReceivedAsync(
+        IrcUserSession session, ServerNetworkType serverNetworkType, KickCommand command
+    )
+    {
+        if (!_channelManagerService.ChannelExists(command.Channel))
+        {
+            await session.SendCommandAsync(
+                ErrNoSuchChannel.Create(ServerHostName, session.NickName, command.Channel)
+            );
+            return;
+        }
+
+        var targetSession = GetSessionByNickName(command.Target);
+
+        if (targetSession == null)
+        {
+            await session.SendCommandAsync(
+                ErrNoSuchNick.Create(ServerHostName, command.Target, session.NickName)
+            );
+            return;
+        }
+
+        var channelData = _channelManagerService.GetChannel(command.Channel);
+
+        if (!channelData.GetMembership(session.NickName).IsOperator && !session.IsOperator)
+        {
+            await session.SendCommandAsync(
+                ErrChanOpPrivsNeeded.Create(ServerHostName, session.NickName, command.Channel)
+            );
+            return;
+        }
+
+        var kickCommand = KickCommand.Create(
+            ServerHostName,
+            command.Channel,
+            targetSession.NickName,
+            command.Reason
+        );
+
+
+        foreach (var member in channelData.GetMemberList())
+        {
+            var memberSession = GetSessionByNickName(member);
+            if (memberSession != null)
+            {
+                await memberSession.SendCommandAsync(kickCommand);
+            }
+        }
     }
 }

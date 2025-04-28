@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -104,10 +105,26 @@ public class Program
 
         builder.Services.AddHostedService<OrionHostedService>();
 
+        builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    "AllowLocalhost",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    }
+                );
+            }
+        );
+
         var app = builder.Build();
 
 
-        app.Map("/", () => Results.Text("Orion Server"));
+        app.UseCors("AllowLocalhost");
+
+        app.Map("/", () => Results.Redirect("/index.html"));
 
         app.MapOpenApi();
 
@@ -139,6 +156,14 @@ public class Program
             .MapStatus();
 
         app.MapOpenApi(_openApiPath);
+
+        //Get current Directory
+
+
+        var webRootPath = Path.Combine(Environment.CurrentDirectory, "Assets", "Web");
+
+
+        app.UseOrionSpa(webRootPath);
 
         app.Run();
     }

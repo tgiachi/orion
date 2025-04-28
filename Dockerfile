@@ -11,11 +11,16 @@ ARG BUILD_CONFIGURATION=Release
 ARG TARGETARCH
 WORKDIR /src
 COPY ["./", "./"]
-RUN dotnet restore "src/Orion.Server/Orion.Server.csproj" -a $TARGETARCH
-COPY . .
-WORKDIR "src/Orion.Server"
-RUN dotnet build "Orion.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build -a $TARGETARCH
+RUN apk add --no-cache nodejs npm
 
+COPY . .
+WORKDIR "src/orion-web-ui"
+RUN npm install -g vite
+RUN npm install
+RUN npm run build:server
+WORKDIR "/src/src/Orion.Server"
+RUN dotnet restore "Orion.Server.csproj" -a $TARGETARCH
+RUN dotnet build "Orion.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build -a $TARGETARCH
 # Publish image with single file
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
