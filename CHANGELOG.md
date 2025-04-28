@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.11.0"></a>
+## [0.11.0](https://www.github.com/tgiachi/orion/releases/tag/v0.11.0) (2025-04-28)
+
+### Features
+
+* **.gitignore:** add src/Orion.Server/Assets/Web to .gitignore to exclude it from version control ([6d2733c](https://www.github.com/tgiachi/orion/commit/6d2733c6dfc455a96b320f9207169b153d121c80))
+* **apiStore.ts:** add ApiStore class to handle API requests and error handling ([88089de](https://www.github.com/tgiachi/orion/commit/88089de923f9cef2c1f03b595bf192f446a49220))
+* **App.tsx:** add DashboardPage component and route to /dashboard path ([b7e7b15](https://www.github.com/tgiachi/orion/commit/b7e7b1505a12d92b448aeb6a724d2c84818fcfe0))
+* **App.tsx:** refactor App component to use react-router-dom for routing ([3944bc9](https://www.github.com/tgiachi/orion/commit/3944bc91bde245859671cce31e5e1ae979cf7327))
+* **ChannelData.cs:** add Members property to store channel members list for easier access ([87fa7f1](https://www.github.com/tgiachi/orion/commit/87fa7f1ebede4481b4274cc6f689c03fe507dbe0))
+* **ChannelsHandler.cs:** add support for handling KickCommand to manage kicking users from channels ([e9bfbdd](https://www.github.com/tgiachi/orion/commit/e9bfbdd7ff386b82ff887849225e910d1259f629))
+* **Dockerfile:** add npm install and build steps for orion-web-ui to support Vite ([d07fd14](https://www.github.com/tgiachi/orion/commit/d07fd1498e0e5abbadc2722ba0c7b34b5505b38b))
+* **IrcUserSession.cs:** add IsSecureConnection property to track secure connections ([11f6621](https://www.github.com/tgiachi/orion/commit/11f66217b47455256f9081f594563ab3c73ae3a4))
+* **orion-web-ui:** add new dependencies @emotion/styled, @mui/material, and @mui/x-date-pickers ([ad91065](https://www.github.com/tgiachi/orion/commit/ad91065e6513ba271495f37aec5af21653ec454a))
+* **orion-web-ui:** add postcss configuration for tailwindcss and autoprefixer ([9808ba1](https://www.github.com/tgiachi/orion/commit/9808ba193aa03a773b82e258e737d3daaaaba4c1))
+* **orion-web-ui:** update dependencies in package.json to use caret (^) for version ranges ([e58754f](https://www.github.com/tgiachi/orion/commit/e58754fba68a8cb3c4b6cc4e329f5ff83c03f219))
+* **orion-web-ui:** update package.json dependencies and devDependencies ([a0574e7](https://www.github.com/tgiachi/orion/commit/a0574e7341a8300de100be152b5093426ba5e0ec))
+* **VersionStatus.tsx:** update VersionStatus component to display the version information ([4cba241](https://www.github.com/tgiachi/orion/commit/4cba241c65abe25487e21f1c0b1ec8b350babef5))
+
+### Bug Fixes
+
+* **csproj:** update Serilog.Sinks.File package version to 7.0.0 for Orion.Core.Server project ([5fd64ad](https://www.github.com/tgiachi/orion/commit/5fd64adf945a7d0bdbcd93486c51f26b0881cd49))
+* **index.html:** update favicon path to be relative for better file structure ([d8f11b7](https://www.github.com/tgiachi/orion/commit/d8f11b7aa5d35169b13dc3f0af6b19ae90096043))
+
 <a name="0.10.0"></a>
 ## [0.10.0](https://www.github.com/tgiachi/orion/releases/tag/v0.10.0) (2025-04-23)
 
