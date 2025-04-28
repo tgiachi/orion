@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Metrics.ProcessQueue;
+using Orion.Core.Server.Interfaces.Config;
 using Orion.Core.Server.Interfaces.Services.System;
 
 namespace Orion.Core.Server.Services;
@@ -32,7 +33,7 @@ public class ProcessQueueService : IProcessQueueService
 
     // private readonly SemaphoreSlim _mainThreadSemaphore = new(1);
 
-    public ProcessQueueService(ILogger<ProcessQueueService> logger, OrionServerConfig config)
+    public ProcessQueueService(ILogger<ProcessQueueService> logger, IOrionServerConfig config)
     {
         Config = config.Process.ProcessQueue;
         _logger = logger;

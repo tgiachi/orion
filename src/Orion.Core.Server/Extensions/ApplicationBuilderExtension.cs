@@ -67,7 +67,7 @@ public static class ApplicationBuilderExtension
             directoriesConfig.LoadConfig<TConfig>(serviceCollection, parsedOptions.Value.ConfigFile);
 
 
-
+        serviceCollection.AddSingleton<IOrionServerConfig>(appContextData.Config);
         serviceCollection.AddSingleton<TConfig>(appContextData.Config);
 
         appContextData.Directories = directoriesConfig;
