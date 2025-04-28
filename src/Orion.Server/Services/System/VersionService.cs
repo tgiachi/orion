@@ -4,7 +4,7 @@ using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Options;
 using Orion.Core.Server.Interfaces.Services.System;
 
-namespace Orion.Core.Server.Services;
+namespace Orion.Server.Services.System;
 
 public class VersionService : IVersionService
 {
