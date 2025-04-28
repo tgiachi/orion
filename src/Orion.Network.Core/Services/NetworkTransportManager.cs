@@ -81,15 +81,14 @@ public class NetworkTransportManager : INetworkTransportManager
 
                     var transport = Transports.FirstOrDefault(t => t.Id == sessionTransportId);
 
-                    var bytes = Encoding.UTF8.GetBytes(message.Message, 0, message.Message.Length);
 
-
-                    _sessionsMetrics[message.SessionId].AddBytesOut(bytes.Length);
+                    _sessionsMetrics[message.SessionId].AddBytesOut(message.Message.Length);
                     _sessionsMetrics[message.SessionId].AddPacketsOut();
 
-                    await transport.Transport.SendAsync(message.SessionId, bytes);
+                    await transport.Transport.SendAsync(message.SessionId, message.Message);
 
-                    var sanitizedMessage = message.Message.Replace(Environment.NewLine, " ");
+                    var messageString = Encoding.UTF8.GetString(message.Message);
+                    var sanitizedMessage = messageString.Replace(Environment.NewLine, " ");
 
                     _logger.LogDebug(
                         "-> {IpEndpoint}- {SessionId} - {Type} - {Message}",
@@ -137,27 +136,27 @@ public class NetworkTransportManager : INetworkTransportManager
 
     private void TransportOnMessageReceived(string transportId, string sessionId, ReadOnlyMemory<byte> data)
     {
-        var messages = NewLineMessageParser.FastParseMessages(data);
 
-        foreach (var message in messages)
-        {
-            _sessionsMetrics[sessionId].AddBytesIn(data.Length);
-            _sessionsMetrics[sessionId].AddPacketsIn();
+        var messageString = Encoding.UTF8.GetString(data.Span).Replace(Environment.NewLine, " ");
 
-            var transport = Transports.FirstOrDefault(t => t.Id == transportId);
+        _sessionsMetrics[sessionId].AddBytesIn(data.Length);
+        _sessionsMetrics[sessionId].AddPacketsIn();
 
+        var transport = Transports.FirstOrDefault(t => t.Id == transportId);
 
-            _logger.LogDebug(
-                "<- {Endpoint} - {SessionId} - {Type} - {Message}",
-                _sessionsMetrics[sessionId].Endpoint,
-                sessionId.ToShortSessionId(),
-                transport.ServerNetworkType,
-                message
-            );
+        _logger.LogDebug(
+            "<- {Endpoint} - {SessionId} - {Type} - {Message}",
+            _sessionsMetrics[sessionId].Endpoint,
+            sessionId.ToShortSessionId(),
+            transport.ServerNetworkType,
+            messageString
+        );
 
-            var messageData = new NetworkMessageData(sessionId, message, transport.ServerNetworkType);
-            IncomingMessages.Writer.TryWrite(messageData);
-        }
+  ;
+
+        var messageData = new NetworkMessageData(sessionId, data.ToArray(), transport.ServerNetworkType);
+        IncomingMessages.Writer.TryWrite(messageData);
+        //}
     }
 
     private void TransportOnClientDisconnected(string transportId, string sessionId, string endpoint)
