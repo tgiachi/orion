@@ -1,5 +1,4 @@
 using System.Security.Authentication;
-
 using NetCoreServer;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Events.Server;
@@ -7,7 +6,6 @@ using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Listeners.EventBus;
 using Orion.Foundations.Extensions;
-
 using Orion.Foundations.Types;
 using Orion.Network.Core.Interfaces.Services;
 using Orion.Network.Tcp.Servers;

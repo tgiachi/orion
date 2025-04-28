@@ -5,7 +5,7 @@ using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Interfaces.Modules;
 using Orion.Core.Server.Interfaces.Services.System;
-
+using Orion.Core.Server.Services;
 using Orion.Irc.Core.Interfaces.Parser;
 using Orion.Irc.Core.Services;
 using Orion.Server.Services;

@@ -1,13 +1,13 @@
 using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Events.TextTemplate;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Listeners.EventBus;
-using Orion.Server.Converters;
 using Scriban;
 using Scriban.Runtime;
 using Scriban.Syntax;
 
-namespace Orion.Server.Services.System;
+namespace Orion.Core.Server.Services;
 
 public class TextTemplateService
     : ITextTemplateService, IEventBusListener<AddVariableEvent>, IEventBusListener<AddVariableBuilderEvent>
@@ -52,8 +52,7 @@ public class TextTemplateService
     {
         try
         {
-            // Parse il template
-            Template template = Template.Parse(text);
+            var template = Template.Parse(text);
 
 
             var scriptContext = new TemplateContext();
@@ -78,7 +77,7 @@ public class TextTemplateService
                 scriptObject.Add("context", context);
             }
 
-            return MircNotationConverter.Convert(template.Render(scriptContext));
+            return template.Render(scriptContext);
         }
         catch (Exception ex)
         {

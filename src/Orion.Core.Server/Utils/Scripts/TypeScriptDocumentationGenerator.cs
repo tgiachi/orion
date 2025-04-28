@@ -5,7 +5,7 @@ using Orion.Core.Server.Attributes.Scripts;
 using Orion.Core.Server.Data.Internal;
 using Orion.Foundations.Extensions;
 
-namespace Orion.Server.Utils.Scripts;
+namespace Orion.Core.Server.Utils.Scripts;
 
 public static class TypeScriptDocumentationGenerator
 {

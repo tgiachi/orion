@@ -1,13 +1,13 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reactive.Linq;
+using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Events.Scheduler;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Internal.Scheduler;
 using Orion.Core.Server.Listeners.EventBus;
 
-
-namespace Orion.Server.Services.System;
+namespace Orion.Core.Server.Services;
 
 public class SchedulerSystemService : ISchedulerSystemService, IEventBusListener<AddSchedulerJobEvent>
 {

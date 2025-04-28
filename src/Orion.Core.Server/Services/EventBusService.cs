@@ -1,12 +1,13 @@
 using System.Collections.Concurrent;
 using System.Reactive.Subjects;
 using System.Threading.Tasks.Dataflow;
+using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Listeners.EventBus;
 
-namespace Orion.Server.Services.System;
+namespace Orion.Core.Server.Services;
 
 public class EventBusService : IEventBusService
 {

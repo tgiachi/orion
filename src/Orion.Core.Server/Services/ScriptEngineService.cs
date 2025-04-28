@@ -1,7 +1,7 @@
 using System.Reflection;
-
 using Jint;
 using Jint.Runtime.Interop;
+using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Attributes.Scripts;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Internal;
@@ -9,11 +9,10 @@ using Orion.Core.Server.Events.Server;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Listeners.EventBus;
 using Orion.Core.Server.Types;
+using Orion.Core.Server.Utils.Scripts;
 using Orion.Foundations.Extensions;
 
-using Orion.Server.Utils.Scripts;
-
-namespace Orion.Server.Services.System;
+namespace Orion.Core.Server.Services;
 
 public class ScriptEngineService : IScriptEngineService, IEventBusListener<ServerReadyEvent>
 {
@@ -116,6 +115,16 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
     public Task StopAsync(CancellationToken cancellationToken = default)
     {
         return Task.CompletedTask;
+    }
+
+    public void AddInitScript(string script)
+    {
+        if (string.IsNullOrWhiteSpace(script))
+        {
+            throw new ArgumentException("Script cannot be null or empty", nameof(script));
+        }
+
+        _initScripts.Add(script);
     }
 
     public void ExecuteScript(string script)

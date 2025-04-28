@@ -1,8 +1,8 @@
-
+using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Foundations.Extensions;
 
-namespace Orion.Server.Services.System;
+namespace Orion.Core.Server.Services;
 
 public class EventDispatcherService : IEventDispatcherService
 {

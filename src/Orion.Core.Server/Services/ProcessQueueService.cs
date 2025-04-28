@@ -3,13 +3,13 @@ using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks.Dataflow;
+using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Metrics.ProcessQueue;
 using Orion.Core.Server.Interfaces.Services.System;
 
-
-namespace Orion.Server.Services.System;
+namespace Orion.Core.Server.Services;
 
 public class ProcessQueueService : IProcessQueueService
 {

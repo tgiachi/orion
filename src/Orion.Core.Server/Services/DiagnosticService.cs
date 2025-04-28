@@ -1,14 +1,14 @@
 using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Metrics.Diagnostic;
 using Orion.Core.Server.Events.Diagnostic;
 using Orion.Core.Server.Interfaces.Services.System;
 
-
-namespace Orion.Server.Services.System;
+namespace Orion.Core.Server.Services;
 
 public class DiagnosticService : IDiagnosticService
 {
