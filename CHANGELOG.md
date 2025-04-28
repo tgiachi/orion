@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.13.0"></a>
+## [0.13.0](https://www.github.com/tgiachi/orion/releases/tag/v0.13.0) (2025-04-28)
+
+### Features
+
+* **AddIrcCommandToParserExtension.cs:** add extension method to IServiceCollection to register IRC commands ([c0924c3](https://www.github.com/tgiachi/orion/commit/c0924c35dbcc12722438e57658653ef71000fa32))
+* **DefaultOrionScriptsModule.cs:** add new module for registering script services ([3f15d6a](https://www.github.com/tgiachi/orion/commit/3f15d6a5237a821fac21c32ac008407f4b8bf7df))
+
 <a name="0.12.3"></a>
 ## [0.12.3](https://www.github.com/tgiachi/orion/releases/tag/v0.12.3) (2025-04-28)
 
