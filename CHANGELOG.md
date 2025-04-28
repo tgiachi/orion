@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.15.0"></a>
+## [0.15.0](https://www.github.com/tgiachi/orion/releases/tag/v0.15.0) (2025-04-28)
+
+### Features
+
+* **INetworkService.cs:** create a new interface for network services to extend IOrionService ([f3c54df](https://www.github.com/tgiachi/orion/commit/f3c54df59fe6b62b18a4e73d3a79cd101df2ccce))
+
 <a name="0.14.3"></a>
 ## [0.14.3](https://www.github.com/tgiachi/orion/releases/tag/v0.14.3) (2025-04-28)
 
