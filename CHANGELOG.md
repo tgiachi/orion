@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.12.0"></a>
+## [0.12.0](https://www.github.com/tgiachi/orion/releases/tag/v0.12.0) (2025-04-28)
+
+### Features
+
+* added common service for server ([14c9f11](https://www.github.com/tgiachi/orion/commit/14c9f116c6beca092707f2c8053ab35cefe37472))
+* created new library for irc services ([ec7f307](https://www.github.com/tgiachi/orion/commit/ec7f3073048d80f1fa6982882dd2b6b98a7e908e))
+* **Orion.Core.Irc.Server.csproj:** update project metadata including version, authors, company, description, URLs, tags, license, and packaging settings ([948159a](https://www.github.com/tgiachi/orion/commit/948159a532fa79ba4338cf1a65ff21b907ae94e0))
+
+### Bug Fixes
+
+* **Orion.Core.Irc.Server.csproj:** update project version from 0.11.0 to 0.11.1 ([e13fd3e](https://www.github.com/tgiachi/orion/commit/e13fd3e232d2223e13c685f50533cef0d394fa51))
+
 <a name="0.11.1"></a>
 ## [0.11.1](https://www.github.com/tgiachi/orion/releases/tag/v0.11.1) (2025-04-28)
 
