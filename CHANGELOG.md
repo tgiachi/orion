@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.14.0"></a>
+## [0.14.0](https://www.github.com/tgiachi/orion/releases/tag/v0.14.0) (2025-04-28)
+
+### Features
+
+* **ApplicationBuilderExtension.cs:** add support for defaultDirectories parameter in InitApplication method to allow specifying default directories ([a543604](https://www.github.com/tgiachi/orion/commit/a5436044aec475acf991210b7db9d4362672f3eb))
+
 <a name="0.13.0"></a>
 ## [0.13.0](https://www.github.com/tgiachi/orion/releases/tag/v0.13.0) (2025-04-28)
 
