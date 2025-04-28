@@ -5,6 +5,7 @@ using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Internal;
+using Orion.Core.Server.Interfaces.Config;
 using Orion.Core.Server.Interfaces.Options;
 using Orion.Foundations.Extensions;
 using Orion.Foundations.Types;
@@ -19,7 +20,7 @@ public static class ApplicationBuilderExtension
     public static AppContextData<TOptions, TConfig> InitApplication<TOptions, TConfig>(
         this IServiceCollection serviceCollection, string appName
     )
-        where TOptions : IOrionServerCmdOptions where TConfig : OrionServerConfig, new()
+        where TOptions : IOrionServerCmdOptions where TConfig : class, IOrionServerConfig, new()
     {
         var env = Environment.GetEnvironmentVariable(appName.ToSnakeCaseUpper() + "_ENVIRONMENT");
         var appContextData = new AppContextData<TOptions, TConfig>
@@ -64,9 +65,6 @@ public static class ApplicationBuilderExtension
 
         appContextData.Config =
             directoriesConfig.LoadConfig<TConfig>(serviceCollection, parsedOptions.Value.ConfigFile);
-
-
-
 
 
         serviceCollection.AddSingleton<TConfig>(appContextData.Config);
