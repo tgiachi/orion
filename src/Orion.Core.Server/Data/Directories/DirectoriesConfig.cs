@@ -1,4 +1,3 @@
-using Orion.Core.Server.Types;
 using Orion.Foundations.Extensions;
 
 
@@ -7,10 +6,12 @@ namespace Orion.Core.Server.Data.Directories;
 public class DirectoriesConfig
 {
     private readonly string _rootDirectory;
+    private readonly string[] _directories;
 
-    public DirectoriesConfig(string rootDirectory)
+    public DirectoriesConfig(string rootDirectory, params string[] directories)
     {
         _rootDirectory = rootDirectory;
+        _directories = directories;
 
         Init();
     }
@@ -18,12 +19,19 @@ public class DirectoriesConfig
     public string Root => _rootDirectory;
 
 
-    public string this[DirectoryType directoryType] => GetPath(directoryType);
+    public string this[string directoryType] => GetPath(directoryType);
 
 
-    public string GetPath(DirectoryType directoryType)
+    public string GetPath(string directoryType)
     {
-        return Path.Combine(_rootDirectory, directoryType.ToString().ToSnakeCase());
+        var path = Path.Combine(_rootDirectory, directoryType.ToSnakeCase());
+
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        return path;
     }
 
     private void Init()
@@ -33,9 +41,7 @@ public class DirectoriesConfig
             Directory.CreateDirectory(_rootDirectory);
         }
 
-        var directoryTypes = Enum.GetValues<DirectoryType>().ToList();
-
-        directoryTypes.Remove(DirectoryType.Root);
+        var directoryTypes = _directories.ToList();
 
 
         foreach (var directory in directoryTypes)

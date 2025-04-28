@@ -6,7 +6,6 @@ using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Interfaces.Options;
-using Orion.Core.Server.Types;
 using Orion.Foundations.Extensions;
 using Orion.Foundations.Types;
 using Orion.Foundations.Utils;
@@ -88,7 +87,7 @@ public static class ApplicationBuilderExtension
             .WriteTo.File(
                 new JsonFormatter(),
                 rollingInterval: RollingInterval.Day,
-                path: Path.Combine(directoriesConfig[DirectoryType.Logs], $"{appName}_.log")
+                path: Path.Combine(directoriesConfig["Logs"], $"{appName}_.log")
             );
 
         if (parsedOptions.Value.IsDebug)
@@ -106,7 +105,7 @@ public static class ApplicationBuilderExtension
                 )
                 .MinimumLevel.Debug()
                 .WriteTo.File(
-                    Path.Combine(directoriesConfig[DirectoryType.Logs], "packets", "raw_.log"),
+                    Path.Combine(directoriesConfig["Logs"], "packets", "raw_.log"),
                     rollingInterval: RollingInterval.Day
                 )
             );

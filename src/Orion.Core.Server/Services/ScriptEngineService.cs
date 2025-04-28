@@ -8,7 +8,6 @@ using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Events.Server;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Listeners.EventBus;
-using Orion.Core.Server.Types;
 using Orion.Core.Server.Utils.Scripts;
 using Orion.Foundations.Extensions;
 
@@ -49,7 +48,7 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
         _jsEngine = new Engine(
             options =>
             {
-                options.EnableModules(directoriesConfig[DirectoryType.Scripts]);
+                options.EnableModules(directoriesConfig["Scripts"]);
                 options.AllowClr(GetType().Assembly);
                 options.SetTypeResolver(typeResolver);
             }
@@ -67,7 +66,7 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
 
     private void ExecuteBootstrap()
     {
-        foreach (var file in _initScripts.Select(s => Path.Combine(_directoriesConfig[DirectoryType.Scripts], s)))
+        foreach (var file in _initScripts.Select(s => Path.Combine(_directoriesConfig["Scripts"], s)))
         {
             if (File.Exists(file))
             {
@@ -103,7 +102,7 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
         _logger.LogDebug("Generating scripts documentation in scripts directory named 'index.d.ts'");
         var documentation = TypeScriptDocumentationGenerator.GenerateDocumentation(_scriptModules, _constants);
 
-        File.WriteAllText(Path.Combine(_directoriesConfig[DirectoryType.Scripts], "index.d.ts"), documentation);
+        File.WriteAllText(Path.Combine(_directoriesConfig["Scripts"], "index.d.ts"), documentation);
 
 
         ExecuteBootstrap();
