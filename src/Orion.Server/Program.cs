@@ -11,6 +11,7 @@ using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Data.Options;
 using Orion.Core.Server.Extensions;
+using Orion.Core.Server.Modules.Container;
 using Orion.Core.Server.Web.Extensions;
 using Orion.Server.Hosted;
 using Orion.Server.Modules.Container;
@@ -95,7 +96,8 @@ public class Program
             .AddModule<NetworkTransportModule>();
 
 
-        builder.Services.AddModule<DefaultScriptsModule>();
+        builder.Services.AddModule<DefaultOrionServiceModule>();
+        builder.Services.AddModule<DefaultOrionScriptsModule>();
 
         builder.Services.AddSingleton<IrcCommandListenerContext>();
 

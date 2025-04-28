@@ -1,7 +1,7 @@
+using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Attributes.Scripts;
 
-
-namespace Orion.Server.Modules.Scripts;
+namespace Orion.Core.Server.Modules.Scripts;
 
 [ScriptModule("logger")]
 public class JsLoggerModule

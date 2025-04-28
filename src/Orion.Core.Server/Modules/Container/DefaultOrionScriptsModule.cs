@@ -1,11 +1,11 @@
+using Microsoft.Extensions.DependencyInjection;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Interfaces.Modules;
+using Orion.Core.Server.Modules.Scripts;
 
-using Orion.Server.Modules.Scripts;
+namespace Orion.Core.Server.Modules.Container;
 
-namespace Orion.Server.Modules.Container;
-
-public class DefaultScriptsModule : IOrionContainerModule
+public class DefaultOrionScriptsModule : IOrionContainerModule
 {
     public IServiceCollection RegisterServices(IServiceCollection services)
     {

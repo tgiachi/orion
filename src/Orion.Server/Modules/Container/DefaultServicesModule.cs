@@ -33,15 +33,9 @@ public class DefaultServicesModule : IOrionContainerModule
             .AddService<IIrcCommandParser, IrcCommandParser>();
 
         return services
-            .AddService<IEventBusService, EventBusService>()
-            .AddService<IDiagnosticService, DiagnosticService>()
-            .AddService<ITextTemplateService, TextTemplateService>()
-            .AddService<ISchedulerSystemService, SchedulerSystemService>()
-            .AddService<IEventDispatcherService, EventDispatcherService>()
-            .AddService<IScriptEngineService, ScriptEngineService>()
+
             .AddService<INetworkService, NetworkService>()
-            .AddService<IVersionService, VersionService>()
-            .AddService<IProcessQueueService, ProcessQueueService>();
+            .AddService<IVersionService, VersionService>();
 
     }
 }

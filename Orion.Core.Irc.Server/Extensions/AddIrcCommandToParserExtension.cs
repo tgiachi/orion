@@ -1,8 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
+using Orion.Core.Server.Extensions;
 using Orion.Irc.Core.Data.Internal;
 using Orion.Irc.Core.Interfaces.Commands;
 
-namespace Orion.Core.Server.Extensions;
+namespace Orion.Core.Irc.Server.Extensions;
 
 public static class AddIrcCommandToParserExtension
 {
