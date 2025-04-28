@@ -30,7 +30,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Orion.Foundations\Orion.Foundations.csproj" />
-        <ProjectReference Include="..\Orion.Irc.Core\Orion.Irc.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
