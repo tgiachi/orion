@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Orion.Core.Server.Data.Rest;
+using Orion.Core.Irc.Server.Data.Rest;
+using Orion.Core.Irc.Server.Interfaces.Services.System;
 using Orion.Core.Server.Interfaces.Services.System;
 
 namespace Orion.Server.Routes;

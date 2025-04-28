@@ -1,6 +1,6 @@
+using Orion.Core.Irc.Server.Data.Sessions;
+using Orion.Core.Irc.Server.Interfaces.Services.Irc;
 using Orion.Core.Server.Data.Internal;
-using Orion.Core.Server.Data.Sessions;
-using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Core.Server.Interfaces.Services.System;
 
 namespace Orion.Server.Routes;

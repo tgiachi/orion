@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Events\" />
+      <Folder Include="Interfaces\Listeners\EventBus\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\src\Orion.Core.Server\Orion.Core.Server.csproj" />
+      <ProjectReference Include="..\src\Orion.Irc.Core\Orion.Irc.Core.csproj" />
+      <ProjectReference Include="..\src\Orion.Network.Core\Orion.Network.Core.csproj" />
+    </ItemGroup>
+
+</Project>

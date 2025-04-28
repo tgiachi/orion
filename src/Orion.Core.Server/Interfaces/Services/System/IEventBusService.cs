@@ -1,4 +1,4 @@
-using Orion.Core.Server.Interfaces.Listeners.EventBus;
+using Orion.Core.Server.Listeners.EventBus;
 
 namespace Orion.Core.Server.Interfaces.Services.System;
 

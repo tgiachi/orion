@@ -3,7 +3,6 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks.Dataflow;
 using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Internal;
-using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Listeners.EventBus;
 

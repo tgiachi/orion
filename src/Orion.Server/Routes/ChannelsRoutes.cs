@@ -1,5 +1,5 @@
-using Orion.Core.Server.Data.Rest;
-using Orion.Core.Server.Interfaces.Services.Irc;
+using Orion.Core.Irc.Server.Data.Rest;
+using Orion.Core.Irc.Server.Interfaces.Services.Irc;
 using Orion.Irc.Core.Data.Channels;
 
 namespace Orion.Server.Routes;

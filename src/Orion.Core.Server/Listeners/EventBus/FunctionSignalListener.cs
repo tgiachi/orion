@@ -1,5 +1,3 @@
-using Orion.Core.Server.Interfaces.Listeners.EventBus;
-
 namespace Orion.Core.Server.Listeners.EventBus;
 
 /// <summary>

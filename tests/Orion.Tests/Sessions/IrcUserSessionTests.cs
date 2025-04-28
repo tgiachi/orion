@@ -1,12 +1,12 @@
 using Moq;
 using NUnit.Framework;
-using Orion.Core.Server.Data.Sessions;
-using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Irc.Core.Commands.Replies;
 using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Network.Core.Interfaces.Services;
 using System;
 using System.Threading.Tasks;
+using Orion.Core.Irc.Server.Data.Sessions;
+using Orion.Core.Irc.Server.Interfaces.Services.Irc;
 
 namespace Orion.Tests.Sessions;
 

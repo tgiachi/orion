@@ -1,8 +1,7 @@
 using System.Collections.Concurrent;
 using Orion.Core.Server.Events.TextTemplate;
-using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Core.Server.Interfaces.Services.System;
-
+using Orion.Core.Server.Listeners.EventBus;
 using Orion.Server.Converters;
 using Scriban;
 using Scriban.Runtime;

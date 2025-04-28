@@ -1,5 +1,4 @@
-using Orion.Core.Server.Interfaces.Listeners;
-using Orion.Core.Server.Interfaces.Listeners.Commands;
+using Orion.Core.Irc.Server.Interfaces.Listeners.Commands;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Interfaces.Commands;
 

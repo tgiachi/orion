@@ -2,9 +2,9 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using Orion.Core.Server.Events.Scheduler;
-using Orion.Core.Server.Interfaces.Listeners.EventBus;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Internal.Scheduler;
+using Orion.Core.Server.Listeners.EventBus;
 
 
 namespace Orion.Server.Services.System;

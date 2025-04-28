@@ -3,9 +3,10 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Orion.Core.Irc.Server.Data.Rest;
+using Orion.Core.Irc.Server.Interfaces.Services.System;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Config.Sections;
-using Orion.Core.Server.Data.Rest;
 using Orion.Core.Server.Interfaces.Services.System;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 

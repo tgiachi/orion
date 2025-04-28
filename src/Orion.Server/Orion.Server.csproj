@@ -26,6 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Orion.Core.Irc.Server\Orion.Core.Irc.Server.csproj" />
         <ProjectReference Include="..\Orion.Core.Server.Web\Orion.Core.Server.Web.csproj" />
         <ProjectReference Include="..\Orion.Core.Server\Orion.Core.Server.csproj" />
         <ProjectReference Include="..\Orion.Foundations\Orion.Foundations.csproj" />
