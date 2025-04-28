@@ -1,3 +1,4 @@
+using Orion.Core.Irc.Server.Data.Internal;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Events.Server;
 using Orion.Core.Server.Interfaces.Services.Base;

@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.IdentityModel.Tokens;
+using Orion.Core.Irc.Server.Data.Internal;
+using Orion.Core.Irc.Server.Extensions;
 using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Config.Sections;
 using Orion.Core.Server.Data.Internal;

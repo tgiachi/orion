@@ -1,9 +1,10 @@
-using Orion.Core.Server.Data.Channels;
+using Orion.Core.Irc.Server.Data.Channels;
+using Orion.Core.Irc.Server.Data.Exceptions.Channels;
+using Orion.Core.Irc.Server.Data.Internal;
+using Orion.Core.Irc.Server.Data.Sessions;
+using Orion.Core.Irc.Server.Events.Irc.Channels;
+using Orion.Core.Irc.Server.Interfaces.Services.Irc;
 using Orion.Core.Server.Data.Internal;
-using Orion.Core.Server.Data.Sessions;
-using Orion.Core.Server.Events.Irc.Channels;
-using Orion.Core.Server.Exceptions.Channels;
-using Orion.Core.Server.Interfaces.Services.Irc;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Errors;

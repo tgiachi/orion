@@ -1,7 +1,8 @@
+using Orion.Core.Irc.Server.Data.Internal;
+using Orion.Core.Irc.Server.Data.Sessions;
+using Orion.Core.Irc.Server.Handlers.Base;
+using Orion.Core.Irc.Server.Interfaces.Listeners.Commands;
 using Orion.Core.Server.Data.Internal;
-using Orion.Core.Server.Data.Sessions;
-using Orion.Core.Server.Handlers.Base;
-using Orion.Core.Server.Interfaces.Listeners.Commands;
 using Orion.Foundations.Types;
 using Orion.Irc.Core.Commands;
 using Orion.Irc.Core.Commands.Replies;
