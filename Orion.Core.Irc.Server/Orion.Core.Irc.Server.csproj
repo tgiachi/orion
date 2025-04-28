@@ -3,7 +3,24 @@
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
+        <Version>0.11.0</Version>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Authors>tgiachi</Authors>
+        <Company>tgiachi</Company>
+        <Description>Web API and HTTP interface for Orion IRC Server</Description>
+        <PackageProjectUrl>https://github.com/tgiachi/orion</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/tgiachi/orion</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>irc;server;orion;web;api;http</PackageTags>
+        <PackageIcon>orion_nuget_logo.png</PackageIcon>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,6 +32,10 @@
       <ProjectReference Include="..\src\Orion.Core.Server\Orion.Core.Server.csproj" />
       <ProjectReference Include="..\src\Orion.Irc.Core\Orion.Irc.Core.csproj" />
       <ProjectReference Include="..\src\Orion.Network.Core\Orion.Network.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\assets\orion_nuget_logo.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
