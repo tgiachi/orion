@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.16.0"></a>
+## [0.16.0](https://www.github.com/tgiachi/orion/releases/tag/v0.16.0) (2025-04-28)
+
+### Features
+
+* **NetworkMessageData:** change 'message' property type from string to byte[] for better performance and compatibility ([7277d07](https://www.github.com/tgiachi/orion/commit/7277d07b744730dc539c6da94f7cae7a3dbfadb7))
+
 <a name="0.15.0"></a>
 ## [0.15.0](https://www.github.com/tgiachi/orion/releases/tag/v0.15.0) (2025-04-28)
 
