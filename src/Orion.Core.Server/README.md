@@ -8,6 +8,15 @@ Server-side core functionality for the Orion IRC Server project.
 
 > IRC is not dead, long live IRC!
 
+
+## 🔍 Frontend Developers Wanted!
+
+I'm looking for frontend developers interested in creating a modern web admin interface and web-based IRC client for Orion IRC Server. Experience with React desired!
+
+If interested, please open an issue or contact us via GitHub.
+
+---
+
 ## About
 
 Orion.Core.Server provides the essential server-side infrastructure for building a full-featured IRC server. This library includes services, interfaces, configuration handling, event dispatching, and the modular architecture that makes Orion IRC Server flexible and extensible.
@@ -17,7 +26,7 @@ Orion.Core.Server provides the essential server-side infrastructure for building
 ```bash
 dotnet add package Orion.Core.Server
 ```
-
+a
 Or using the Package Manager Console:
 
 ```
