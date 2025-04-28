@@ -60,9 +60,14 @@ public static class ApplicationBuilderExtension
 
         var directoriesConfig = new DirectoriesConfig(parsedOptions.Value.RootDirectory, defaultDirectories);
 
+        if (parsedOptions.Value.ConfigFile == null)
+        {
+            parsedOptions.Value.ConfigFile = appName.ToSnakeCase() + ".yml";
+        }
+
         serviceCollection.AddSingleton(directoriesConfig);
         appContextData.Config =
-            directoriesConfig.LoadConfig<TConfig>(serviceCollection, parsedOptions.Value.ConfigFile ?? appName.ToSnakeCase() + ".yml");
+            directoriesConfig.LoadConfig<TConfig>(serviceCollection, parsedOptions.Value.ConfigFile);
 
 
         serviceCollection.AddSingleton<IOrionServerConfig>(appContextData.Config);

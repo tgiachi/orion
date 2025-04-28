@@ -4,7 +4,7 @@ namespace Orion.Core.Server.Interfaces.Options;
 
 public interface IOrionServerCmdOptions
 {
-    string ConfigFile { get; set; }
+    string? ConfigFile { get; set; }
 
     string RootDirectory { get; set; }
 
