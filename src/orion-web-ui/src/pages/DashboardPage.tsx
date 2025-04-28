@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite";
 import DefaultLayout from "../layouts/DefaultLayout";
 
-export const IndexPage = observer(() => {
+export const DashboardPage = observer(() => {
   return <DefaultLayout>
-    <span>Index</span>
+    <span>DashboardPage</span>
   </DefaultLayout>
 })

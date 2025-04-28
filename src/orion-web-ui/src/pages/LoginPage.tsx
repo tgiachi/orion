@@ -3,12 +3,14 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import LoginForm from "../components/LoginForm";
 import { useStore } from "../stores/rootStore";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = observer(() => {
 
   const [errorMessage, setErrorMessage] = useState('')
 
   const rootStore = useStore()
+  const navigate = useNavigate()
   const loginHandle = async (username: string, password: string) => {
 
     rootStore.loadingStore.setLoading("")
@@ -17,7 +19,7 @@ export const LoginPage = observer(() => {
     if (result) {
       console.log('OK')
       setErrorMessage('')
-
+      navigate('/dashboard')
     }
     else {
       console.log('Error')

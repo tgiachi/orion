@@ -55,7 +55,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, isLoading, errorMessage 
             />
             <Spacer y={2} />
             <Button type="submit" color="primary" fullWidth>
-              Accedi
+              Access
             </Button>
           </div>
         </form>
