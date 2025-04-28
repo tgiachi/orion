@@ -6,6 +6,7 @@ using Orion.Core.Server.Data.Config;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Metrics.Diagnostic;
 using Orion.Core.Server.Events.Diagnostic;
+using Orion.Core.Server.Interfaces.Config;
 using Orion.Core.Server.Interfaces.Services.System;
 
 namespace Orion.Core.Server.Services;
@@ -34,7 +35,7 @@ public class DiagnosticService : IDiagnosticService
 
     public DiagnosticService(
         ILogger<DiagnosticService> logger, ISchedulerSystemService schedulerService, DirectoriesConfig directoriesConfig,
-        IEventBusService eventBusService, OrionServerConfig orionServerConfig
+        IEventBusService eventBusService, IOrionServerConfig orionServerConfig
     )
     {
         _schedulerService = schedulerService;

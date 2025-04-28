@@ -5,4 +5,6 @@ namespace Orion.Core.Server.Interfaces.Config;
 public interface IOrionServerConfig
 {
     DebugConfig Debug { get; set; }
+
+    ProcessConfig Process { get; set; }
 }
