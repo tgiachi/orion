@@ -1,6 +1,7 @@
 using Orion.Core.Irc.Server.Data.Internal;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Events.Server;
+using Orion.Core.Server.Hosted;
 using Orion.Core.Server.Interfaces.Services.Base;
 using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Internal;
@@ -9,102 +10,36 @@ using Orion.Irc.Core.Data.Internal;
 
 namespace Orion.Server.Hosted;
 
-public class OrionHostedService : IHostedService
+public class OrionHostedService : BaseOrionHostedService
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly List<ServiceDefinitionObject> _serviceDefinitions;
-    private readonly IEventBusService _eventBusService;
-    private readonly ILogger _logger;
-
     private readonly List<IrcListenerDefinition> _ircCommandListeners;
 
 
     public OrionHostedService(
         ILogger<OrionHostedService> logger, List<ServiceDefinitionObject> serviceDefinitions,
-        IEventBusService eventBusService, IServiceProvider serviceProvider,
-        List<IrcListenerDefinition> ircCommandListeners
-    )
+        IEventBusService eventBusService, IServiceProvider serviceProvider, List<IrcListenerDefinition> ircCommandListeners
+    ) : base(logger, serviceDefinitions, eventBusService, serviceProvider)
     {
-        _serviceDefinitions = serviceDefinitions;
-        _eventBusService = eventBusService;
-        _serviceProvider = serviceProvider;
         _ircCommandListeners = ircCommandListeners;
-        _logger = logger;
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+
+    protected override async Task BeforeStartAsync()
     {
-        var serverContext = _serviceProvider.GetRequiredService<IrcServerContextData>();
-        var textService = _serviceProvider.GetRequiredService<ITextTemplateService>();
+        var serverContext = ServiceProvider.GetRequiredService<IrcServerContextData>();
+        var textService = ServiceProvider.GetRequiredService<ITextTemplateService>();
 
 
         textService.AddVariable("network_name", serverContext.NetworkName);
         textService.AddVariable("server_name", serverContext.ServerName);
         textService.AddVariable("server_started", serverContext.ServerStartTime);
-
-        foreach (var serviceDef in _serviceDefinitions)
-        {
-            try
-            {
-                var service = _serviceProvider.GetService(serviceDef.ServiceType);
-                if (service == null)
-                {
-                    _logger.LogError("Service {ServiceName} not registered", serviceDef.ServiceType.Name);
-                    throw new InvalidOperationException($"Service {serviceDef.ServiceType.Name} not registered");
-                }
-
-                _logger.LogDebug("Starting service {ServiceName}", serviceDef.ServiceType.Name);
-
-                if (service is IOrionStartService orionService)
-                {
-                    await orionService.StartAsync(cancellationToken);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error starting service {ServiceName}", serviceDef.ServiceType.Name);
-                throw;
-            }
-        }
-
-        await _eventBusService.PublishAsync(new ServerStartedEvent(), cancellationToken);
-        await _eventBusService.PublishAsync(new ServerReadyEvent(), cancellationToken);
-
-        _logger.LogInformation("Server started and ready");
-
-        foreach (var listenerType in _ircCommandListeners)
-        {
-            _serviceProvider.GetRequiredService(listenerType.Type);
-        }
     }
 
-    public async Task StopAsync(CancellationToken cancellationToken)
+    protected override async Task OnReady()
     {
-        await _eventBusService.PublishAsync(new ServerStoppingEvent(), cancellationToken);
-
-        foreach (var serviceDef in _serviceDefinitions)
+        foreach (var listenerType in _ircCommandListeners)
         {
-            try
-            {
-                var service = _serviceProvider.GetService(serviceDef.ServiceType);
-                if (service == null)
-                {
-                    _logger.LogError("Service {ServiceName} not registered", serviceDef.ServiceType.Name);
-                    continue;
-                }
-
-                _logger.LogDebug("Stopping service {ServiceName}", serviceDef.ServiceType.Name);
-
-
-                if (service is IOrionStartService orionService)
-                {
-                    await orionService.StopAsync(cancellationToken);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error stopping service {ServiceName}", serviceDef.ServiceType.Name);
-            }
+            ServiceProvider.GetRequiredService(listenerType.Type);
         }
     }
 }

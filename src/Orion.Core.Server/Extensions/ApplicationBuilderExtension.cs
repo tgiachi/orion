@@ -18,7 +18,7 @@ namespace Orion.Core.Server.Extensions;
 public static class ApplicationBuilderExtension
 {
     public static AppContextData<TOptions, TConfig> InitApplication<TOptions, TConfig>(
-        this IServiceCollection serviceCollection, string appName
+        this IServiceCollection serviceCollection, string appName, params string[]? defaultDirectories
     )
         where TOptions : IOrionServerCmdOptions where TConfig : class, IOrionServerConfig, new()
     {
@@ -58,13 +58,14 @@ public static class ApplicationBuilderExtension
         parsedOptions.Value.RootDirectory ??= Path.Combine(Directory.GetCurrentDirectory(), appName.ToSnakeCase() + "_root");
 
         serviceCollection.AddSingleton(parsedOptions);
+        defaultDirectories ??= new List<string>().ToArray();
 
-        var directoriesConfig = new DirectoriesConfig(parsedOptions.Value.RootDirectory);
+        var directoriesConfig = new DirectoriesConfig(parsedOptions.Value.RootDirectory, defaultDirectories);
 
         serviceCollection.AddSingleton(directoriesConfig);
-
         appContextData.Config =
             directoriesConfig.LoadConfig<TConfig>(serviceCollection, parsedOptions.Value.ConfigFile);
+
 
 
         serviceCollection.AddSingleton<TConfig>(appContextData.Config);
