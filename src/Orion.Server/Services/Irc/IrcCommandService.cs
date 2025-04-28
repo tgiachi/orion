@@ -1,3 +1,4 @@
+using System.Text;
 using Orion.Core.Irc.Server.Interfaces.Listeners.Commands;
 using Orion.Core.Irc.Server.Interfaces.Services.Irc;
 using Orion.Foundations.Observable;
@@ -7,6 +8,7 @@ using Orion.Irc.Core.Interfaces.Commands;
 using Orion.Irc.Core.Interfaces.Parser;
 using Orion.Network.Core.Data;
 using Orion.Network.Core.Interfaces.Services;
+using Orion.Network.Core.Parsers;
 using Orion.Server.CommandListener;
 
 namespace Orion.Server.Services.Irc;
@@ -58,30 +60,35 @@ public class IrcCommandService : IIrcCommandService, IDisposable
 
 
     private async Task HandleIncomingMessageAsync(
-        string sessionId, string message, ServerNetworkType serverNetworkType
+        string sessionId, byte[] buffer, ServerNetworkType serverNetworkType
     )
     {
-        var command = await _ircCommandParser.ParseAsync(message);
+        var messages = NewLineMessageParser.FastParseMessages(buffer);
 
-        var listeners = _commandListenerRegistry.GetListeners(serverNetworkType, command.Code);
-
-
-        foreach (var listener in listeners)
+        foreach (var message in messages)
         {
-            try
+            var command = await _ircCommandParser.ParseAsync(message);
+
+            var listeners = _commandListenerRegistry.GetListeners(serverNetworkType, command.Code);
+
+
+            foreach (var listener in listeners)
             {
-                await listener.OnCommandReceivedAsync(sessionId, serverNetworkType, command);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(
-                    ex,
-                    "Error while processing command {Command} for session {SessionId} in listener: {Listener}: {Message}",
-                    command.Code,
-                    sessionId,
-                    listener.GetType().Name,
-                    message
-                );
+                try
+                {
+                    await listener.OnCommandReceivedAsync(sessionId, serverNetworkType, command);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(
+                        ex,
+                        "Error while processing command {Command} for session {SessionId} in listener: {Listener}: {Message}",
+                        command.Code,
+                        sessionId,
+                        listener.GetType().Name,
+                        buffer
+                    );
+                }
             }
         }
     }
@@ -105,8 +112,11 @@ public class IrcCommandService : IIrcCommandService, IDisposable
         }
 
         var cmdString = await _ircCommandParser.SerializeAsync(command);
+
+        var buffer = Encoding.UTF8.GetBytes(cmdString);
+
         await _networkTransportManager.EnqueueMessageAsync(
-            new NetworkMessageData(sessionId, cmdString, ServerNetworkType.None)
+            new NetworkMessageData(sessionId, buffer, ServerNetworkType.None)
         );
     }
 
