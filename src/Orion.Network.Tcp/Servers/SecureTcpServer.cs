@@ -23,7 +23,7 @@ public class SecureTcpServer : SslServer, INetworkTransport
     public ServerNetworkType ServerNetworkType { get; }
     public string IpAddress { get; }
 
-    public SecureTcpServer(ServerNetworkType serverNetworkType, SslContext context, IPAddress address, int port) : base(
+    public SecureTcpServer(string id, ServerNetworkType serverNetworkType, SslContext context, IPAddress address, int port) : base(
         context,
         address,
         port

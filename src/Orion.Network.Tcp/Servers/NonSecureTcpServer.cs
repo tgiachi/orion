@@ -22,9 +22,9 @@ public class NonSecureTcpServer : TcpServer, INetworkTransport
     public ServerNetworkType ServerNetworkType { get; }
     public string IpAddress { get; }
 
-    public NonSecureTcpServer(ServerNetworkType serverNetworkType, IPAddress address, int port) : base(address, port)
+    public NonSecureTcpServer(string id, ServerNetworkType serverNetworkType, IPAddress address, int port) : base(address, port)
     {
-        Id = Guid.NewGuid().ToString();
+        Id = id;
         Name = "NonSecureTcpServer";
         IpAddress = address.ToString();
         ServerNetworkType = serverNetworkType;
