@@ -26,7 +26,9 @@ public abstract class BaseOrionHostedService : IHostedService
         EventBusService = eventBusService;
         ServiceProvider = serviceProvider;
         Logger = logger;
+
     }
+
 
 
     public async Task StartAsync(CancellationToken cancellationToken)

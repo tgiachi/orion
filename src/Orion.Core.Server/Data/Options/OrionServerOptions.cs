@@ -8,7 +8,7 @@ namespace Orion.Core.Server.Data.Options;
 public class OrionServerOptions : IOrionServerCmdOptions
 {
     [Option('c', "config", Required = false, HelpText = "Path to the configuration file.")]
-    public string ConfigFile { get; set; } = "orion.yml";
+    public string? ConfigFile { get; set; } = null;
 
     [Option('r', "root-directory", Required = false, HelpText = "Root directory for the server.")]
     public string RootDirectory { get; set; } = null!;
