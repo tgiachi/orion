@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.18.0"></a>
+## [0.18.0](https://www.github.com/tgiachi/orion/releases/tag/v0.18.0) (2025-04-29)
+
+### Features
+
+* **AddNetworkSessionServiceExtension.cs:** add extension method to add network session service to service collection ([670e78c](https://www.github.com/tgiachi/orion/commit/670e78c583c45510d8ad17d73371406e0e216df8))
+
 <a name="0.17.0"></a>
 ## [0.17.0](https://www.github.com/tgiachi/orion/releases/tag/v0.17.0) (2025-04-29)
 
