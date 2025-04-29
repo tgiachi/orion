@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.17.0"></a>
+## [0.17.0](https://www.github.com/tgiachi/orion/releases/tag/v0.17.0) (2025-04-29)
+
+### Features
+
+* **ByteUtilsMethodEx.cs:** add HumanizedContent method to convert byte array to a human-readable string ([bd212fd](https://www.github.com/tgiachi/orion/commit/bd212fdda035921c1f428e3227f0e7b07f1b87b9))
+
 <a name="0.16.0"></a>
 ## [0.16.0](https://www.github.com/tgiachi/orion/releases/tag/v0.16.0) (2025-04-28)
 
