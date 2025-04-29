@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Orion.Foundations.Extensions;
 
 public static class ByteUtilsMethodEx
@@ -29,5 +31,34 @@ public static class ByteUtilsMethodEx
     /// <param name="value"></param>
     /// <returns></returns>
     public static string GetMd5Checksum(this string value) => System.Text.Encoding.UTF8.GetBytes(value).GetMd5Checksum();
+
+
+
+    /// <summary>
+    ///  Convert a byte array to a human readable string
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static string HumanizedContent(this byte[] value)
+    {
+        if (value == null || value.Length == 0)
+        {
+            return string.Empty;
+        }
+
+        var sb = new StringBuilder();
+        foreach (var b in value)
+        {
+            sb.Append(b.ToString("[0x{b:X2}],"));
+        }
+
+        // Remove the last comma
+        if (sb.Length > 0)
+        {
+            sb.Remove(sb.Length - 1, 1);
+        }
+
+        return sb.ToString();
+    }
 }
 
