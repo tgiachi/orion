@@ -22,6 +22,14 @@ public class DirectoriesConfig
     public string this[string directoryType] => GetPath(directoryType);
 
 
+
+    public string this[Enum directoryType] => GetPath(directoryType.ToString());
+
+    public string GetPath<TEnum>(TEnum value) where TEnum : struct, Enum
+    {
+        return GetPath(Enum.GetName(value));
+    }
+
     public string GetPath(string directoryType)
     {
         var path = Path.Combine(_rootDirectory, directoryType.ToSnakeCase());
