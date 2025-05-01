@@ -4,7 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.19.0</Version>
+        <Version>0.19.1</Version>
         <Authors>tgiachi</Authors>
         <Company>tgiachi</Company>
         <Description>Networking abstractions for Orion IRC Server</Description>
