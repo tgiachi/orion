@@ -49,4 +49,14 @@ public static class AddOrionServiceExtension
     {
         return services.AddService(typeof(TService), typeof(TImplementation), lifetimeType);
     }
+
+    public static IServiceCollection AddService<TService>(
+        this IServiceCollection services,
+        ServiceLifetimeType lifetimeType = ServiceLifetimeType.Singleton
+    )
+        where TService : class
+
+    {
+        return services.AddService(typeof(TService), typeof(TService), lifetimeType);
+    }
 }
