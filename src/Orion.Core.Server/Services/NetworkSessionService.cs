@@ -48,9 +48,10 @@ public class NetworkSessionService<TSession> : INetworkSessionService<TSession> 
     public TSession AddSession(string? sessionId = null)
     {
         var session = _sessionsObjectPool.Get();
-        session.Id = sessionId ?? Guid.NewGuid().ToString();
 
         session.Initialize();
+
+        session.Id = sessionId ?? Guid.NewGuid().ToString();
 
         if (_sessions.TryAdd(session.Id, session))
         {
