@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.19.0"></a>
+## [0.19.0](https://www.github.com/tgiachi/orion/releases/tag/v0.19.0) (2025-05-01)
+
+### Features
+
+* **Orion.Core.Server:** add overloaded method to AddService extension for easier service registration ([e5105a9](https://www.github.com/tgiachi/orion/commit/e5105a92594c124e1b4105c93dac9b38891a9eb7))
+
 <a name="0.18.1"></a>
 ## [0.18.1](https://www.github.com/tgiachi/orion/releases/tag/v0.18.1) (2025-04-30)
 
