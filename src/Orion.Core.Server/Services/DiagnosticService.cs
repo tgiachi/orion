@@ -59,7 +59,7 @@ public class DiagnosticService : IDiagnosticService, IMetricsProvider
 
     public DiagnosticService(
         ILogger<DiagnosticService> logger, ISchedulerSystemService schedulerService, DirectoriesConfig directoriesConfig,
-        IEventBusService eventBusService, IOrionServerConfig orionServerConfig,
+        IEventBusService eventBusService,
         DiagnosticServiceConfig diagnosticServiceConfig
     )
     {
@@ -69,7 +69,7 @@ public class DiagnosticService : IDiagnosticService, IMetricsProvider
         _logger = logger;
 
         _eventBusService.Subscribe<RegisterMetricEvent>(OnRegisterMetricEvent);
-        PidFilePath = Path.Combine(directoriesConfig.Root, orionServerConfig.Process.PidFile);
+        PidFilePath = Path.Combine(directoriesConfig.Root, _diagnosticServiceConfig.PidFileName);
         _currentProcess = Process.GetCurrentProcess();
 
         // Initialize GC collection counts
@@ -101,7 +101,7 @@ public class DiagnosticService : IDiagnosticService, IMetricsProvider
         await _schedulerService.RegisterJob(
             "diagnostic_metrics",
             CollectMetricsAsync,
-            TimeSpan.FromSeconds(_diagnosticServiceConfig.MetricsInterval)
+            TimeSpan.FromSeconds(_diagnosticServiceConfig.MetricsIntervalInSeconds)
         );
 
         _logger.LogInformation("Diagnostic service started. PID: {Pid}", _currentProcess.Id);

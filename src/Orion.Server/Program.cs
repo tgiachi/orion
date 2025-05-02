@@ -101,6 +101,7 @@ public class Program
         builder.Services.AddModule<DefaultOrionScriptsModule>();
 
         builder.Services
+            .AddDiagnosticService()
             .AddEventBusService()
             .AddProcessQueueService()
             .AddScriptEngineService();

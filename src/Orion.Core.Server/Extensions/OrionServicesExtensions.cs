@@ -20,7 +20,7 @@ public static class OrionServicesExtensions
     {
         config ??= new DiagnosticServiceConfig();
         services.AddSingleton(config);
-        return services.AddService<IDiagnosticService, DiagnosticService>();
+        return services.AddService<IDiagnosticService, DiagnosticService>(priority: -1);
     }
 
     /// <summary>

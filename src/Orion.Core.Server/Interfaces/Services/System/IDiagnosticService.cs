@@ -4,14 +4,13 @@ using Orion.Core.Server.Interfaces.Services.Base;
 
 namespace Orion.Core.Server.Interfaces.Services.System;
 
-public interface IDiagnosticService : IOrionStartService
+public interface IDiagnosticService : IOrionService, IOrionStartService
 {
     /// <summary>
     ///  Get the current metrics
     /// </summary>
     /// <returns></returns>
     Task<List<MetricProviderData>> GetCurrentMetricsAsync();
-
 
     /// <summary>
     ///  Get the current metrics
@@ -25,8 +24,7 @@ public interface IDiagnosticService : IOrionStartService
     string PidFilePath { get; }
 
     /// <summary>
-    ///
-    ///
+    /// Collect metrics from all registered providers
     /// </summary>
     /// <returns></returns>
     Task CollectMetricsAsync();
