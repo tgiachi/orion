@@ -94,13 +94,13 @@ public class NetworkTransportManager : INetworkTransportManager
                     var messageString = Encoding.UTF8.GetString(message.Message);
                     var sanitizedMessage = messageString.Replace(Environment.NewLine, " ");
 
-                    _logger.LogDebug(
-                        "-> {IpEndpoint}- {SessionId} - {Type} - {Message}",
-                        _sessionsMetrics[message.SessionId].Endpoint,
-                        message.SessionId.ToShortSessionId(),
-                        message.ServerNetworkType,
-                        sanitizedMessage
-                    );
+                    // _logger.LogDebug(
+                    //     "-> {IpEndpoint}- {SessionId} - {Type} - {Message}",
+                    //     _sessionsMetrics[message.SessionId].Endpoint,
+                    //     message.SessionId.ToShortSessionId(),
+                    //     message.ServerNetworkType,
+                    //     sanitizedMessage
+                    // );
                 }
                 catch (Exception ex)
                 {
@@ -148,13 +148,13 @@ public class NetworkTransportManager : INetworkTransportManager
 
         var transport = Transports.FirstOrDefault(t => t.Id == transportId);
 
-        _logger.LogDebug(
-            "<- {Endpoint} - {SessionId} - {Type} - {Message}",
-            _sessionsMetrics[sessionId].Endpoint,
-            sessionId.ToShortSessionId(),
-            transport.ServerNetworkType,
-            messageString
-        );
+        // _logger.LogDebug(
+        //     "<- {Endpoint} - {SessionId} - {Type} - {Message}",
+        //     _sessionsMetrics[sessionId].Endpoint,
+        //     sessionId.ToShortSessionId(),
+        //     transport.ServerNetworkType,
+        //     messageString
+        // );
 
   ;
 
