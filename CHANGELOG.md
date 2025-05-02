@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.22.0"></a>
+## [0.22.0](https://www.github.com/tgiachi/orion/releases/tag/v0.22.0) (2025-05-02)
+
+### Features
+
+* **ByteUtilsMethodEx.cs:** add parameter maxBytes to HumanizedContent method to limit displayed bytes ([dd11bc8](https://www.github.com/tgiachi/orion/commit/dd11bc81b011a20298697960b8f139b041618527))
+
 <a name="0.21.0"></a>
 ## [0.21.0](https://www.github.com/tgiachi/orion/releases/tag/v0.21.0) (2025-05-02)
 
