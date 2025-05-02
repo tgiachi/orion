@@ -9,6 +9,13 @@ namespace Orion.Network.Core.Interfaces.Services;
 /// </summary>
 public interface INetworkTransportManager : IDisposable
 {
+    delegate void RawPacketOutHandler(string sessionId, string transportId, byte[] data);
+
+    delegate void RawPacketInHandler(string sessionId, string transportId, byte[] data);
+
+    event RawPacketOutHandler RawPacketOut;
+    event RawPacketInHandler RawPacketIn;
+
     /// <summary>
     ///  Notifies when a client connects to the network
     /// </summary>
