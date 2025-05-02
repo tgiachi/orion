@@ -26,16 +26,14 @@ public abstract class BaseOrionHostedService : IHostedService
         EventBusService = eventBusService;
         ServiceProvider = serviceProvider;
         Logger = logger;
-
     }
-
 
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         await BeforeStartAsync();
 
-        foreach (var serviceDef in _serviceDefinitions)
+        foreach (var serviceDef in _serviceDefinitions.OrderBy(serviceDef => serviceDef.Priority))
         {
             try
             {
@@ -46,7 +44,11 @@ public abstract class BaseOrionHostedService : IHostedService
                     throw new InvalidOperationException($"Service {serviceDef.ServiceType.Name} not registered");
                 }
 
-                Logger.LogDebug("Starting service {ServiceName}", serviceDef.ServiceType.Name);
+                Logger.LogDebug(
+                    "Starting service {ServiceName} [Priority: {Priority}]",
+                    serviceDef.ServiceType.Name,
+                    serviceDef.Priority
+                );
 
                 if (service is IOrionStartService orionService)
                 {
@@ -72,7 +74,7 @@ public abstract class BaseOrionHostedService : IHostedService
 
         await OnStopping();
 
-        foreach (var serviceDef in _serviceDefinitions)
+        foreach (var serviceDef in _serviceDefinitions.OrderByDescending(serviceDef => serviceDef.Priority))
         {
             try
             {

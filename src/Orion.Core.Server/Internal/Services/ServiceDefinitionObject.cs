@@ -13,5 +13,6 @@ public record ServiceDefinitionObject(
     Type ServiceType,
     Type ImplementationType,
     ServiceLifetimeType Lifetime,
-    bool IsAutoStart
+    bool IsAutoStart,
+    int Priority = 0
 );
