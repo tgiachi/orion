@@ -39,7 +39,7 @@ public static class ByteUtilsMethodEx
     /// <param name="value">The byte array to convert.</param>
     /// <param name="maxBytes">Maximum number of bytes to display. Default is 10.</param>
     /// <returns>A formatted string representation of the byte array.</returns>
-    public static string HumanizedContent(this byte[] value, int maxBytes = 10)
+    public static string HumanizedContent(this byte[] value, int maxBytes = 10, bool hex = true)
     {
         if (value == null || value.Length == 0)
         {
@@ -53,6 +53,18 @@ public static class ByteUtilsMethodEx
 
         for (int i = 0; i < bytesToShow; i++)
         {
+            var byteValue = value[i];
+
+            if (hex)
+            {
+                sb.Append($"0x{byteValue:X2}");
+            }
+            else
+            {
+                sb.Append(byteValue);
+            }
+
+
             sb.Append($"0x{value[i]:X2}");
 
             if (i < bytesToShow - 1)
