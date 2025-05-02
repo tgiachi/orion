@@ -26,6 +26,8 @@ public class NetworkTransportManager : INetworkTransportManager
 
     private readonly IDisposable _metricsSubscription;
 
+    public event INetworkTransportManager.RawPacketOutHandler? RawPacketOut;
+    public event INetworkTransportManager.RawPacketInHandler? RawPacketIn;
     public event INetworkTransport.ClientConnectedHandler? ClientConnected;
 
     public event INetworkTransport.ClientDisconnectedHandler? ClientDisconnected;
@@ -86,6 +88,8 @@ public class NetworkTransportManager : INetworkTransportManager
                     _sessionsMetrics[message.SessionId].AddPacketsOut();
 
                     await transport.Transport.SendAsync(message.SessionId, message.Message);
+
+                    RawPacketOut?.Invoke(message.SessionId, sessionTransportId, message.Message);
 
                     var messageString = Encoding.UTF8.GetString(message.Message);
                     var sanitizedMessage = messageString.Replace(Environment.NewLine, " ");
@@ -155,6 +159,9 @@ public class NetworkTransportManager : INetworkTransportManager
   ;
 
         var messageData = new NetworkMessageData(sessionId, data.ToArray(), transport.ServerNetworkType);
+
+        RawPacketIn?.Invoke(sessionId, transportId, data.ToArray());
+
         IncomingMessages.Writer.TryWrite(messageData);
         //}
     }

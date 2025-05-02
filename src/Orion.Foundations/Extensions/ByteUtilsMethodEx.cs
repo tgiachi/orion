@@ -33,32 +33,41 @@ public static class ByteUtilsMethodEx
     public static string GetMd5Checksum(this string value) => System.Text.Encoding.UTF8.GetBytes(value).GetMd5Checksum();
 
 
-
     /// <summary>
-    ///  Convert a byte array to a human readable string
+    /// Convert a byte array to a human readable string with specified byte limit.
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public static string HumanizedContent(this byte[] value)
+    /// <param name="value">The byte array to convert.</param>
+    /// <param name="maxBytes">Maximum number of bytes to display. Default is 10.</param>
+    /// <returns>A formatted string representation of the byte array.</returns>
+    public static string HumanizedContent(this byte[] value, int maxBytes = 10)
     {
         if (value == null || value.Length == 0)
         {
-            return string.Empty;
+            return "[]";
         }
 
         var sb = new StringBuilder();
-        foreach (var b in value)
+        sb.Append('[');
+
+        int bytesToShow = Math.Min(value.Length, maxBytes);
+
+        for (int i = 0; i < bytesToShow; i++)
         {
-            sb.Append(b.ToString("[0x{b:X2}],"));
+            sb.Append($"0x{value[i]:X2}");
+
+            if (i < bytesToShow - 1)
+            {
+                sb.Append(", ");
+            }
         }
 
-        // Remove the last comma
-        if (sb.Length > 0)
+        if (value.Length > maxBytes)
         {
-            sb.Remove(sb.Length - 1, 1);
+            sb.Append(", ...");
         }
+
+        sb.Append(']');
 
         return sb.ToString();
     }
 }
-
