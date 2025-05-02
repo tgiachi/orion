@@ -3,45 +3,72 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Data.Config;
+using Orion.Core.Server.Data.Config.Internal;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Metrics.Diagnostic;
 using Orion.Core.Server.Events.Diagnostic;
 using Orion.Core.Server.Interfaces.Config;
+using Orion.Core.Server.Interfaces.Metrics;
 using Orion.Core.Server.Interfaces.Services.System;
 
 namespace Orion.Core.Server.Services;
 
-public class DiagnosticService : IDiagnosticService
+public class DiagnosticService : IDiagnosticService, IMetricsProvider
 {
+    public string ProviderName => "SystemMetrics";
+
+
     public string PidFilePath { get; }
 
 
     private readonly ILogger<DiagnosticService> _logger;
 
     private readonly IEventBusService _eventBusService;
+    private readonly DiagnosticServiceConfig _diagnosticServiceConfig;
 
     private readonly ISchedulerSystemService _schedulerService;
-    private readonly Subject<DiagnosticMetrics> _metricsSubject = new();
+    private readonly Subject<MetricProviderData> _metricsSubject = new();
     private long _uptimeStopwatch;
     private readonly Process _currentProcess;
 
+
+    private readonly Dictionary<string, IMetricsProvider> _metricsProviders = new();
 
     private int _lastGcGen0;
     private int _lastGcGen1;
     private int _lastGcGen2;
 
-    public IObservable<DiagnosticMetrics> Metrics => _metricsSubject.AsObservable();
+    public Task<List<MetricProviderData>> GetCurrentMetricsAsync()
+    {
+        var metrics = GetAllProvidersMetrics();
+        var metricList = new List<MetricProviderData>();
+
+        foreach (var kvp in metrics)
+        {
+            if (kvp.Value is MetricProviderData metricData)
+            {
+                metricList.Add(metricData);
+            }
+        }
+
+        return Task.FromResult(metricList);
+    }
+
+    public IObservable<MetricProviderData> Metrics => _metricsSubject.AsObservable();
 
 
     public DiagnosticService(
         ILogger<DiagnosticService> logger, ISchedulerSystemService schedulerService, DirectoriesConfig directoriesConfig,
-        IEventBusService eventBusService, IOrionServerConfig orionServerConfig
+        IEventBusService eventBusService, IOrionServerConfig orionServerConfig,
+        DiagnosticServiceConfig diagnosticServiceConfig
     )
     {
         _schedulerService = schedulerService;
         _eventBusService = eventBusService;
+        _diagnosticServiceConfig = diagnosticServiceConfig;
         _logger = logger;
 
+        _eventBusService.Subscribe<RegisterMetricEvent>(OnRegisterMetricEvent);
         PidFilePath = Path.Combine(directoriesConfig.Root, orionServerConfig.Process.PidFile);
         _currentProcess = Process.GetCurrentProcess();
 
@@ -49,6 +76,18 @@ public class DiagnosticService : IDiagnosticService
         _lastGcGen0 = GC.CollectionCount(0);
         _lastGcGen1 = GC.CollectionCount(1);
         _lastGcGen2 = GC.CollectionCount(2);
+
+        RegisterMetricsProvider(this);
+    }
+
+    private async Task OnRegisterMetricEvent(RegisterMetricEvent @event)
+    {
+        RegisterMetricsProvider(@event.provider);
+    }
+
+    public object GetMetrics()
+    {
+        return CollectMetricsInternalAsync();
     }
 
 
@@ -62,7 +101,7 @@ public class DiagnosticService : IDiagnosticService
         await _schedulerService.RegisterJob(
             "diagnostic_metrics",
             CollectMetricsAsync,
-            TimeSpan.FromMinutes(1)
+            TimeSpan.FromSeconds(_diagnosticServiceConfig.MetricsInterval)
         );
 
         _logger.LogInformation("Diagnostic service started. PID: {Pid}", _currentProcess.Id);
@@ -75,19 +114,54 @@ public class DiagnosticService : IDiagnosticService
         _logger.LogInformation("Diagnostic service stopped");
     }
 
-    public async Task<DiagnosticMetrics> GetCurrentMetricsAsync()
-    {
-        return await CollectMetricsInternalAsync();
-    }
 
     public async Task CollectMetricsAsync()
     {
-        var metrics = await CollectMetricsInternalAsync();
-        _metricsSubject.OnNext(metrics);
-        await _eventBusService.PublishAsync(new DiagnosticMetricEvent(metrics));
+        foreach (var provider in _metricsProviders)
+        {
+            var metric = provider.Value.GetMetrics();
+
+            var metrics = new MetricProviderData(
+                provider.Key,
+                metric
+            );
+            _metricsSubject.OnNext(metrics);
+            await _eventBusService.PublishAsync(new DiagnosticMetricEvent(metrics));
+        }
     }
 
-    private async Task<DiagnosticMetrics> CollectMetricsInternalAsync()
+    public void RegisterMetricsProvider(IMetricsProvider provider)
+    {
+        ArgumentNullException.ThrowIfNull(provider);
+
+        if (!_metricsProviders.TryAdd(provider.ProviderName, provider))
+        {
+            throw new InvalidOperationException(
+                $"Metrics provider with name {provider.ProviderName} is already registered."
+            );
+        }
+    }
+
+    public void UnregisterMetricsProvider(string providerName)
+    {
+        if (!_metricsProviders.Remove(providerName))
+        {
+            throw new InvalidOperationException($"Metrics provider with name {providerName} is not registered.");
+        }
+
+        _logger.LogDebug("Unregistered metrics provider: {ProviderName}", providerName);
+    }
+
+    public Dictionary<string, object> GetAllProvidersMetrics()
+    {
+        return _metricsProviders
+            .ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.GetMetrics()
+            );
+    }
+
+    private DiagnosticMetrics CollectMetricsInternalAsync()
     {
         var currentGen0 = GC.CollectionCount(0);
         var currentGen1 = GC.CollectionCount(1);

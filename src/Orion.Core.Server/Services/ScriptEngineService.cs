@@ -3,6 +3,7 @@ using Jint;
 using Jint.Runtime.Interop;
 using Microsoft.Extensions.Logging;
 using Orion.Core.Server.Attributes.Scripts;
+using Orion.Core.Server.Data.Config.Internal;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Internal;
 using Orion.Core.Server.Events.Server;
@@ -17,7 +18,7 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
 {
     private readonly ILogger _logger;
 
-    private readonly List<string> _initScripts = ["bootstrap.js", "index.js", "orion.js"];
+    private readonly List<string> _initScripts;
 
     private readonly DirectoriesConfig _directoriesConfig;
     private readonly Engine _jsEngine;
@@ -27,12 +28,14 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
     private readonly Dictionary<string, Action<object[]>> _callbacks = new();
     private readonly Dictionary<string, object> _constants = new();
 
+    private readonly ScriptEngineConfig _scriptEngineConfig;
+
     private readonly IEventBusService _eventBusService;
 
 
     public ScriptEngineService(
         ILogger<ScriptEngineService> logger, DirectoriesConfig directoriesConfig, IServiceProvider serviceProvider,
-        List<ScriptModuleData> scriptModules, IEventBusService eventBusService
+        List<ScriptModuleData> scriptModules, IEventBusService eventBusService, ScriptEngineConfig scriptEngineConfig
     )
     {
         _logger = logger;
@@ -41,6 +44,9 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
         _scriptModules = scriptModules;
 
         _eventBusService = eventBusService;
+        _scriptEngineConfig = scriptEngineConfig;
+
+        _initScripts = _scriptEngineConfig.InitScriptsFileNames;
 
         var typeResolver = TypeResolver.Default;
 

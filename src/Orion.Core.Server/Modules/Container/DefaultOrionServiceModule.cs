@@ -11,12 +11,9 @@ public class DefaultOrionServiceModule : IOrionContainerModule
     public IServiceCollection RegisterServices(IServiceCollection services)
     {
         return services
-            .AddService<IEventBusService, EventBusService>()
-            .AddService<IDiagnosticService, DiagnosticService>()
             .AddService<ITextTemplateService, TextTemplateService>()
             .AddService<ISchedulerSystemService, SchedulerSystemService>()
             .AddService<IEventDispatcherService, EventDispatcherService>()
-            .AddService<IScriptEngineService, ScriptEngineService>()
-            .AddService<IProcessQueueService, ProcessQueueService>();
+            .AddService<IScriptEngineService, ScriptEngineService>();
     }
 }
