@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.21.0"></a>
+## [0.21.0](https://www.github.com/tgiachi/orion/releases/tag/v0.21.0) (2025-05-02)
+
+### Features
+
+* **AddOrionServiceExtension.cs:** add priority parameter to AddService method to allow specifying service priority ([cc56495](https://www.github.com/tgiachi/orion/commit/cc5649584638a146658f8a57f7dcebaed75c8612))
+* **DiagnosticServiceConfig.cs:** add PidFileName property to DiagnosticServiceConfig class with default value ([e903927](https://www.github.com/tgiachi/orion/commit/e903927284cf145c446082b0903d40807f724116))
+
 <a name="0.20.0"></a>
 ## [0.20.0](https://www.github.com/tgiachi/orion/releases/tag/v0.20.0) (2025-05-02)
 
