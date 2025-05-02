@@ -97,7 +97,13 @@ public class Program
 
 
         builder.Services.AddModule<DefaultOrionServiceModule>();
+
         builder.Services.AddModule<DefaultOrionScriptsModule>();
+
+        builder.Services
+            .AddEventBusService()
+            .AddProcessQueueService()
+            .AddScriptEngineService();
 
         builder.Services.AddSingleton<IrcCommandListenerContext>();
 

@@ -1,19 +1,52 @@
 using Orion.Core.Server.Data.Metrics.Diagnostic;
+using Orion.Core.Server.Interfaces.Metrics;
 using Orion.Core.Server.Interfaces.Services.Base;
 
 namespace Orion.Core.Server.Interfaces.Services.System;
 
 public interface IDiagnosticService : IOrionStartService
 {
-    // Get current metrics
-    Task<DiagnosticMetrics> GetCurrentMetricsAsync();
+    /// <summary>
+    ///  Get the current metrics
+    /// </summary>
+    /// <returns></returns>
+    Task<List<MetricProviderData>> GetCurrentMetricsAsync();
 
-    // Observable for continuous monitoring
-    IObservable<DiagnosticMetrics> Metrics { get; }
 
-    // Get the PID file path
+    /// <summary>
+    ///  Get the current metrics
+    /// </summary>
+    IObservable<MetricProviderData> Metrics { get; }
+
+
+    /// <summary>
+    ///  Get Pid file path
+    /// </summary>
     string PidFilePath { get; }
 
-    // Force collect diagnostics now
+    /// <summary>
+    ///
+    ///
+    /// </summary>
+    /// <returns></returns>
     Task CollectMetricsAsync();
+
+
+    /// <summary>
+    /// Register a provider of metrics
+    /// </summary>
+    /// <param name="provider">The metrics provider to register</param>
+    void RegisterMetricsProvider(IMetricsProvider provider);
+
+    /// <summary>
+    /// Unregister a provider of metrics
+    /// </summary>
+    /// <param name="providerName">The name of the provider to unregister</param>
+    void UnregisterMetricsProvider(string providerName);
+
+    /// <summary>
+    /// Get all metrics from registered providers
+    /// </summary>
+    /// <returns>Dictionary with provider names as keys and metrics objects as values</returns>
+    Dictionary<string, object> GetAllProvidersMetrics();
 }
