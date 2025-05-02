@@ -101,7 +101,7 @@ public class DiagnosticService : IDiagnosticService, IMetricsProvider
         await _schedulerService.RegisterJob(
             "diagnostic_metrics",
             CollectMetricsAsync,
-            TimeSpan.FromSeconds(_diagnosticServiceConfig.MetricsInterval)
+            TimeSpan.FromSeconds(_diagnosticServiceConfig.MetricsIntervalInSeconds)
         );
 
         _logger.LogInformation("Diagnostic service started. PID: {Pid}", _currentProcess.Id);
