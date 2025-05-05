@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.22.3"></a>
+## [0.22.3](https://www.github.com/tgiachi/orion/releases/tag/v0.22.3) (2025-05-05)
+
 <a name="0.22.2"></a>
 ## [0.22.2](https://www.github.com/tgiachi/orion/releases/tag/v0.22.2) (2025-05-05)
 
