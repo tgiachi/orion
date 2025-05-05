@@ -65,7 +65,7 @@ public static class ByteUtilsMethodEx
             }
 
 
-            sb.Append($"0x{value[i]:X2}");
+          //  sb.Append($"0x{value[i]:X2}");
 
             if (i < bytesToShow - 1)
             {
