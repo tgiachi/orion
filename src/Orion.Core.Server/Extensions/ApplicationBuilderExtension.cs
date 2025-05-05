@@ -85,7 +85,6 @@ public static class ApplicationBuilderExtension
 
         appContextData.LoggerConfiguration = new LoggerConfiguration()
             .MinimumLevel.Is(parsedOptions.Value.LogLevel.ToSerilogLogLevel())
-            .WriteTo.Console()
             .WriteTo.File(
                 new JsonFormatter(),
                 rollingInterval: RollingInterval.Day,
