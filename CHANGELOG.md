@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.23.0"></a>
+## [0.23.0](https://www.github.com/tgiachi/orion/releases/tag/v0.23.0) (2025-05-06)
+
+### Features
+
+* **AppNameData.cs:** add new file AppNameData.cs to define a record for AppName ([252283b](https://www.github.com/tgiachi/orion/commit/252283bbffbaa72cf5cfca38d084c23a341e34b1))
+
 <a name="0.22.3"></a>
 ## [0.22.3](https://www.github.com/tgiachi/orion/releases/tag/v0.22.3) (2025-05-05)
 
