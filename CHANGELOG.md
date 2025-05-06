@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.24.0"></a>
+## [0.24.0](https://www.github.com/tgiachi/orion/releases/tag/v0.24.0) (2025-05-06)
+
+### Features
+
+* **Buffers:** add PooledArraySpanFormattable struct for efficient string formatting ([7d6800b](https://www.github.com/tgiachi/orion/commit/7d6800bb14f5df7c0bffb2f187e2e92fb2040729))
+* **Extensions:** add InsensitiveStringHelpers class to provide case-insensitive string comparison and manipulation methods ([5be07b9](https://www.github.com/tgiachi/orion/commit/5be07b9638dc51357659dc424694943c04b8ab5f))
+* **Gen2GcCallback.cs:** add Gen2GcCallback class to schedule callbacks roughly every gen 2 GC for better memory management and performance ([1f03050](https://www.github.com/tgiachi/orion/commit/1f030500d954f2f064c4b8690a4159d73dfc4218))
+* **ValueStringBuilder.cs:** add ValueStringBuilder class for efficient string building with support for pooling and aggressive inlining ([404802a](https://www.github.com/tgiachi/orion/commit/404802abc8f06ef595fb35c86dfb60153830043f))
+
 <a name="0.23.0"></a>
 ## [0.23.0](https://www.github.com/tgiachi/orion/releases/tag/v0.23.0) (2025-05-06)
 
