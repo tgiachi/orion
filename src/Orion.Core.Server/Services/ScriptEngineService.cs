@@ -30,12 +30,17 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
 
     private readonly ScriptEngineConfig _scriptEngineConfig;
 
+    private readonly IVersionService _versionService;
+
+    private readonly AppNameData _appNameData;
+
     private readonly IEventBusService _eventBusService;
 
 
     public ScriptEngineService(
         ILogger<ScriptEngineService> logger, DirectoriesConfig directoriesConfig, IServiceProvider serviceProvider,
-        List<ScriptModuleData> scriptModules, IEventBusService eventBusService, ScriptEngineConfig scriptEngineConfig
+        List<ScriptModuleData> scriptModules, IEventBusService eventBusService, ScriptEngineConfig scriptEngineConfig,
+        IVersionService versionService, AppNameData appNameData
     )
     {
         _logger = logger;
@@ -45,14 +50,15 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
 
         _eventBusService = eventBusService;
         _scriptEngineConfig = scriptEngineConfig;
+        _versionService = versionService;
+        _appNameData = appNameData;
 
         _initScripts = _scriptEngineConfig.InitScriptsFileNames;
 
         var typeResolver = TypeResolver.Default;
 
         typeResolver.MemberNameCreator = MemberNameCreator;
-        _jsEngine = new Engine(
-            options =>
+        _jsEngine = new Engine(options =>
             {
                 options.EnableModules(directoriesConfig["Scripts"]);
                 options.AllowClr(GetType().Assembly);
@@ -85,8 +91,6 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
 
     public Task StartAsync(CancellationToken cancellationToken = default)
     {
-        AddConstant("Version", "1.0.0");
-
         foreach (var module in _scriptModules)
         {
             var scriptModuleAttribute = module.ModuleType.GetCustomAttribute<ScriptModuleAttribute>();
@@ -104,9 +108,16 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
             _jsEngine.SetValue(scriptModuleAttribute.Name, instance);
         }
 
+        AddConstant("appName", _appNameData.AppName);
+        AddConstant("version", _versionService.GetVersionInfo().Version);
 
         _logger.LogDebug("Generating scripts documentation in scripts directory named 'index.d.ts'");
-        var documentation = TypeScriptDocumentationGenerator.GenerateDocumentation(_scriptModules, _constants);
+        var documentation = TypeScriptDocumentationGenerator.GenerateDocumentation(
+            _appNameData.AppName,
+            _versionService.GetVersionInfo().Version,
+            _scriptModules,
+            _constants
+        );
 
         File.WriteAllText(Path.Combine(_directoriesConfig["Scripts"], "index.d.ts"), documentation);
 
@@ -161,7 +172,6 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
         _constants[name.ToSnakeCaseUpper()] = value;
         _jsEngine.SetValue(name.ToSnakeCaseUpper(), value);
     }
-
 
 
     public async Task HandleAsync(ServerReadyEvent @event, CancellationToken cancellationToken = default)
