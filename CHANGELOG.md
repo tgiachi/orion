@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.25.0"></a>
+## [0.25.0](https://www.github.com/tgiachi/orion/releases/tag/v0.25.0) (2025-05-06)
+
+### Features
+
+* **OrdinalStringHelpers.cs:** add OrdinalStringHelpers class with methods for comparing, ([6a838f5](https://www.github.com/tgiachi/orion/commit/6a838f523dd43bff14046b314ce33d9ed4265b90))
+
 <a name="0.24.0"></a>
 ## [0.24.0](https://www.github.com/tgiachi/orion/releases/tag/v0.24.0) (2025-05-06)
 
