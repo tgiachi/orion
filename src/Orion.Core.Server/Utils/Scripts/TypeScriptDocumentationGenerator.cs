@@ -14,12 +14,14 @@ public static class TypeScriptDocumentationGenerator
     private static readonly StringBuilder _constantsBuilder = new();
 
 
-    public static string GenerateDocumentation(List<ScriptModuleData> scriptModules, Dictionary<string, object> constants)
+    public static string GenerateDocumentation(
+        string appName, string appVersion, List<ScriptModuleData> scriptModules, Dictionary<string, object> constants
+    )
     {
         var sb = new StringBuilder();
         sb.AppendLine("/**");
-        sb.AppendLine(" * OrionIRC Server JavaScript API TypeScript Definitions");
-        sb.AppendLine(" * Auto-generated documentation");
+        sb.AppendLine($" * {appName} v{appVersion} JavaScript API TypeScript Definitions");
+        sb.AppendLine(" * Auto-generated documentation on " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
         sb.AppendLine(" **/");
         sb.AppendLine();
 
@@ -28,9 +30,13 @@ public static class TypeScriptDocumentationGenerator
         _interfacesBuilder.Clear();
 
 
-        ProcessConstants(constants);
+        var distinctConstants = constants
+            .GroupBy(kvp => kvp.Key)
+            .ToDictionary(g => g.Key, g => g.First().Value);
 
-        sb.Append(_constantsBuilder.ToString());
+        ProcessConstants(distinctConstants);
+
+        sb.Append(_constantsBuilder);
 
         foreach (var module in scriptModules)
         {
@@ -139,7 +145,9 @@ public static class TypeScriptDocumentationGenerator
     }
 
 
-    private static string ConvertToTypeScriptType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type type)
+    private static string ConvertToTypeScriptType(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type type
+    )
     {
         if (type == typeof(void))
         {
@@ -447,7 +455,7 @@ public static class TypeScriptDocumentationGenerator
         _interfacesBuilder.AppendLine($"/**");
         _interfacesBuilder.AppendLine($" * Generated enum for {enumType.FullName}");
         _interfacesBuilder.AppendLine($" */");
-        _interfacesBuilder.AppendLine($"enum {enumType.Name.ToSnakeCase()} {{");
+        _interfacesBuilder.AppendLine($"export enum {enumType.Name.ToSnakeCase()} {{");
 
         var enumValues = Enum.GetNames(enumType);
 

@@ -27,6 +27,8 @@ public static class ApplicationBuilderExtension
             Environment = env ?? "Production"
         };
 
+        serviceCollection.AddSingleton(new AppNameData(appContextData.AppName));
+
         var parsedOptions = Parser.Default.ParseArguments<TOptions>(Environment.GetCommandLineArgs());
 
         if (parsedOptions is null)
