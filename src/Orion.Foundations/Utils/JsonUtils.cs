@@ -1,6 +1,8 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using Orion.Foundations.Text;
 
 namespace Orion.Foundations.Utils;
 
@@ -28,8 +30,11 @@ public static class JsonUtils
         {
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
             WriteIndented = true,
+            AllowTrailingCommas = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault | JsonIgnoreCondition.WhenWritingNull,
             PropertyNameCaseInsensitive = true,
+            ReadCommentHandling = JsonCommentHandling.Skip,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
 
         Converters.ForEach(c => { _jsonSerializerOptions.Converters.Add(c); });
@@ -47,6 +52,47 @@ public static class JsonUtils
     public static string Serialize<T>(T value, JsonTypeInfo<T> jsonTypeInfo)
     {
         return JsonSerializer.Serialize(value, jsonTypeInfo);
+    }
+
+
+    /// <summary>
+    ///  Serializes an object to JSON and writes it to a file.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="filePath"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static string SerializeToFile<T>(T value, string filePath, JsonSerializerOptions? options = null)
+    {
+        var contents = JsonSerializer.Serialize(value, options ?? GetDefaultJsonSettings());
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
+
+        Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+
+        File.WriteAllText(filePath, contents);
+
+        return contents;
+    }
+
+    /// <summary>
+    ///  Deserializes JSON from a file to an object of the specified type.
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <param name="options"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T DeserializeFromFile<T>(string filePath, JsonSerializerOptions? options = null)
+    {
+        if (!File.Exists(filePath))
+        {
+            return default;
+        }
+
+        var text = File.ReadAllText(filePath, TextEncoding.UTF8);
+        return JsonSerializer.Deserialize<T>(text, options ?? GetDefaultJsonSettings());
     }
 
     /// <summary>
