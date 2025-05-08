@@ -144,19 +144,40 @@ public static partial class ResourceUtils
         }
 
         // Read the resource content
-        using (var stream = assembly.GetManifestResourceStream(fullResourceName))
+        using var stream = assembly.GetManifestResourceStream(fullResourceName);
+        if (stream == null)
         {
-            if (stream == null)
-            {
-                throw new FileNotFoundException($"Unable to open resource: {fullResourceName}");
-            }
-
-            using (var reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
+            throw new FileNotFoundException($"Unable to open resource: {fullResourceName}");
         }
+
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd();
     }
+
+    public static string ConvertResourceNameToPath(string resourceName, string baseNamespace)
+    {
+        if (!resourceName.StartsWith(baseNamespace + "."))
+        {
+            throw new ArgumentException("Resource name does not start with the given base namespace.");
+        }
+
+        string relativeName = resourceName[(baseNamespace.Length + 1)..];
+
+
+        int lastDotIndex = relativeName.LastIndexOf('.');
+
+        if (lastDotIndex == -1)
+        {
+            throw new ArgumentException("Resource name does not contain a valid extension.");
+        }
+
+        // Divide in nome senza estensione e estensione
+        string pathPart = relativeName[..lastDotIndex].Replace('.', Path.DirectorySeparatorChar);
+        string extension = relativeName[(lastDotIndex + 1)..];
+
+        return $"{pathPart}.{extension}";
+    }
+
 
     /// <summary>
     /// Extracts the file name from an embedded resource path
