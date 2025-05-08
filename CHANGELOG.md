@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.26.0"></a>
+## [0.26.0](https://www.github.com/tgiachi/orion/releases/tag/v0.26.0) (2025-05-08)
+
+### Features
+
+* **JsonMethodExtension.cs:** add new extension methods to deserialize JSON using Utf8JsonReader, JsonElement, and JsonDocument for improved performance and flexibility ([8c6a537](https://www.github.com/tgiachi/orion/commit/8c6a537904450f244f1c273c8b8ec30baed67aa8))
+
 <a name="0.25.2"></a>
 ## [0.25.2](https://www.github.com/tgiachi/orion/releases/tag/v0.25.2) (2025-05-08)
 
