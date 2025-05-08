@@ -1,3 +1,5 @@
+using System.Buffers;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Orion.Foundations.Utils;
 
@@ -40,5 +42,45 @@ public static class JsonMethodExtension
         return context == null ? JsonUtils.Deserialize(json, type) : JsonUtils.Deserialize(json, type, context);
     }
 
+    /// <summary>
+    ///  Deserializes a JSON string to an object of the specified type using a Utf8JsonReader.
+    /// </summary>
+    /// <param name="reader"></param>
+    /// <param name="options"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T ToObject<T>(this ref Utf8JsonReader reader, JsonSerializerOptions? options = null) =>
+        JsonSerializer.Deserialize<T>(ref reader, options ?? JsonUtils.GetDefaultJsonSettings());
 
+    /// <summary>
+    ///  Deserializes a JsonElement to an object of the specified type.
+    /// </summary>
+    /// <param name="element"></param>
+    /// <param name="options"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T ToObject<T>(this JsonElement element, JsonSerializerOptions? options = null)
+    {
+        var bufferWriter = new ArrayBufferWriter<byte>();
+        using (var writer = new Utf8JsonWriter(bufferWriter))
+        {
+            element.WriteTo(writer);
+        }
+
+        return JsonSerializer.Deserialize<T>(bufferWriter.WrittenSpan, options ?? JsonUtils.GetDefaultJsonSettings());
+    }
+
+    /// <summary>
+    ///  Deserializes a JsonDocument to an object of the specified type.
+    /// </summary>
+    /// <param name="document"></param>
+    /// <param name="options"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T ToObject<T>(this JsonDocument document, JsonSerializerOptions? options = null)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+
+        return document.RootElement.ToObject<T>(options ?? JsonUtils.GetDefaultJsonSettings());
+    }
 }
