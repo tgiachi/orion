@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.27.1"></a>
+## [0.27.1](https://www.github.com/tgiachi/orion/releases/tag/v0.27.1) (2025-05-08)
+
+### Bug Fixes
+
+* **JsonUtils.cs:** remove unnecessary JsonIgnoreCondition to improve code clarity and consistency ([23560c2](https://www.github.com/tgiachi/orion/commit/23560c2a8519c4bf4c284cbfbeafde1c801290c3))
+
 <a name="0.27.0"></a>
 ## [0.27.0](https://www.github.com/tgiachi/orion/releases/tag/v0.27.0) (2025-05-08)
 
