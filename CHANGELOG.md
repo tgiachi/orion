@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.27.0"></a>
+## [0.27.0](https://www.github.com/tgiachi/orion/releases/tag/v0.27.0) (2025-05-08)
+
+### Features
+
+* **JsonUtils.cs:** add support for serializing and deserializing JSON to/from files for easier data persistence ([b7c88a6](https://www.github.com/tgiachi/orion/commit/b7c88a60244b74447d0723007e333819bacb5d0b))
+
 <a name="0.26.0"></a>
 ## [0.26.0](https://www.github.com/tgiachi/orion/releases/tag/v0.26.0) (2025-05-08)
 
