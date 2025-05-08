@@ -31,7 +31,7 @@ public static class JsonUtils
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
             WriteIndented = true,
             AllowTrailingCommas = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault | JsonIgnoreCondition.WhenWritingNull,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             PropertyNameCaseInsensitive = true,
             ReadCommentHandling = JsonCommentHandling.Skip,
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
