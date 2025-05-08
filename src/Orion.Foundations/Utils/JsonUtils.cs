@@ -11,19 +11,31 @@ public static class JsonUtils
 {
     private static JsonSerializerOptions? _jsonSerializerOptions;
 
+    public static List<JsonConverterFactory> Converters { get; } = new();
+
     /// <summary>
     /// Gets the default JSON serialization settings.
     /// </summary>
     /// <returns>JSON serializer options configured with snake_case naming, indentation, and other default settings.</returns>
-    public static JsonSerializerOptions GetDefaultJsonSettings() =>
+    public static JsonSerializerOptions GetDefaultJsonSettings()
+    {
+        if (_jsonSerializerOptions != null)
+        {
+            return _jsonSerializerOptions;
+        }
+
         _jsonSerializerOptions ??= new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
             WriteIndented = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault | JsonIgnoreCondition.WhenWritingNull,
             PropertyNameCaseInsensitive = true,
-            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower) },
         };
+
+        Converters.ForEach(c => { _jsonSerializerOptions.Converters.Add(c); });
+
+        return _jsonSerializerOptions;
+    }
 
     /// <summary>
     /// Serializes an object to JSON using explicit type information for AOT compatibility.
@@ -51,7 +63,9 @@ public static class JsonUtils
         var jsonTypeInfo = context.GetTypeInfo(typeof(T)) as JsonTypeInfo<T>;
         if (jsonTypeInfo == null)
         {
-            throw new InvalidOperationException($"Type {typeof(T).Name} is not registered in the provided JsonSerializerContext");
+            throw new InvalidOperationException(
+                $"Type {typeof(T).Name} is not registered in the provided JsonSerializerContext"
+            );
         }
 
         return JsonSerializer.Serialize(value, jsonTypeInfo);
@@ -94,7 +108,9 @@ public static class JsonUtils
         var jsonTypeInfo = context.GetTypeInfo(typeof(T)) as JsonTypeInfo<T>;
         if (jsonTypeInfo == null)
         {
-            throw new InvalidOperationException($"Type {typeof(T).Name} is not registered in the provided JsonSerializerContext");
+            throw new InvalidOperationException(
+                $"Type {typeof(T).Name} is not registered in the provided JsonSerializerContext"
+            );
         }
 
         return JsonSerializer.Deserialize<T>(json, jsonTypeInfo);
@@ -125,7 +141,9 @@ public static class JsonUtils
         var jsonTypeInfo = context.GetTypeInfo(returnType);
         if (jsonTypeInfo == null)
         {
-            throw new InvalidOperationException($"Type {returnType.Name} is not registered in the provided JsonSerializerContext");
+            throw new InvalidOperationException(
+                $"Type {returnType.Name} is not registered in the provided JsonSerializerContext"
+            );
         }
 
         return JsonSerializer.Deserialize(json, returnType, context);
