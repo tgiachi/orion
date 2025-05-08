@@ -11,6 +11,8 @@ namespace Orion.Foundations.Utils;
 /// </summary>
 public static class JsonUtils
 {
+    public static JsonNamingPolicy DefaultNamingPolicy => JsonNamingPolicy.CamelCase;
+    
     private static JsonSerializerOptions? _jsonSerializerOptions;
 
     public static List<JsonConverterFactory> Converters { get; } = new();
@@ -28,7 +30,7 @@ public static class JsonUtils
 
         _jsonSerializerOptions ??= new JsonSerializerOptions
         {
-            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+            PropertyNamingPolicy = DefaultNamingPolicy,
             WriteIndented = true,
             AllowTrailingCommas = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
