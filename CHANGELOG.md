@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.28.0"></a>
+## [0.28.0](https://www.github.com/tgiachi/orion/releases/tag/v0.28.0) (2025-05-08)
+
+### Features
+
+* **JsonUtils.cs:** add DefaultNamingPolicy property to set default naming policy for JSON serialization to CamelCase ([66399bc](https://www.github.com/tgiachi/orion/commit/66399bc981dda8854edfd15de929758d5335ba7e))
+
 <a name="0.27.1"></a>
 ## [0.27.1](https://www.github.com/tgiachi/orion/releases/tag/v0.27.1) (2025-05-08)
 
