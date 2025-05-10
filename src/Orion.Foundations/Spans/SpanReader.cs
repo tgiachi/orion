@@ -22,11 +22,11 @@ using Orion.Foundations.Text;
 
 namespace Orion.Foundations.Spans;
 
-public ref struct SpanReader
+public ref struct SpanReader : IDisposable
 {
-    private readonly ReadOnlySpan<byte> _buffer;
+    private ReadOnlySpan<byte> _buffer;
 
-    public int Length { get; }
+    public int Length { get; private set; }
     public int Position { get; private set; }
     public int Remaining => Length - Position;
 
@@ -304,5 +304,12 @@ public ref struct SpanReader
         }
 
         return _buffer.TryCopyTo(bytes);
+    }
+
+    public void Dispose()
+    {
+        _buffer = default;
+        Position = 0;
+        Length = 0;
     }
 }
