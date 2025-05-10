@@ -24,7 +24,7 @@ using Orion.Foundations.Text;
 
 namespace Orion.Foundations.Spans;
 
-public ref struct SpanWriter
+public ref struct SpanWriter : IDisposable
 {
     private readonly bool _resize;
     private byte[] _arrayToReturnToPool;
