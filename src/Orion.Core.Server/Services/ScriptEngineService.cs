@@ -173,6 +173,19 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
         _jsEngine.SetValue(name.ToSnakeCaseUpper(), value);
     }
 
+    public void ExecuteCallback(string name, params object[] args)
+    {
+        if (_callbacks.TryGetValue(name, out var callback))
+        {
+            _logger.LogDebug("Executing callback {Name}", name);
+            callback(args);
+        }
+        else
+        {
+            _logger.LogWarning("Callback {Name} not found", name);
+        }
+    }
+
 
     public async Task HandleAsync(ServerReadyEvent @event, CancellationToken cancellationToken = default)
     {
