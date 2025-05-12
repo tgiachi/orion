@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.30.0"></a>
+## [0.30.0](https://www.github.com/tgiachi/orion/releases/tag/v0.30.0) (2025-05-12)
+
+### Features
+
+* **Collections:** add PooledRefList data structure for efficient memory management ([1ea3ac4](https://www.github.com/tgiachi/orion/commit/1ea3ac4ee6c54771688dcf9f0d5bed7a4dc8de30))
+
 <a name="0.29.0"></a>
 ## [0.29.0](https://www.github.com/tgiachi/orion/releases/tag/v0.29.0) (2025-05-12)
 
