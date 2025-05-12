@@ -33,7 +33,8 @@ public abstract class BaseOrionHostedService : IHostedService
     {
         await BeforeStartAsync();
 
-        foreach (var serviceDef in _serviceDefinitions.OrderBy(serviceDef => serviceDef.Priority))
+        foreach (var serviceDef in _serviceDefinitions.DistinctBy(s => s.ServiceType)
+                     .OrderBy(serviceDef => serviceDef.Priority))
         {
             try
             {
@@ -74,7 +75,8 @@ public abstract class BaseOrionHostedService : IHostedService
 
         await OnStopping();
 
-        foreach (var serviceDef in _serviceDefinitions.OrderByDescending(serviceDef => serviceDef.Priority))
+        foreach (var serviceDef in _serviceDefinitions.DistinctBy(s => s.ServiceType)
+                     .OrderByDescending(serviceDef => serviceDef.Priority))
         {
             try
             {
