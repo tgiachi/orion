@@ -23,14 +23,16 @@ public class SecureTcpServer : SslServer, INetworkTransport
     public ServerNetworkType ServerNetworkType { get; }
     public string IpAddress { get; }
 
-    public SecureTcpServer(string id, ServerNetworkType serverNetworkType, SslContext context, IPAddress address, int port) : base(
+    public SecureTcpServer(
+        string? id, ServerNetworkType serverNetworkType, SslContext context, IPAddress address, int port
+    ) : base(
         context,
         address,
         port
     )
     {
-        Id = Guid.NewGuid().ToString();
-        Name = "SecureTcpServer";
+        Id = id ?? Guid.NewGuid().ToString();
+        Name = "SecureTcpServer" + id;
         IpAddress = address.ToString();
 
         ServerNetworkType = serverNetworkType;

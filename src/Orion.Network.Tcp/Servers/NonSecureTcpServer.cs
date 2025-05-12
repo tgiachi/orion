@@ -25,7 +25,7 @@ public class NonSecureTcpServer : TcpServer, INetworkTransport
     public NonSecureTcpServer(string id, ServerNetworkType serverNetworkType, IPAddress address, int port) : base(address, port)
     {
         Id = id;
-        Name = "NonSecureTcpServer";
+        Name = "NonSecureTcpServer_" + id;
         IpAddress = address.ToString();
         ServerNetworkType = serverNetworkType;
 
