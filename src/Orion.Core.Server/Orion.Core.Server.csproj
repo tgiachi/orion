@@ -4,7 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>0.28.2</Version>
+        <Version>0.28.3</Version>
         <Authors>tgiachi</Authors>
         <Company>tgiachi</Company>
         <Description>Server-side core functionality for Orion IRC Server</Description>
