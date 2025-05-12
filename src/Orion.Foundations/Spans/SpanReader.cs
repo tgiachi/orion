@@ -128,6 +128,20 @@ public ref struct SpanReader : IDisposable
         return value;
     }
 
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public byte[] ReadBytes(int length)
+    {
+        if (length > Remaining)
+        {
+            throw new OutOfMemoryException();
+        }
+
+        var bytes = _buffer.Slice(Position, length).ToArray();
+        Position += length;
+        return bytes;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public uint ReadUInt32LE()
     {
