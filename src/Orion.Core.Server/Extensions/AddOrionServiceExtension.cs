@@ -25,6 +25,12 @@ public static class AddOrionServiceExtension
         };
 
         var isAutoStart = typeof(IOrionStartService).IsAssignableFrom(implementationType);
+        // check for already registered service
+
+        if (services.Any(s => s.ServiceType == serviceType && s.ImplementationType == implementationType))
+        {
+            return services;
+        }
 
         services.Add(new ServiceDescriptor(serviceType, implementationType, lifetime));
 
