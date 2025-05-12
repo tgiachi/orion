@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.29.0"></a>
+## [0.29.0](https://www.github.com/tgiachi/orion/releases/tag/v0.29.0) (2025-05-12)
+
+### Features
+
+* **SpanReader.cs:** add method ReadBytes to efficiently read a specified number of bytes from the buffer ([7fae61f](https://www.github.com/tgiachi/orion/commit/7fae61f3a0925fa4b940f41234d98c80e0d03469))
+
 <a name="0.28.4"></a>
 ## [0.28.4](https://www.github.com/tgiachi/orion/releases/tag/v0.28.4) (2025-05-12)
 
