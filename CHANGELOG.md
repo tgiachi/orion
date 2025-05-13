@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.30.1"></a>
+## [0.30.1](https://www.github.com/tgiachi/orion/releases/tag/v0.30.1) (2025-05-13)
+
+### Bug Fixes
+
+* **Orion.Server.csproj:** update Scalar.AspNetCore package version to 2.3.0 to ([1f2dac9](https://www.github.com/tgiachi/orion/commit/1f2dac9d28cd094b5accc75129f89b41b20a4ac5))
+
 <a name="0.30.0"></a>
 ## [0.30.0](https://www.github.com/tgiachi/orion/releases/tag/v0.30.0) (2025-05-12)
 
