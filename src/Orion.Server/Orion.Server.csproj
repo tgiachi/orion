@@ -40,7 +40,7 @@
 
         <PackageReference Include="Jint" Version="4.2.2" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
-        <PackageReference Include="Scalar.AspNetCore" Version="2.2.7" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.3.0" />
         <PackageReference Include="Scriban" Version="6.2.1" />
         <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
