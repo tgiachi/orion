@@ -13,6 +13,8 @@ using Orion.Core.Server.Data.Options;
 using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Modules.Container;
 using Orion.Core.Server.Web.Extensions;
+using Orion.JavaScript.Engine.Extensions;
+using Orion.JavaScript.Engine.Modules.Container;
 using Orion.Server.Hosted;
 using Orion.Server.Modules.Container;
 using Orion.Server.Routes;
@@ -104,7 +106,8 @@ public class Program
             .AddDiagnosticService()
             .AddEventBusService()
             .AddProcessQueueService()
-            .AddScriptEngineService();
+            .AddJsScriptEngineService();
+
 
         builder.Services.AddSingleton<IrcCommandListenerContext>();
 
