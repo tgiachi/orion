@@ -1,7 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using Orion.Core.Server.Data.Internal;
+using Orion.Core.Server.Extensions;
+using Orion.JavaScript.Engine.Data.Internal;
 
-namespace Orion.Core.Server.Extensions;
+namespace Orion.JavaScript.Engine.Extensions;
 
 public static class AddScriptModuleExtension
 {

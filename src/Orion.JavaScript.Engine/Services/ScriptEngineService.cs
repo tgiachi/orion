@@ -2,7 +2,6 @@ using System.Reflection;
 using Jint;
 using Jint.Runtime.Interop;
 using Microsoft.Extensions.Logging;
-using Orion.Core.Server.Attributes.Scripts;
 using Orion.Core.Server.Data.Config.Internal;
 using Orion.Core.Server.Data.Directories;
 using Orion.Core.Server.Data.Internal;
@@ -11,8 +10,11 @@ using Orion.Core.Server.Interfaces.Services.System;
 using Orion.Core.Server.Listeners.EventBus;
 using Orion.Core.Server.Utils.Scripts;
 using Orion.Foundations.Extensions;
+using Orion.JavaScript.Engine.Attributes.Scripts;
+using Orion.JavaScript.Engine.Data.Configs;
+using Orion.JavaScript.Engine.Data.Internal;
 
-namespace Orion.Core.Server.Services;
+namespace Orion.JavaScript.Engine.Services;
 
 public class ScriptEngineService : IScriptEngineService, IEventBusListener<ServerReadyEvent>
 {
@@ -21,7 +23,7 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
     private readonly List<string> _initScripts;
 
     private readonly DirectoriesConfig _directoriesConfig;
-    private readonly Engine _jsEngine;
+    private readonly Jint.Engine _jsEngine;
     private readonly IServiceProvider _serviceProvider;
     private readonly List<ScriptModuleData> _scriptModules;
 
@@ -58,7 +60,7 @@ public class ScriptEngineService : IScriptEngineService, IEventBusListener<Serve
         var typeResolver = TypeResolver.Default;
 
         typeResolver.MemberNameCreator = MemberNameCreator;
-        _jsEngine = new Engine(options =>
+        _jsEngine = new Jint.Engine(options =>
             {
                 options.EnableModules(directoriesConfig["Scripts"]);
                 options.AllowClr(GetType().Assembly);

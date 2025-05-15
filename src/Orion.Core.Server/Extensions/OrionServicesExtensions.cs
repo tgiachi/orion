@@ -51,12 +51,5 @@ public static class OrionServicesExtensions
         return services.AddService<IProcessQueueService, ProcessQueueService>();
     }
 
-    public static IServiceCollection AddScriptEngineService(
-        this IServiceCollection services, ScriptEngineConfig? config = null
-    )
-    {
-        config ??= new ScriptEngineConfig();
-        services.AddSingleton(config);
-        return services.AddService<IScriptEngineService, ScriptEngineService>();
-    }
+
 }

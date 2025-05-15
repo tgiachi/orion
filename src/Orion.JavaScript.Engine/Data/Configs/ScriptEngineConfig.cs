@@ -1,4 +1,4 @@
-namespace Orion.Core.Server.Data.Config.Internal;
+namespace Orion.JavaScript.Engine.Data.Configs;
 
 public class ScriptEngineConfig
 {

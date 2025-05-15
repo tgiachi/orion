@@ -1,4 +1,4 @@
-namespace Orion.Core.Server.Attributes.Scripts;
+namespace Orion.JavaScript.Engine.Attributes.Scripts;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class ScriptModuleAttribute : Attribute

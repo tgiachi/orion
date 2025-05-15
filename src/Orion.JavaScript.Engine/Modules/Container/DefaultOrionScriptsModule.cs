@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
-using Orion.Core.Server.Extensions;
 using Orion.Core.Server.Interfaces.Modules;
-using Orion.Core.Server.Modules.Scripts;
+using Orion.JavaScript.Engine.Extensions;
+using Orion.JavaScript.Engine.Modules.Scripts;
 
-namespace Orion.Core.Server.Modules.Container;
+namespace Orion.JavaScript.Engine.Modules.Container;
 
 public class DefaultOrionScriptsModule : IOrionContainerModule
 {

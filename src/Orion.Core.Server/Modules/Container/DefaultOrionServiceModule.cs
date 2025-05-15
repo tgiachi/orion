@@ -13,7 +13,6 @@ public class DefaultOrionServiceModule : IOrionContainerModule
         return services
             .AddService<ITextTemplateService, TextTemplateService>()
             .AddService<ISchedulerSystemService, SchedulerSystemService>()
-            .AddService<IEventDispatcherService, EventDispatcherService>()
-            .AddService<IScriptEngineService, ScriptEngineService>();
+            .AddService<IEventDispatcherService, EventDispatcherService>();
     }
 }

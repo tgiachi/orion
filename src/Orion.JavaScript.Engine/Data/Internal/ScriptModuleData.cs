@@ -1,3 +1,3 @@
-namespace Orion.Core.Server.Data.Internal;
+namespace Orion.JavaScript.Engine.Data.Internal;
 
 public record ScriptModuleData(Type ModuleType);
