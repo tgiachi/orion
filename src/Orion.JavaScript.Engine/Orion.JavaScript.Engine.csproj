@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Orion.Core.Server\Orion.Core.Server.csproj"/>
+        <ProjectReference Include="..\Orion.Core.Server\Orion.Core.Server.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Jint" Version="4.2.2"/>
+        <PackageReference Include="Jint" Version="4.4.0" />
     </ItemGroup>
 
 </Project>
